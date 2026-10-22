@@ -120,8 +120,23 @@ export async function PUT(
         },
       });
 
-      // Update primary image if provided
-      if (imageUrl && typeof imageUrl === 'string' && imageUrl.trim()) {
+      // Update images: handle multiple images array or fallback to single imageUrl
+      if (Array.isArray(body.images)) {
+        const validImages = body.images.filter((u: unknown) => typeof u === 'string' && u.trim());
+        if (validImages.length > 0) {
+          await prisma.productImage.deleteMany({
+            where: { productId: id },
+          });
+          await prisma.productImage.createMany({
+            data: validImages.map((url: string, idx: number) => ({
+              productId: id,
+              url: url.trim(),
+              isPrimary: idx === 0,
+              displayOrder: idx,
+            })),
+          });
+        }
+      } else if (imageUrl && typeof imageUrl === 'string' && imageUrl.trim()) {
         const primaryImg = await prisma.productImage.findFirst({
           where: { productId: id, isPrimary: true },
         });
@@ -141,6 +156,12 @@ export async function PUT(
           });
         }
       }
+
+      // Re-fetch updated product with fresh images for Firestore sync
+      updated = await prisma.product.findUnique({
+        where: { id },
+        include: { brand: true, category: true, images: true },
+      });
     }
 
     // Always update Firestore Database so state is persisted across serverless functions

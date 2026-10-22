@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Save, Check, Loader2, Sparkles, Laptop, ShieldCheck, Upload, Image as ImageIcon } from 'lucide-react';
+import CloudinaryMultiImageUploader from '@/components/admin/CloudinaryMultiImageUploader';
 
 interface Brand {
   id: string;
@@ -63,8 +64,12 @@ export default function ProductEditForm({
 }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [uploadingImage, setUploadingImage] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [images, setImages] = useState<string[]>(
+    product.images && product.images.length > 0
+      ? product.images.map((img) => img.url)
+      : [product.images?.[0]?.url || 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80']
+  );
   const [error, setError] = useState<string | null>(null);
 
   const [formData, setFormData] = useState({
@@ -99,35 +104,6 @@ export default function ProductEditForm({
     imageUrl: product.images[0]?.url || 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80',
   });
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setUploadingImage(true);
-    setError(null);
-
-    try {
-      const data = new FormData();
-      data.append('file', file);
-
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: data,
-      });
-
-      const result = await res.json();
-      if (!res.ok) {
-        throw new Error(result.error || 'Failed to upload image to Cloudinary');
-      }
-
-      setFormData((prev) => ({ ...prev, imageUrl: result.url }));
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Error uploading image');
-    } finally {
-      setUploadingImage(false);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -146,6 +122,7 @@ export default function ProductEditForm({
           ramGb: Number(formData.ramGb),
           storageGb: Number(formData.storageGb),
           warrantyMonths: Number(formData.warrantyMonths),
+          images: images,
         }),
       });
 
@@ -508,60 +485,11 @@ export default function ProductEditForm({
           <span>4. Media & Display Flags</span>
         </h2>
 
-        <div>
-          <div className="flex items-center justify-between mb-1.5">
-            <label className="block text-xs font-bold text-slate-700">Primary Laptop Image</label>
-            <span className="text-[10px] font-semibold text-sky-600 bg-sky-50 px-2.5 py-0.5 rounded-full border border-sky-100 flex items-center gap-1">
-              <Sparkles className="w-3 h-3" /> Cloudinary Enabled
-            </span>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center gap-4 bg-[#F7F8FA] border border-[#E8E8E8] rounded-2xl p-4">
-            <div className="w-24 h-24 rounded-xl bg-white border border-slate-200 overflow-hidden flex-shrink-0 relative flex items-center justify-center shadow-xs">
-              {uploadingImage ? (
-                <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
-              ) : formData.imageUrl ? (
-                <img
-                  src={formData.imageUrl}
-                  alt="Preview"
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <ImageIcon className="w-8 h-8 text-slate-300" />
-              )}
-            </div>
-
-            <div className="flex-1 w-full space-y-2">
-              <label className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl font-bold cursor-pointer transition-all text-xs shadow-xs">
-                {uploadingImage ? (
-                  <>
-                    <Loader2 className="w-4 h-4 animate-spin text-white" />
-                    <span>Uploading to Cloudinary...</span>
-                  </>
-                ) : (
-                  <>
-                    <Upload className="w-4 h-4 text-white" />
-                    <span>Upload New Photo to Cloudinary</span>
-                  </>
-                )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  disabled={uploadingImage}
-                  onChange={handleImageUpload}
-                  className="hidden"
-                />
-              </label>
-
-              <input
-                type="url"
-                value={formData.imageUrl}
-                onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                placeholder="Or paste Cloudinary / Image URL (https://...)"
-                className="w-full bg-white border border-[#E8E8E8] rounded-xl p-2.5 outline-none focus:border-blue-600 font-mono text-xs text-slate-800"
-              />
-            </div>
-          </div>
+        <div className="bg-[#F7F8FA] border border-[#E8E8E8] rounded-2xl p-4 sm:p-5">
+          <CloudinaryMultiImageUploader
+            images={images}
+            onChange={setImages}
+          />
         </div>
 
         <div>

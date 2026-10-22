@@ -100,7 +100,6 @@ export default function Header() {
         document.body.style.position = originalPosition || '';
         document.body.style.top = originalTop || '';
         document.body.style.width = originalWidth || '';
-        window.scrollTo(0, scrollY);
       };
     }
   }, [mobileMenuOpen]);

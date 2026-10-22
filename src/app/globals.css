@@ -22,7 +22,6 @@
   }
 
   html {
-    scroll-behavior: smooth;
     background-color: var(--bg-primary);
     color: var(--text-primary);
     font-family: var(--font-poppins), 'Helvetica Neue', Helvetica, Arial, sans-serif;

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Plus, X, Loader2, Sparkles, Laptop, Check, Upload, Image as ImageIcon } from 'lucide-react';
 import Link from 'next/link';
+import CloudinaryMultiImageUploader from '@/components/admin/CloudinaryMultiImageUploader';
 
 interface Brand {
   id: string;
@@ -21,7 +22,9 @@ export default function QuickAddProductModal() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [uploadingImage, setUploadingImage] = useState(false);
+  const [images, setImages] = useState<string[]>([
+    'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80',
+  ]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [brands, setBrands] = useState<Brand[]>([]);
@@ -70,35 +73,6 @@ export default function QuickAddProductModal() {
     }
   }, [isOpen]);
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setUploadingImage(true);
-    setErrorMessage(null);
-
-    try {
-      const data = new FormData();
-      data.append('file', file);
-
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: data,
-      });
-
-      const result = await res.json();
-      if (!res.ok) {
-        throw new Error(result.error || 'Failed to upload image to Cloudinary');
-      }
-
-      setFormData((prev) => ({ ...prev, imageUrl: result.url }));
-    } catch (err: unknown) {
-      setErrorMessage(err instanceof Error ? err.message : 'Error uploading image');
-    } finally {
-      setUploadingImage(false);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -115,6 +89,7 @@ export default function QuickAddProductModal() {
           stock: Number(formData.stock),
           ramGb: Number(formData.ramGb),
           storageGb: Number(formData.storageGb),
+          images: images.length > 0 ? images : [formData.imageUrl],
         }),
       });
 
@@ -124,6 +99,7 @@ export default function QuickAddProductModal() {
       }
 
       setIsOpen(false);
+      setImages(['https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80']);
       setFormData({
         title: '',
         brandId: brands[0]?.id || '',
@@ -321,63 +297,12 @@ export default function QuickAddProductModal() {
                 </div>
               </div>
 
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="block font-bold text-slate-700">Laptop Photo / Image</label>
-                  <span className="text-[10px] font-semibold text-sky-600 bg-sky-50 px-2 py-0.5 rounded-full border border-sky-100 flex items-center gap-1">
-                    <Sparkles className="w-3 h-3" /> Cloudinary Enabled
-                  </span>
-                </div>
-
-                <div className="flex flex-col sm:flex-row items-center gap-3">
-                  {/* Thumbnail Preview */}
-                  <div className="w-16 h-16 rounded-xl bg-slate-100 border border-slate-200 overflow-hidden flex-shrink-0 relative flex items-center justify-center">
-                    {uploadingImage ? (
-                      <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
-                    ) : formData.imageUrl ? (
-                      <img
-                        src={formData.imageUrl}
-                        alt="Preview"
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <ImageIcon className="w-6 h-6 text-slate-300" />
-                    )}
-                  </div>
-
-                  <div className="flex-1 w-full space-y-1.5">
-                    {/* Direct Cloudinary Upload Button */}
-                    <label className="inline-flex items-center gap-2 px-3.5 py-2 bg-sky-50 hover:bg-sky-100 text-sky-800 border border-sky-200 rounded-xl font-bold cursor-pointer transition-all text-xs">
-                      {uploadingImage ? (
-                        <>
-                          <Loader2 className="w-3.5 h-3.5 animate-spin text-sky-600" />
-                          <span>Uploading to Cloudinary...</span>
-                        </>
-                      ) : (
-                        <>
-                          <Upload className="w-3.5 h-3.5 text-sky-600" />
-                          <span>Upload from Computer to Cloudinary</span>
-                        </>
-                      )}
-                      <input
-                        type="file"
-                        accept="image/*"
-                        disabled={uploadingImage}
-                        onChange={handleImageUpload}
-                        className="hidden"
-                      />
-                    </label>
-
-                    {/* Or URL input */}
-                    <input
-                      type="url"
-                      value={formData.imageUrl}
-                      onChange={(e) => setFormData({ ...formData, imageUrl: e.target.value })}
-                      placeholder="Or enter Cloudinary / Image URL (https://...)"
-                      className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-2 outline-none focus:border-blue-600 text-slate-700 text-[11px] font-mono"
-                    />
-                  </div>
-                </div>
+              <div className="bg-[#F7F8FA] border border-[#E8E8E8] rounded-2xl p-3.5">
+                <CloudinaryMultiImageUploader
+                  images={images}
+                  onChange={setImages}
+                  label="Product Photos"
+                />
               </div>
 
               <div className="flex flex-wrap items-center gap-4 pt-1">
