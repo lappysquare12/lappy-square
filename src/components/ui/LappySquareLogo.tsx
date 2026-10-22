@@ -8,23 +8,25 @@ interface LappySquareLogoProps {
   size?: number; // size in px
   variant?: 'emblem' | 'horizontal' | 'compact';
   showSubtitle?: boolean;
+  showText?: boolean;
 }
 
 export default function LappySquareLogo({
   className = '',
-  size = 44,
+  size = 48,
   variant = 'horizontal',
   showSubtitle = true,
+  showText = true,
 }: LappySquareLogoProps) {
-  if (variant === 'emblem') {
+  if (variant === 'emblem' || !showText) {
     return (
       <div className={`inline-flex items-center justify-center shrink-0 ${className}`}>
         <Image
-          src="/logo.png"
-          alt="Lappy Square Logo"
+          src="/logo.png?v=3"
+          alt="Lappy Square Official Logo"
           width={size}
           height={size}
-          className="rounded-full object-contain shrink-0 drop-shadow-xs"
+          className="rounded-full object-contain shrink-0 drop-shadow-xs transition-transform duration-300 hover:scale-105"
           priority
         />
       </div>
@@ -34,11 +36,11 @@ export default function LappySquareLogo({
   return (
     <div className={`inline-flex items-center gap-2.5 sm:gap-3 shrink-0 ${className}`}>
       <Image
-        src="/logo.png"
-        alt="Lappy Square Logo"
+        src="/logo.png?v=3"
+        alt="Lappy Square Official Logo"
         width={size}
         height={size}
-        className="rounded-full object-contain shrink-0 drop-shadow-xs"
+        className="rounded-full object-contain shrink-0 drop-shadow-xs transition-transform duration-300 hover:scale-105"
         priority
       />
       <div className="shrink-0">
@@ -65,5 +67,6 @@ export default function LappySquareLogo({
     </div>
   );
 }
+
 
 

@@ -41,11 +41,12 @@ export const metadata: Metadata = {
   },
   icons: {
     icon: [
-      { url: '/favicon.png', type: 'image/png' },
-      { url: '/favicon.ico' },
+      { url: '/favicon.png?v=3', type: 'image/png' },
+      { url: '/icon.png?v=3', type: 'image/png' },
+      { url: '/favicon.ico?v=3' },
     ],
-    shortcut: '/favicon.png',
-    apple: '/favicon.png',
+    shortcut: '/favicon.png?v=3',
+    apple: '/apple-icon.png?v=3',
   },
 };
 
@@ -73,6 +74,10 @@ export default async function RootLayout({
   return (
     <html lang="en" className={poppins.variable} suppressHydrationWarning>
       <head>
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.png?v=3" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon.png?v=3" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon.png?v=3" />
+        <link rel="shortcut icon" href="/favicon.ico?v=3" />
         {gsc && <meta name="google-site-verification" content={gsc} />}
         {gaId && (
           <>

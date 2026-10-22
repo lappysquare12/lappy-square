@@ -193,10 +193,10 @@ export default function Header() {
 
               <Link href="/" className="flex items-center group py-0.5">
                 <span className="sm:hidden">
-                  <LappySquareLogo size={34} variant="horizontal" />
+                  <LappySquareLogo size={38} variant="horizontal" />
                 </span>
                 <span className="hidden sm:inline-block">
-                  <LappySquareLogo size={46} variant="horizontal" />
+                  <LappySquareLogo size={48} variant="horizontal" />
                 </span>
               </Link>
             </div>
