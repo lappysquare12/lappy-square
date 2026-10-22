@@ -48,7 +48,7 @@ export default async function DealsPage() {
       </section>
 
       {/* Products Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-10">
         {deals.length === 0 ? (
           <div className="text-center py-16 bg-slate-900/60 border border-slate-800 rounded-3xl p-8 space-y-4">
             <Zap className="w-12 h-12 text-amber-400 mx-auto" />

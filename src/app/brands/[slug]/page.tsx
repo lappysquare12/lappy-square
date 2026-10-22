@@ -116,7 +116,7 @@ export default async function SingleBrandPage({ params }: BrandPageProps) {
       </section>
 
       {/* Products Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-10">
         {brand.products.length === 0 ? (
           <div className="bg-white border border-slate-200 rounded-3xl p-12 text-center text-slate-500 space-y-4 shadow-sm">
             <p className="text-sm">No laptops currently listed under {brand.name}. Check back soon or request directly via WhatsApp!</p>

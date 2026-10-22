@@ -99,7 +99,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
 
   return (
     <div className="bg-[#FAFBFD] min-h-screen py-8 sm:py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
         
         {/* Breadcrumb & Header */}
         <div className="space-y-3">

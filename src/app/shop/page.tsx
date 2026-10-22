@@ -160,7 +160,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
       </section>
 
       {/* Layout Grid: Sidebar Filters + Products Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
           
           {/* Left Column: Filters */}
@@ -192,7 +192,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
               </div>
             ) : (
               <ScrollReveal direction="up" delay={0.05}>
-                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-7">
+                <div className="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-3 gap-6 sm:gap-7">
                   {products.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}

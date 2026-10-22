@@ -111,7 +111,7 @@ export default async function UseCasePage({ params }: UseCasePageProps) {
       </section>
 
       {/* Products Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10">
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 pt-10">
         {category.products.length === 0 ? (
           <div className="bg-white border border-slate-200 rounded-3xl p-12 text-center text-slate-500 space-y-4 shadow-sm">
             <p className="text-sm">No laptops found under {category.name} at this moment. Explore our full catalog!</p>

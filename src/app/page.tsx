@@ -71,7 +71,7 @@ export default async function HomePage() {
       {dealsOfDay.length > 0 && (
         <ScrollReveal direction="up" delay={0.1}>
           <section className="py-16 bg-white border-b border-[#E8E8E8]">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
                 <div>
                   <div className="inline-flex items-center gap-1.5 bg-amber-50 text-amber-900 border border-amber-200 px-3 py-1 rounded-full text-xs font-bold mb-2">
@@ -113,7 +113,7 @@ export default async function HomePage() {
       {/* 5. Best-Selling Laptops */}
       <ScrollReveal direction="up" delay={0.1}>
         <section className="py-16 bg-white border-b border-[#E8E8E8]">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center justify-between mb-8">
               <div>
                 <div className="flex items-center gap-1.5 text-blue-700 text-xs font-bold uppercase tracking-wider mb-1">
@@ -152,7 +152,7 @@ export default async function HomePage() {
       {newArrivals.length > 0 && (
         <ScrollReveal direction="up" delay={0.1}>
           <section className="py-16 bg-white border-b border-[#E8E8E8]">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between mb-8">
                 <div>
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Fresh Lab Certification</span>

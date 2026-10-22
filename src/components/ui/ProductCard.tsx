@@ -150,64 +150,68 @@ export default function ProductCard({ product }: ProductCardProps) {
     <motion.div
       whileHover={{ y: -8 }}
       transition={{ duration: 0.25, ease: 'easeOut' }}
-      className="group relative bg-white border border-slate-200/90 hover:border-blue-600/60 rounded-3xl p-4 sm:p-6 flex flex-col justify-between transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_25px_50px_-15px_rgba(37,99,235,0.18)]"
+      className="group relative bg-white border border-slate-200/90 hover:border-blue-600/60 rounded-3xl p-3.5 sm:p-5 flex flex-col justify-between transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_25px_50px_-15px_rgba(37,99,235,0.18)]"
     >
       <div>
         {/* Large Stage Product Image Container */}
         <div className="relative h-52 sm:h-64 md:h-72 w-full overflow-hidden rounded-2xl bg-gradient-to-b from-slate-50 via-slate-100/60 to-white border border-slate-200/70 p-3 sm:p-4 mb-4 sm:mb-5 group-hover:border-blue-200 transition-colors">
           
-          {/* Floating Grade Badge (Top Left) */}
-          <div className="absolute top-3 left-3 sm:top-3.5 sm:left-3.5 z-10 flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full border border-slate-200/90 shadow-sm">
-            <span className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full ${gradeDisplay.dot}`} />
-            <span className="text-[10px] sm:text-xs font-bold text-slate-800 tracking-tight">
-              {gradeDisplay.text}
-            </span>
+          {/* Top Header Floating Row: Grade Badge & Floating Actions (Unified flex to prevent overlapping) */}
+          <div className="absolute top-2.5 inset-x-2.5 sm:top-3 sm:inset-x-3 z-10 flex items-center justify-between gap-1.5 pointer-events-none">
+            {/* Grade Badge */}
+            <div className="pointer-events-auto flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border border-slate-200/90 shadow-xs min-w-0 shrink">
+              <span className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0 ${gradeDisplay.dot}`} />
+              <span className="text-[10px] sm:text-xs font-bold text-slate-800 tracking-tight whitespace-nowrap truncate">
+                {gradeDisplay.text}
+              </span>
+            </div>
+
+            {/* Floating Actions (Top Right) */}
+            <div className="pointer-events-auto flex items-center gap-1 sm:gap-1.5 shrink-0">
+              {/* Compare Button */}
+              <button
+                type="button"
+                suppressHydrationWarning
+                onClick={handleToggleCompare}
+                className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full backdrop-blur-md border flex items-center justify-center transition-all ${
+                  isCompared
+                    ? 'bg-blue-700 text-white border-blue-700 shadow-xs'
+                    : 'bg-white/95 text-slate-500 border-slate-200/90 hover:text-blue-700 hover:scale-105 shadow-xs'
+                }`}
+                title={isCompared ? 'Remove from comparison' : 'Compare laptop specs'}
+              >
+                <Scale className="w-3.5 h-3.5" />
+              </button>
+
+              {/* Wishlist Button */}
+              <button
+                type="button"
+                suppressHydrationWarning
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  toggleWishlist({
+                    productId: product.id,
+                    title: product.title,
+                    slug: product.slug,
+                    price: product.price,
+                    originalPrice: product.originalPrice,
+                    image: imageUrl,
+                    conditionGrade: product.conditionGrade,
+                  });
+                }}
+                className={`w-7 h-7 sm:w-8 sm:h-8 rounded-full backdrop-blur-md border flex items-center justify-center transition-all ${
+                  isWishlisted
+                    ? 'bg-rose-50 text-rose-600 border-rose-200 shadow-xs'
+                    : 'bg-white/95 text-slate-500 border-slate-200/90 hover:text-rose-600 hover:scale-105 shadow-xs'
+                }`}
+                title={isWishlisted ? 'Remove from wishlist' : 'Save to wishlist'}
+              >
+                <Heart className={`w-3.5 h-3.5 ${isWishlisted ? 'fill-rose-600' : ''}`} />
+              </button>
+            </div>
           </div>
 
-          {/* Floating Actions (Top Right) */}
-          <div className="absolute top-3 right-3 sm:top-3.5 sm:right-3.5 z-10 flex items-center gap-1.5 sm:gap-2">
-            {/* Compare Button */}
-            <button
-              type="button"
-              suppressHydrationWarning
-              onClick={handleToggleCompare}
-              className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full backdrop-blur-md border flex items-center justify-center transition-all ${
-                isCompared
-                  ? 'bg-blue-700 text-white border-blue-700 shadow-sm'
-                  : 'bg-white/95 text-slate-500 border-slate-200/90 hover:text-blue-700 hover:scale-110 shadow-sm'
-              }`}
-              title={isCompared ? 'Remove from comparison' : 'Compare laptop specs'}
-            >
-              <Scale className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-            </button>
-
-            {/* Wishlist Button */}
-            <button
-              type="button"
-              suppressHydrationWarning
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                toggleWishlist({
-                  productId: product.id,
-                  title: product.title,
-                  slug: product.slug,
-                  price: product.price,
-                  originalPrice: product.originalPrice,
-                  image: imageUrl,
-                  conditionGrade: product.conditionGrade,
-                });
-              }}
-              className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full backdrop-blur-md border flex items-center justify-center transition-all ${
-                isWishlisted
-                  ? 'bg-rose-50 text-rose-600 border-rose-200 shadow-sm'
-                  : 'bg-white/95 text-slate-500 border-slate-200/90 hover:text-rose-600 hover:scale-110 shadow-sm'
-              }`}
-              title={isWishlisted ? 'Remove from wishlist' : 'Save to wishlist'}
-            >
-              <Heart className={`w-3.5 h-3.5 sm:w-4 sm:h-4 ${isWishlisted ? 'fill-rose-600' : ''}`} />
-            </button>
-          </div>
 
           {/* Big Laptop Showcase Image with Hover Zoom */}
           <Link href={`/product/${product.slug}`} className="block relative w-full h-full">
