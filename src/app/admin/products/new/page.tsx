@@ -27,20 +27,23 @@ export default function NewProductPage() {
     price: '',
     originalPrice: '',
     stock: '2',
-    processor: 'Intel Core i5',
-    processorModel: '',
-    processorGen: '11th Gen',
+    processor: 'Intel Core i7',
+    processorModel: 'Core i7-10610U vPro (Hexa-Core up to 4.9GHz)',
+    processorGen: '10th Gen',
     ramGb: '16',
-    ramType: 'DDR4',
+    ramType: '16GB LPDDR3 2133MHz',
     storageGb: '512',
-    storageType: 'NVMe SSD',
-    screenSize: '14.0 Inch FHD (1920 x 1080)',
-    graphicsCard: 'Intel Iris Xe Graphics',
-    os: 'Windows 11 Pro Genuine',
-    batteryHealth: '92% Certified OEM Health',
-    batteryBackupHours: '6-8 Hours',
+    storageType: '512GB M.2 NVMe SSD',
+    screenSize: '14.0 Inch',
+    displayResolution: '14.0 Inch FHD IPS 400 nits PrivacyGuard Display (1920 x 1080)',
+    graphicsCard: 'Intel UHD Graphics 620',
+    os: 'Windows 11 Pro Genuine (100% Genuine License)',
+    batteryHealth: '90% Certified OEM Health',
+    batteryBackupHours: '8-10 Hours',
+    weightKg: '1.4 kg',
     warrantyMonths: '12',
-    useCase: 'Business & Office, Programming, Students',
+    includedAccessories: '1x Original OEM Power Adapter & Power Cable, 1x Lappy Square Laptop Bag, 1x 45-Point Certificate, 1x Warranty Card',
+    useCase: 'C-Suite, Founders, Frequent Flyers, Consulting',
     description: '',
     featured: false,
     bestSeller: false,
@@ -273,107 +276,255 @@ export default function NewProductPage() {
           </div>
         </div>
 
-        {/* Section 3: Technical Specifications */}
-        <div className="space-y-4">
-          <h2 className="text-xs font-bold text-slate-900 uppercase tracking-wider border-b border-slate-100 pb-2">
-            3. Hardware & Lab Diagnostics
-          </h2>
+        {/* Section 3: Full Technical Specifications */}
+        <div className="space-y-5">
+          <div className="border-b border-slate-100 pb-2 flex items-center justify-between">
+            <h2 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+              3. Full Technical Specifications (Storefront Specs Table)
+            </h2>
+            <span className="text-[10px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full">
+              Live on Product Details Page
+            </span>
+          </div>
 
+          {/* Row 1: Processor & Generation */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Processor *</label>
+              <label className="block font-bold text-slate-700 mb-1">Processor Family *</label>
               <input
                 type="text"
                 value={formData.processor}
                 onChange={(e) => setFormData({ ...formData, processor: e.target.value })}
                 required
-                placeholder="Intel Core i5 / Apple M1"
+                placeholder="e.g. Intel Core i7 / Apple M1 / AMD Ryzen 7"
                 className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
               />
             </div>
 
             <div>
-              <label className="block font-bold text-slate-700 mb-1">RAM Memory (GB) *</label>
+              <label className="block font-bold text-slate-700 mb-1">Processor Model & Clock</label>
               <input
-                type="number"
+                type="text"
+                value={formData.processorModel}
+                onChange={(e) => setFormData({ ...formData, processorModel: e.target.value })}
+                placeholder="e.g. Core i7-10610U vPro (Hexa-Core up to 4.9GHz)"
+                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">Generation</label>
+              <input
+                type="text"
+                value={formData.processorGen}
+                onChange={(e) => setFormData({ ...formData, processorGen: e.target.value })}
+                placeholder="e.g. 10th Gen / 11th Gen / Apple Silicon"
+                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Row 2: RAM & Storage */}
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">RAM Memory (GB) *</label>
+              <select
                 value={formData.ramGb}
                 onChange={(e) => setFormData({ ...formData, ramGb: e.target.value })}
-                required
-                placeholder="16"
+                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none font-semibold"
+              >
+                <option value="4">4 GB RAM</option>
+                <option value="8">8 GB RAM</option>
+                <option value="16">16 GB RAM</option>
+                <option value="32">32 GB RAM</option>
+                <option value="64">64 GB RAM</option>
+                <option value="128">128 GB RAM</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">RAM Type & Speed</label>
+              <input
+                type="text"
+                value={formData.ramType}
+                onChange={(e) => setFormData({ ...formData, ramType: e.target.value })}
+                placeholder="e.g. 16GB LPDDR3 2133MHz / DDR4"
                 className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
               />
             </div>
 
             <div>
               <label className="block font-bold text-slate-700 mb-1">Storage (GB SSD) *</label>
-              <input
-                type="number"
+              <select
                 value={formData.storageGb}
                 onChange={(e) => setFormData({ ...formData, storageGb: e.target.value })}
-                required
-                placeholder="512"
+                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none font-semibold"
+              >
+                <option value="128">128 GB SSD</option>
+                <option value="256">256 GB SSD</option>
+                <option value="512">512 GB SSD</option>
+                <option value="1024">1 TB SSD</option>
+                <option value="2048">2 TB SSD</option>
+                <option value="4096">4 TB SSD</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">Storage Type & Bus</label>
+              <input
+                type="text"
+                value={formData.storageType}
+                onChange={(e) => setFormData({ ...formData, storageType: e.target.value })}
+                placeholder="e.g. 512GB M.2 NVMe SSD"
                 className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
               />
             </div>
           </div>
 
+          {/* Row 3: Display & Graphics */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block font-bold text-slate-700 mb-1">Battery Health *</label>
-              <input
-                type="text"
-                value={formData.batteryHealth}
-                onChange={(e) => setFormData({ ...formData, batteryHealth: e.target.value })}
-                placeholder="91% Tested Health"
-                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
-              />
-            </div>
-
-            <div>
-              <label className="block font-bold text-slate-700 mb-1">Screen Size & Display</label>
+              <label className="block font-bold text-slate-700 mb-1">Screen Size</label>
               <input
                 type="text"
                 value={formData.screenSize}
                 onChange={(e) => setFormData({ ...formData, screenSize: e.target.value })}
-                placeholder="14.0 Inch Full HD IPS"
+                placeholder="e.g. 14.0 Inch / 13.3 Inch / 15.6 Inch"
                 className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
               />
             </div>
 
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">Screen Size & Res (Full Display Specs)</label>
+              <input
+                type="text"
+                value={formData.displayResolution}
+                onChange={(e) => setFormData({ ...formData, displayResolution: e.target.value })}
+                placeholder="e.g. 14.0 Inch FHD IPS 400 nits PrivacyGuard Display (1920 x 1080)"
+                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">Graphics Controller</label>
+              <input
+                type="text"
+                value={formData.graphicsCard}
+                onChange={(e) => setFormData({ ...formData, graphicsCard: e.target.value })}
+                placeholder="e.g. Intel UHD Graphics 620 / NVIDIA RTX 3050"
+                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Row 4: OS, Battery & Weight */}
+          <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
             <div>
               <label className="block font-bold text-slate-700 mb-1">Operating System</label>
               <input
                 type="text"
                 value={formData.os}
                 onChange={(e) => setFormData({ ...formData, os: e.target.value })}
-                placeholder="Windows 11 Pro Genuine"
+                placeholder="e.g. Windows 11 Pro Genuine (100% Genuine License)"
+                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">Battery Health *</label>
+              <input
+                type="text"
+                value={formData.batteryHealth}
+                onChange={(e) => setFormData({ ...formData, batteryHealth: e.target.value })}
+                placeholder="e.g. 90% Certified OEM Health"
+                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">Battery Backup Duration</label>
+              <input
+                type="text"
+                value={formData.batteryBackupHours}
+                onChange={(e) => setFormData({ ...formData, batteryBackupHours: e.target.value })}
+                placeholder="e.g. 8-10 Hours / 6-8 Hours"
+                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">Weight</label>
+              <input
+                type="text"
+                value={formData.weightKg}
+                onChange={(e) => setFormData({ ...formData, weightKg: e.target.value })}
+                placeholder="e.g. 1.09 kg / 1.4 kg"
                 className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
               />
             </div>
           </div>
 
-          {/* Use Case / Recommended Audience */}
-          <div className="pt-2">
+          {/* Row 5: Warranty & What's in the Box */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label className="block font-bold text-slate-700 mb-1">Warranty Period (Months)</label>
+              <select
+                value={formData.warrantyMonths}
+                onChange={(e) => setFormData({ ...formData, warrantyMonths: e.target.value })}
+                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none font-semibold"
+              >
+                <option value="6">6 Months Comprehensive Warranty</option>
+                <option value="12">12 Months Comprehensive Warranty</option>
+                <option value="24">24 Months Extended Warranty</option>
+              </select>
+            </div>
+
+            <div className="sm:col-span-2">
+              <label className="block font-bold text-slate-700 mb-1">What&apos;s in the Box & Accessories (Comma-separated)</label>
+              <input
+                type="text"
+                value={formData.includedAccessories}
+                onChange={(e) => setFormData({ ...formData, includedAccessories: e.target.value })}
+                placeholder="e.g. 1x Original OEM Power Adapter & Power Cable, 1x Lappy Square Laptop Bag, 1x 45-Point Certificate, 1x Warranty Card"
+                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Row 6: Detailed Condition Overview (Description) */}
+          <div>
+            <label className="block font-bold text-slate-700 mb-1">Detailed Condition Overview (Editorial Review)</label>
+            <textarea
+              rows={3}
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              placeholder="e.g. Weighing only 1.09 kg, the X1 Carbon combines aerospace-grade carbon fiber and magnesium alloy with an unmatched typing experience..."
+              className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none text-xs"
+            />
+          </div>
+
+          {/* Row 7: Recommended Use / Audience */}
+          <div>
             <label className="block font-bold text-slate-700 mb-1 text-xs">
-              By Use Case / Recommended Audience
+              Recommended Use / Audience
             </label>
             <input
               type="text"
               value={formData.useCase}
               onChange={(e) => setFormData({ ...formData, useCase: e.target.value })}
-              placeholder="e.g. Programming, Coding, Business, Students, Gaming"
+              placeholder="e.g. C-Suite, Founders, Frequent Flyers, Consulting, Programming"
               className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none text-xs"
             />
             {/* Quick Preset Tags */}
             <div className="flex flex-wrap items-center gap-1.5 mt-2">
               <span className="text-[11px] text-slate-400 font-semibold mr-1">Quick Add:</span>
               {[
+                'C-Suite, Founders, Frequent Flyers, Consulting',
                 'Programming & Coding',
                 'Business & Corporate',
                 'Students & College',
                 'Graphic Design & 4K Video',
                 'Gaming & High Performance',
-                'Everyday Home & Streaming',
               ].map((tag) => (
                 <button
                   key={tag}

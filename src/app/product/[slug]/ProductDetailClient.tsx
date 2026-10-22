@@ -628,7 +628,9 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 text-xs text-slate-700">
                 <div className="p-3 bg-[#F7F8FA] rounded-xl flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 sm:gap-2">
                   <span className="font-medium text-slate-500 shrink-0">Processor & Model</span>
-                  <span className="font-bold text-slate-900 text-right break-words min-w-0">{product.processor} ({product.processorModel || 'Multi-core'})</span>
+                  <span className="font-bold text-slate-900 text-right break-words min-w-0">
+                    {product.processor} {product.processorModel ? `(${product.processorModel})` : ''}
+                  </span>
                 </div>
                 <div className="p-3 bg-[#F7F8FA] rounded-xl flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 sm:gap-2">
                   <span className="font-medium text-slate-500 shrink-0">Generation</span>
@@ -636,15 +638,21 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
                 </div>
                 <div className="p-3 bg-[#F7F8FA] rounded-xl flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 sm:gap-2">
                   <span className="font-medium text-slate-500 shrink-0">Installed RAM</span>
-                  <span className="font-bold text-slate-900 text-right break-words min-w-0">{product.ramGb}GB {product.ramType || 'High-Speed'}</span>
+                  <span className="font-bold text-slate-900 text-right break-words min-w-0">
+                    {product.ramType ? product.ramType : `${product.ramGb}GB High-Speed`}
+                  </span>
                 </div>
                 <div className="p-3 bg-[#F7F8FA] rounded-xl flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 sm:gap-2">
                   <span className="font-medium text-slate-500 shrink-0">Storage Capacity</span>
-                  <span className="font-bold text-slate-900 text-right break-words min-w-0">{product.storageGb}GB {product.storageType || 'NVMe SSD'}</span>
+                  <span className="font-bold text-slate-900 text-right break-words min-w-0">
+                    {product.storageType ? product.storageType : `${product.storageGb}GB SSD`}
+                  </span>
                 </div>
                 <div className="p-3 bg-[#F7F8FA] rounded-xl flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 sm:gap-2">
                   <span className="font-medium text-slate-500 shrink-0">Screen Size & Res</span>
-                  <span className="font-bold text-slate-900 text-right break-words min-w-0">{product.screenSize} ({product.displayResolution || 'Full HD'})</span>
+                  <span className="font-bold text-slate-900 text-right break-words min-w-0">
+                    {product.displayResolution || `${product.screenSize} Full HD Display`}
+                  </span>
                 </div>
                 <div className="p-3 bg-[#F7F8FA] rounded-xl flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 sm:gap-2">
                   <span className="font-medium text-slate-500 shrink-0">Graphics Controller</span>
@@ -652,7 +660,9 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
                 </div>
                 <div className="p-3 bg-[#F7F8FA] rounded-xl flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 sm:gap-2">
                   <span className="font-medium text-slate-500 shrink-0">Operating System</span>
-                  <span className="font-bold text-slate-900 text-right break-words min-w-0">{product.os} (100% Genuine License)</span>
+                  <span className="font-bold text-slate-900 text-right break-words min-w-0">
+                    {product.os.toLowerCase().includes('genuine') ? product.os : `${product.os} (100% Genuine License)`}
+                  </span>
                 </div>
                 <div className="p-3 bg-[#F7F8FA] rounded-xl flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 sm:gap-2">
                   <span className="font-medium text-slate-500 shrink-0">Battery Health & Backup</span>
@@ -671,7 +681,7 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
               {product.description && (
                 <div className="pt-4 border-t border-slate-100">
                   <h4 className="text-sm font-bold text-slate-900 mb-2">Detailed Condition Overview</h4>
-                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{product.description}</p>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed whitespace-pre-line">{product.description}</p>
                 </div>
               )}
             </div>
@@ -680,28 +690,43 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
           {/* Tab 2: In The Box */}
           {activeTab === 'box' && (
             <div className="space-y-4 text-xs sm:text-sm text-slate-700">
-              <h4 className="text-sm font-bold text-slate-900">Package Contents</h4>
+              <h4 className="text-sm font-bold text-slate-900">What&apos;s in the Box & Accessories</h4>
               <ul className="space-y-2.5">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
                   <span>1x Certified Refurbished {product.title}</span>
                 </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>1x Original OEM Power Adapter & Power Cable</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>1x Lappy Square Premium Protective Padded Laptop Sleeve</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>1x Signed 45-Point Hardware Quality Certificate</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>1x Lappy Square Warranty Card with direct technical helpline</span>
-                </li>
+                {product.includedAccessories ? (
+                  product.includedAccessories
+                    .split(',')
+                    .map((item, idx) => item.trim())
+                    .filter(Boolean)
+                    .map((item, idx) => (
+                      <li key={idx} className="flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span>{item}</span>
+                      </li>
+                    ))
+                ) : (
+                  <>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span>1x Original OEM Power Adapter & Power Cable</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span>1x Lappy Square Premium Protective Padded Laptop Sleeve</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span>1x Signed 45-Point Hardware Quality Certificate</span>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span>1x Lappy Square Warranty Card with direct technical helpline</span>
+                    </li>
+                  </>
+                )}
               </ul>
             </div>
           )}

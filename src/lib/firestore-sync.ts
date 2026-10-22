@@ -93,11 +93,15 @@ export async function ensureFirestoreProductsSynced(): Promise<void> {
       const storageGb = Number(fields.storageGb?.integerValue || 512);
       const storageType = fields.storageType?.stringValue || 'SSD';
       const screenSize = fields.screenSize?.stringValue || '14.0" FHD';
+      const displayResolution = fields.displayResolution?.stringValue || null;
       const graphicsCard = fields.graphicsCard?.stringValue || 'Integrated Graphics';
       const os = fields.os?.stringValue || 'Windows 11 Pro';
       const batteryHealth = fields.batteryHealth?.stringValue || '90%+ Certified Health';
       const batteryBackupHours = fields.batteryBackupHours?.stringValue || '4-6 Hours';
       const warrantyMonths = Number(fields.warrantyMonths?.integerValue || 12);
+      const includedAccessories = fields.includedAccessories?.stringValue || 'Original Charger, Power Cable, Lappy Square Laptop Bag, Warranty Card';
+      const weightKg = fields.weightKg?.stringValue || '1.4 kg';
+      const useCase = fields.useCase?.stringValue || 'Business & Everyday, Programming, Students';
       const description = fields.description?.stringValue || null;
       const featured = Boolean(fields.featured?.booleanValue);
       const bestSeller = Boolean(fields.bestSeller?.booleanValue);
@@ -159,11 +163,15 @@ export async function ensureFirestoreProductsSynced(): Promise<void> {
           storageGb,
           storageType,
           screenSize,
+          displayResolution,
           graphicsCard,
           os,
           batteryHealth,
           batteryBackupHours,
           warrantyMonths,
+          includedAccessories,
+          weightKg,
+          useCase,
           description,
           featured,
           bestSeller,
