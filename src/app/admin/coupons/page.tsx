@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Tag, Plus, CheckCircle2, AlertCircle, Trash2 } from 'lucide-react';
+import { Tag, Plus, CheckCircle2, AlertCircle, Trash2, Edit2 } from 'lucide-react';
+import EditCouponModal, { CouponItemData } from './EditCouponModal';
 
 interface CouponItem {
   id: string;
@@ -10,6 +11,7 @@ interface CouponItem {
   discountType: string;
   discountValue: number;
   minOrderValue: number;
+  maxDiscount?: number | null;
   currentUses: number;
   maxUses: number;
   validUntil: string;
@@ -20,6 +22,7 @@ export default function AdminCouponsPage() {
   const [coupons, setCoupons] = useState<CouponItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
+  const [editingCoupon, setEditingCoupon] = useState<CouponItemData | null>(null);
 
   const [formData, setFormData] = useState({
     code: '',
@@ -87,7 +90,7 @@ export default function AdminCouponsPage() {
         <div>
           <h1 className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight flex items-center gap-2">
             <Tag className="w-7 h-7 text-emerald-600" />
-            <span>Discount Coupons & Promotions</span>
+            <span>Discount Coupons &amp; Promotions</span>
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
             Create percentage discounts, flat cashbacks, and minimum cart spend rules.
@@ -96,7 +99,7 @@ export default function AdminCouponsPage() {
 
         <button
           onClick={() => setShowForm(!showForm)}
-          className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-sm flex items-center gap-1.5 self-start sm:self-auto"
+          className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-bold shadow-sm flex items-center gap-1.5 self-start sm:self-auto cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>{showForm ? 'Cancel' : 'Create New Coupon'}</span>
@@ -183,7 +186,7 @@ export default function AdminCouponsPage() {
           <div className="flex justify-end pt-2">
             <button
               type="submit"
-              className="px-5 py-2.5 bg-slate-900 text-white rounded-xl font-bold"
+              className="px-5 py-2.5 bg-slate-900 text-white rounded-xl font-bold cursor-pointer hover:bg-slate-800 transition-colors"
             >
               Save Coupon
             </button>
@@ -207,8 +210,15 @@ export default function AdminCouponsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 text-slate-700">
+              {coupons.length === 0 && !loading && (
+                <tr>
+                  <td colSpan={7} className="py-8 text-center text-slate-400">
+                    No discount coupons found. Click &quot;Create New Coupon&quot; to add one.
+                  </td>
+                </tr>
+              )}
               {coupons.map((c) => (
-                <tr key={c.id} className="hover:bg-slate-50/80">
+                <tr key={c.id} className="hover:bg-slate-50/80 transition-colors">
                   <td className="py-3 font-mono font-bold text-slate-900 text-xs">
                     {c.code}
                     {c.description && <span className="block font-sans text-[10px] text-slate-400 font-normal">{c.description}</span>}
@@ -226,18 +236,33 @@ export default function AdminCouponsPage() {
                     {new Date(c.validUntil).toLocaleDateString('en-IN', { dateStyle: 'medium' })}
                   </td>
                   <td className="py-3">
-                    <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">
-                      Active
-                    </span>
+                    {c.active ? (
+                      <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">
+                        Active
+                      </span>
+                    ) : (
+                      <span className="bg-slate-100 text-slate-600 text-[10px] font-bold px-2 py-0.5 rounded">
+                        Inactive
+                      </span>
+                    )}
                   </td>
                   <td className="py-3 text-right">
-                    <button
-                      onClick={() => handleDeleteCoupon(c.id, c.code)}
-                      className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors"
-                      title="Delete Coupon"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+                    <div className="flex items-center justify-end gap-1">
+                      <button
+                        onClick={() => setEditingCoupon(c)}
+                        className="p-1.5 text-slate-500 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors cursor-pointer"
+                        title="Edit Coupon"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteCoupon(c.id, c.code)}
+                        className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                        title="Delete Coupon"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -246,6 +271,17 @@ export default function AdminCouponsPage() {
         </div>
       </div>
 
+      {/* Edit Coupon Modal */}
+      {editingCoupon && (
+        <EditCouponModal
+          coupon={editingCoupon}
+          isOpen={!!editingCoupon}
+          onClose={() => setEditingCoupon(null)}
+          onSuccess={fetchCoupons}
+        />
+      )}
+
     </div>
   );
 }
+
