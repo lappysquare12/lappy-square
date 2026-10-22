@@ -1,0 +1,475 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x", "rhel-openssl-3.0.x"]
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  CONTENT_MANAGER
+  CUSTOMER
+}
+
+enum ConditionGrade {
+  LIKE_NEW
+  EXCELLENT
+  GOOD
+}
+
+enum OrderStatus {
+  PENDING
+  PROCESSING
+  CONFIRMED
+  SHIPPED
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  VERIFIED_PAID
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  WHATSAPP_ORDER
+  RAZORPAY
+  CASH_ON_DELIVERY
+}
+
+enum EnquiryType {
+  GENERAL
+  SELL_LAPTOP
+  EXCHANGE
+  CORPORATE
+  VENDOR
+}
+
+enum EnquiryStatus {
+  NEW
+  CONTACTED
+  IN_PROGRESS
+  RESOLVED
+  REJECTED
+}
+
+model User {
+  id           String      @id @default(cuid())
+  email        String      @unique
+  passwordHash String
+  name         String
+  phone        String?
+  role         Role        @default(CUSTOMER)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  addresses    Address[]
+  orders       Order[]
+  reviews      Review[]
+  wishlist     Wishlist[]
+  cartItems    CartItem[]
+  auditLogs    AuditLog[]
+}
+
+model Address {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  fullName   String
+  phone      String
+  street     String
+  city       String
+  state      String
+  postalCode String
+  country    String   @default("India")
+  isDefault  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
+
+model Brand {
+  id           String    @id @default(cuid())
+  name         String    @unique
+  slug         String    @unique
+  logoUrl      String?
+  description  String?
+  featured     Boolean   @default(false)
+  displayOrder Int       @default(0)
+  active       Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  products     Product[]
+}
+
+model Category {
+  id           String    @id @default(cuid())
+  name         String    @unique
+  slug         String    @unique
+  description  String?
+  image        String?
+  displayOrder Int       @default(0)
+  active       Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  products     Product[]
+}
+
+model Product {
+  id                  String             @id @default(cuid())
+  title               String
+  slug                String             @unique
+  sku                 String             @unique
+  brandId             String
+  brand               Brand              @relation(fields: [brandId], references: [id])
+  categoryId          String
+  category            Category           @relation(fields: [categoryId], references: [id])
+  conditionGrade      ConditionGrade     @default(EXCELLENT)
+  price               Int
+  originalPrice       Int
+  stock               Int                @default(1)
+  featured            Boolean            @default(false)
+  bestSeller          Boolean            @default(false)
+  isNewArrival        Boolean            @default(false)
+  isDealOfTheDay      Boolean            @default(false)
+  dealExpiresAt       DateTime?
+  rating              Float              @default(4.8)
+  reviewCount         Int                @default(0)
+  active              Boolean            @default(true)
+  
+  // Specs
+  processor           String
+  processorModel      String
+  processorGen        String?
+  ramGb               Int
+  ramType             String?            @default("DDR4")
+  storageGb           Int
+  storageType         String             @default("SSD")
+  screenSize          String
+  displayResolution   String?
+  graphicsCard        String?
+  graphicsType        String?            @default("Integrated")
+  os                  String             @default("Windows 11 Pro")
+  batteryHealth       String?            @default("85%+ Certified")
+  batteryBackupHours  String?            @default("4-6 Hours")
+  warrantyMonths      Int                @default(12)
+  includedAccessories String?            @default("Original Charger, Power Cable, Lappy Square Laptop Bag, Warranty Card")
+  weightKg            String?            @default("1.4 kg")
+  useCase             String?            @default("Business, Programming, Students")
+  description         String?
+
+  // SEO
+  metaTitle           String?
+  metaDescription     String?
+  canonicalUrl        String?
+  ogImage             String?
+
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  images              ProductImage[]
+  inventoryUnits      InventoryUnit[]
+  reviews             Review[]
+  faqs                ProductFAQ[]
+  cartItems           CartItem[]
+  wishlist            Wishlist[]
+  orderItems          OrderItem[]
+}
+
+model ProductImage {
+  id           String   @id @default(cuid())
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  url          String
+  alt          String?
+  isPrimary    Boolean  @default(false)
+  displayOrder Int      @default(0)
+}
+
+model InventoryUnit {
+  id             String    @id @default(cuid())
+  productId      String
+  product        Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  serialNumber   String    @unique
+  conditionNotes String?
+  status         String    @default("AVAILABLE") // AVAILABLE, RESERVED, SOLD, DEFECTIVE
+  createdAt      DateTime  @default(now())
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  sessionId String?
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Wishlist {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, productId])
+}
+
+model Order {
+  id                   String               @id @default(cuid())
+  orderNumber          String               @unique
+  userId               String?
+  user                 User?                @relation(fields: [userId], references: [id], onDelete: SetNull)
+  guestEmail           String?
+  guestPhone           String?
+  guestName            String?
+  shippingAddress      String
+  billingAddress       String?
+  status               OrderStatus          @default(PENDING)
+  paymentStatus        PaymentStatus        @default(PENDING)
+  paymentMethod        PaymentMethod        @default(CASH_ON_DELIVERY)
+  razorpayOrderId      String?
+  razorpayPaymentId    String?
+  razorpaySignature    String?
+  subtotal             Int
+  discountAmount       Int                  @default(0)
+  shippingCharge       Int                  @default(0)
+  taxAmount            Int                  @default(0)
+  totalAmount          Int
+  couponCode           String?
+  customerNotes        String?
+  adminNotes           String?
+  trackingNumber       String?
+  courierPartner       String?
+  shippedAt            DateTime?
+  deliveredAt          DateTime?
+  cancelledAt          DateTime?
+  cancellationReason   String?
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+
+  items                OrderItem[]
+  paymentTransactions  PaymentTransaction[]
+  whatsAppLogs         WhatsAppLog[]
+}
+
+model OrderItem {
+  id             String         @id @default(cuid())
+  orderId        String
+  order          Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId      String?
+  product        Product?       @relation(fields: [productId], references: [id], onDelete: SetNull)
+  title          String
+  sku            String
+  price          Int
+  quantity       Int            @default(1)
+  brandName      String?
+  conditionGrade ConditionGrade @default(EXCELLENT)
+  specsSnapshot  String?
+}
+
+model PaymentTransaction {
+  id            String    @id @default(cuid())
+  orderId       String
+  order         Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  gateway       String    @default("RAZORPAY")
+  transactionId String
+  amount        Int
+  status        String
+  rawPayload    String?
+  verifiedAt    DateTime?
+  createdAt     DateTime  @default(now())
+}
+
+model Coupon {
+  id            String    @id @default(cuid())
+  code          String    @unique
+  description   String?
+  discountType  String    @default("PERCENTAGE") // PERCENTAGE or FIXED
+  discountValue Int
+  minOrderValue Int       @default(0)
+  maxDiscount   Int?
+  maxUses       Int       @default(100)
+  currentUses   Int       @default(0)
+  validFrom     DateTime  @default(now())
+  validUntil    DateTime
+  active        Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+}
+
+model Review {
+  id                 String   @id @default(cuid())
+  productId          String
+  product            Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId             String?
+  user               User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userName           String
+  userEmail          String?
+  rating             Int      @default(5)
+  title              String?
+  comment            String
+  isVerifiedPurchase Boolean  @default(true)
+  isApproved         Boolean  @default(true)
+  createdAt          DateTime @default(now())
+}
+
+model ProductFAQ {
+  id           String   @id @default(cuid())
+  productId    String?
+  product      Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+  question     String
+  answer       String
+  category     String   @default("GENERAL")
+  displayOrder Int      @default(0)
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+}
+
+model BlogPost {
+  id              String   @id @default(cuid())
+  title           String
+  slug            String   @unique
+  excerpt         String
+  content         String
+  coverImage      String
+  author          String   @default("Lappy Square Tech Team")
+  category        String   @default("Buying Guide")
+  published       Boolean  @default(true)
+  metaTitle       String?
+  metaDescription String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Banner {
+  id           String   @id @default(cuid())
+  title        String
+  subtitle     String?
+  imageUrl     String
+  linkUrl      String   @default("/shop")
+  badgeText    String?
+  ctaText      String   @default("Shop Now")
+  sectionKey   String   @default("HERO")
+  active       Boolean  @default(true)
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+}
+
+model HomepageConfig {
+  id           String   @id @default(cuid())
+  sectionKey   String   @unique
+  title        String
+  subtitle     String?
+  enabled      Boolean  @default(true)
+  displayOrder Int      @default(0)
+  settingsJson String?
+  updatedAt    DateTime @updatedAt
+}
+
+model ContactEnquiry {
+  id            String        @id @default(cuid())
+  type          EnquiryType   @default(GENERAL)
+  name          String
+  email         String
+  phone         String
+  city          String?
+  deviceDetails String?
+  message       String?
+  status        EnquiryStatus @default(NEW)
+  adminNotes    String?
+  createdAt     DateTime      @default(now())
+}
+
+model WhatsAppSetting {
+  id                     String   @id @default(cuid())
+  enabled                Boolean  @default(false)
+  businessNumber         String   @default("+919057342442")
+  recipientNumber        String   @default("+919057342442")
+  businessAccountId      String?  @default("")
+  phoneNumberId          String?  @default("")
+  accessToken            String?  @default("")
+  notifyOnOrder          Boolean  @default(true)
+  notifyOnPayment        Boolean  @default(true)
+  notifyOnShipment       Boolean  @default(true)
+  notifyOnDelivery       Boolean  @default(true)
+  notifyOnCancel         Boolean  @default(true)
+  templateOrderPlaced    String   @default("order_notification_lappy_square")
+  templatePaymentVerified String  @default("payment_verified_lappy_square")
+  updatedAt              DateTime @updatedAt
+}
+
+model WhatsAppLog {
+  id                String   @id @default(cuid())
+  orderId           String?
+  order             Order?   @relation(fields: [orderId], references: [id], onDelete: SetNull)
+  recipient         String
+  messageType       String   @default("NEW_ORDER")
+  status            String   @default("SENT") // SENT, FAILED, PENDING, DELIVERED
+  providerMessageId String?
+  errorMessage      String?
+  payload           String?
+  responseData      String?
+  createdAt         DateTime @default(now())
+}
+
+model WebsiteSetting {
+  id                     String   @id @default(cuid())
+  siteName               String   @default("Lappy Square")
+  tagline                String   @default("Certified Pre-Owned & Refurbished Laptops")
+  logoUrl                String?  @default("")
+  brandAccent            String   @default("#0F172A")
+  supportEmail           String   @default("lappysquare12@gmail.com")
+  supportPhone           String   @default("+91 93769 88788")
+  supportAddress         String   @default("Peris, Near, Vijay Path, Ward 27, Chauraha, Mansarover, Jaipur, Rajasthan 302020")
+  announcementText       String   @default("⚡ Special Offer: Free Pan-India Insured Express Shipping & 1-Year Comprehensive Warranty on all Laptops!")
+  announcementActive     Boolean  @default(true)
+  freeShippingThreshold  Int      @default(0)
+  defaultShippingCost    Int      @default(0)
+  taxPercentage          Int      @default(18)
+  returnWindowDays       Int      @default(7)
+  warrantyText           String   @default("1-Year Certified Warranty with 45-point testing report included.")
+  metaTitle              String   @default("Lappy Square | Certified Refurbished & Second-Hand Laptops in India")
+  metaDescription        String   @default("Buy certified refurbished laptops from Apple, Dell, HP, Lenovo & Asus. 45-point quality check, 1-year warranty, free Pan-India delivery.")
+  instagramUrl           String   @default("https://www.instagram.com/lappy_square/")
+  facebookUrl            String   @default("https://www.facebook.com/61593042681135/")
+  youtubeUrl             String   @default("https://youtube.com/@lappysquare")
+  linkedinUrl            String   @default("https://linkedin.com/company/lappysquare")
+  twitterUrl             String   @default("https://twitter.com/lappysquare")
+  whatsappNumber         String   @default("+91 93769 88788")
+  googleSiteVerification String?  @default("")
+  googleAnalyticsId      String?  @default("")
+  updatedAt              DateTime @updatedAt
+}
+
+model VideoReview {
+  id           String   @id @default(cuid())
+  title        String
+  customerName String
+  videoUrl     String
+  thumbnailUrl String?
+  laptopModel  String?
+  rating       Int      @default(5)
+  featured     Boolean  @default(true)
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+}
+
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  adminId   String?
+  admin     User?    @relation(fields: [adminId], references: [id], onDelete: SetNull)
+  action    String
+  entity    String
+  entityId  String?
+  details   String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+}

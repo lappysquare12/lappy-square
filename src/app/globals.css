@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F7F8FA;
+    --bg-tertiary: #F1F3F6;
+    --text-primary: #171717;
+    --text-secondary: #666666;
+    --text-muted: #8E8E93;
+    --border-color: #E8E8E8;
+    --border-light: #F0F0F0;
+    --brand-accent: #0F172A;
+    --brand-accent-hover: #1E293B;
+    --success: #15803D;
+    --warning: #B45309;
+    --danger: #DC2626;
+  }
+
+  * {
+    border-color: var(--border-color);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-poppins), 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    overflow-x: clip;
+    max-width: 100vw;
+    width: 100%;
+  }
+
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-poppins), 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    overflow-x: clip;
+    max-width: 100vw;
+    width: 100%;
+    position: relative;
+  }
+}
+
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+::-webkit-scrollbar-track {
+  background: #F7F8FA;
+}
+::-webkit-scrollbar-thumb {
+  background: #D1D5DB;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9CA3AF;
+}
+
+/* Glass & Border Utilities */
+.card-hover {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.08);
+  border-color: #D1D5DB;
+}
+
+/* Badge styles */
+.badge-grade-like-new {
+  background-color: #ECFDF5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+}
+.badge-grade-excellent {
+  background-color: #EFF6FF;
+  color: #1E40AF;
+  border: 1px solid #BFDBFE;
+}
+.badge-grade-good {
+  background-color: #F8FAFC;
+  color: #334155;
+  border: 1px solid #E2E8F0;
+}
+
+/* Hide Netlify Badge & Drawer on Mobile and Desktop */
+[data-netlify-drawer],
+#netlify-badge,
+.netlify-badge,
+[data-netlify-badge],
+div[id*="netlify"],
+div[class*="netlify-badge"],
+iframe[title*="Netlify"],
+iframe[src*="netlify"],
+netlify-drawer {
+  display: none !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  opacity: 0 !important;
+  z-index: -9999 !important;
+}

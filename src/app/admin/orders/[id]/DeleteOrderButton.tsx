@@ -1,0 +1,115 @@
+'use client';
+
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Trash2, Loader2, AlertTriangle, X } from 'lucide-react';
+
+interface DeleteOrderButtonProps {
+  orderId: string;
+  orderNumber: string;
+}
+
+export default function DeleteOrderButton({ orderId, orderNumber }: DeleteOrderButtonProps) {
+  const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    setErrorMessage(null);
+    try {
+      const res = await fetch(`/api/admin/orders/${orderId}`, { method: 'DELETE' });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to delete order');
+      }
+      setShowModal(false);
+      router.push('/admin/orders');
+      router.refresh();
+    } catch (err: unknown) {
+      setErrorMessage(err instanceof Error ? err.message : 'Error deleting order');
+      setIsDeleting(false);
+    }
+  };
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setShowModal(true)}
+        className="px-3.5 py-2 border border-rose-200 bg-rose-50/50 hover:bg-rose-100/80 rounded-xl text-xs font-bold text-rose-700 flex items-center gap-1.5 transition-colors"
+        title="Delete this order"
+      >
+        <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+        <span>Delete Order</span>
+      </button>
+
+      {/* Confirmation Modal */}
+      {showModal && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 text-left">
+          <div className="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600 shrink-0">
+                <AlertTriangle className="w-6 h-6" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-base font-bold text-slate-950">Confirm Order Deletion</h3>
+                  <button
+                    type="button"
+                    onClick={() => setShowModal(false)}
+                    className="p-1 text-slate-400 hover:text-slate-700 rounded-lg"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                  Are you sure you want to permanently delete Order <strong className="text-slate-900 font-semibold">#{orderNumber}</strong>?
+                </p>
+                <p className="text-[11px] text-rose-600 font-medium mt-2 bg-rose-50/80 border border-rose-100 rounded-lg p-2">
+                  ⚠️ This action cannot be undone. All linked order items, payment records, and WhatsApp notification logs will be permanently deleted.
+                </p>
+              </div>
+            </div>
+
+            {errorMessage && (
+              <div className="mt-4 p-3 rounded-xl bg-rose-50 text-rose-700 text-xs font-medium border border-rose-200">
+                {errorMessage}
+              </div>
+            )}
+
+            <div className="mt-6 flex items-center justify-end gap-2.5">
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={() => setShowModal(false)}
+                className="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={isDeleting}
+                onClick={handleDelete}
+                className="px-5 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl flex items-center gap-2 transition-all shadow-md shadow-rose-600/20 disabled:opacity-50"
+              >
+                {isDeleting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Deleting...</span>
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-4 h-4" />
+                    <span>Yes, Delete Order</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
