@@ -22,7 +22,7 @@ export default function LappySquareLogo({
     return (
       <div className={`inline-flex items-center justify-center shrink-0 ${className}`}>
         <Image
-          src="/logo.png?v=3"
+          src="/logo.png"
           alt="Lappy Square Official Logo"
           width={size}
           height={size}
@@ -36,7 +36,7 @@ export default function LappySquareLogo({
   return (
     <div className={`inline-flex items-center gap-2.5 sm:gap-3 shrink-0 ${className}`}>
       <Image
-        src="/logo.png?v=3"
+        src="/logo.png"
         alt="Lappy Square Official Logo"
         width={size}
         height={size}
