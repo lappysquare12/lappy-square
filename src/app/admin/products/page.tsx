@@ -14,7 +14,6 @@ import {
   XCircle
 } from 'lucide-react';
 import ProductTableActions from './ProductTableActions';
-import QuickAddProductModal from './QuickAddProductModal';
 import FirestoreSyncButton from './FirestoreSyncButton';
 import { ensureFirestoreProductsSynced } from '@/lib/firestore-sync';
 
@@ -45,7 +44,13 @@ export default async function AdminProductsPage() {
 
         <div className="flex flex-wrap items-center gap-3">
           <FirestoreSyncButton />
-          <QuickAddProductModal />
+          <Link
+            href="/admin/products/new"
+            className="px-4 py-2.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-700/20 flex items-center gap-1.5 transition-all"
+          >
+            <Plus className="w-4 h-4" />
+            <span>+ Add New Laptop</span>
+          </Link>
         </div>
       </div>
 
