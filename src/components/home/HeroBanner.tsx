@@ -85,13 +85,13 @@ export default function HeroBanner({ banners }: HeroBannerProps) {
     setCurrentIdx((prev) => (prev - 1 + totalSlides) % totalSlides);
   };
 
-  // Auto-play timer with increased speed (2.8s)
+  // Auto-play timer (5s) for pleasant, non-flickering slide transitions
   useEffect(() => {
     if (isPaused || totalSlides <= 1) return;
 
     timerRef.current = setInterval(() => {
       nextSlide();
-    }, 2800);
+    }, 5000);
 
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
@@ -109,13 +109,13 @@ export default function HeroBanner({ banners }: HeroBannerProps) {
       {/* Hero Carousel Container - Balanced responsive banner height so banners are never cut off */}
       {/* Modern Banner Stage with Clean Responsive Ratio */}
       <div className="relative w-full h-[340px] sm:h-[400px] md:h-[480px] lg:h-[540px] xl:h-[580px] overflow-hidden bg-slate-950">
-        <AnimatePresence mode="wait">
+        <AnimatePresence initial={false}>
           <motion.div
             key={currentSlide.id || currentIdx}
-            initial={{ opacity: 0, scale: 1.02 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.99 }}
-            transition={{ duration: 0.35, ease: 'easeInOut' }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.6, ease: 'easeInOut' }}
             className="absolute inset-0 w-full h-full"
           >
             {/* Complete Full-Width Banner Image */}

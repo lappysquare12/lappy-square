@@ -23,7 +23,7 @@ export async function ensureFirestoreProductsSynced(): Promise<void> {
     const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'lappy-square';
     const res = await fetch(
       `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/products`,
-      { cache: 'no-store' }
+      { cache: 'no-store', signal: AbortSignal.timeout(1500) }
     );
     if (!res.ok) return;
 
