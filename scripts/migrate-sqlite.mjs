@@ -58,7 +58,24 @@ async function migrateSqlite() {
         console.log('[migrate-sqlite] Table VideoReview already exists.');
       }
 
-      // 3. Checkpoint WAL changes directly into the main dev.db file
+      // 3. Fix any broken / 404 Unsplash image URLs in the database
+      try {
+        const invalidUrlCount = await prisma.productImage.updateMany({
+          where: {
+            url: { contains: '1544731612' }
+          },
+          data: {
+            url: 'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=1000&q=80'
+          }
+        });
+        if (invalidUrlCount.count > 0) {
+          console.log(`[migrate-sqlite] Repaired ${invalidUrlCount.count} invalid ProductImage URLs.`);
+        }
+      } catch (imgErr) {
+        console.log('[migrate-sqlite] Image repair notice:', imgErr.message);
+      }
+
+      // 4. Checkpoint WAL changes directly into the main dev.db file
       try {
         await prisma.$queryRawUnsafe('PRAGMA wal_checkpoint(TRUNCATE);');
         console.log('[migrate-sqlite] SQLite WAL checkpoint completed.');

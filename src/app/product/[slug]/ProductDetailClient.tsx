@@ -280,12 +280,18 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
               {/* Main Preview Box */}
               <div className="relative aspect-[4/3] w-full rounded-2xl bg-slate-50 border border-slate-200/80 overflow-hidden flex items-center justify-center p-4 sm:p-6">
                 <Image
-                  src={imageUrls[selectedImageIdx] || imageUrls[0]}
+                  src={imageUrls[selectedImageIdx] || imageUrls[0] || 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80'}
                   alt={product.title}
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
                   className="object-contain p-2 sm:p-4 transition-transform duration-300 hover:scale-105"
                   priority
+                  onError={(e) => {
+                    const target = e.currentTarget as HTMLImageElement;
+                    if (target && !target.src.includes('1588872657578')) {
+                      target.src = 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80';
+                    }
+                  }}
                 />
 
                 {discountPercentage > 0 && (

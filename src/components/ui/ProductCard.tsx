@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -60,9 +60,11 @@ export default function ProductCard({ product }: ProductCardProps) {
     ((product.originalPrice - product.price) / product.originalPrice) * 100
   );
 
-  const imageUrl =
-    product.images?.[0]?.url ||
+  const fallbackUrl =
     'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=800&q=80';
+
+  const imageUrl = product.images?.[0]?.url || fallbackUrl;
+  const [imgSrc, setImgSrc] = useState(imageUrl);
 
   const gradeDisplay = {
     LIKE_NEW: {
@@ -216,12 +218,13 @@ export default function ProductCard({ product }: ProductCardProps) {
           {/* Big Laptop Showcase Image with Hover Zoom */}
           <Link href={`/product/${product.slug}`} className="block relative w-full h-full">
             <Image
-              src={imageUrl}
+              src={imgSrc}
               alt={product.title}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-contain p-2.5 transition-transform duration-500 group-hover:scale-108"
               loading="lazy"
+              onError={() => setImgSrc(fallbackUrl)}
             />
           </Link>
 

@@ -346,7 +346,7 @@ async function main() {
       useCase: 'Work from Home, Corporate, Accounting, Students',
       description: 'All-aluminum sleek silver body with Bang & Olufsen tuned audio. Ultra-bright 400-nits anti-glare display for working outdoors and near bright windows. Spill-resistant backlit keyboard.',
       images: [
-        'https://images.unsplash.com/photo-1544731612-de292439cc67?auto=format&fit=crop&w=1000&q=80',
+        'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=1000&q=80',
         'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80',
       ],
     },
@@ -499,7 +499,7 @@ async function main() {
       description: 'Super value under ₹20,000! Lightweight aluminum-magnesium alloy body (1.2 kg), fingerprint reader, fast USB-C charging, and crystal-clear Full HD IPS panel.',
       images: [
         'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80',
-        'https://images.unsplash.com/photo-1544731612-de292439cc67?auto=format&fit=crop&w=1000&q=80',
+        'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=1000&q=80',
       ],
     },
     {
