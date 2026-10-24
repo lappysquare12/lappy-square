@@ -4,6 +4,8 @@ const nextConfig: NextConfig = {
   /* config options here */
   experimental: {
     agentUpgrade: false,
+    cpus: 4,
+    workerThreads: false,
   },
   images: {
     remotePatterns: [
@@ -22,14 +24,6 @@ const nextConfig: NextConfig = {
         hostname: "**",
       },
     ],
-  },
-  turbopack: {
-    rules: {
-      "*.css": {
-        loaders: ["@tailwindcss/turbopack"],
-        as: "*.css",
-      },
-    },
   },
 };
 
