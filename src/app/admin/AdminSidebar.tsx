@@ -18,6 +18,7 @@ import {
   Menu,
   X,
   Image as ImageIcon,
+  BarChart3,
   Video
 } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/ui/SocialIcons';
@@ -66,6 +67,7 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
 
   const navItems = [
     { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+    { label: 'Website Reports & SEO', href: '/admin/reports', icon: BarChart3, badge: 'New' },
     { label: 'Hero Banners Slider', href: '/admin/banners', icon: ImageIcon, badge: 'Slider' },
     { label: 'Product Inventory', href: '/admin/products', icon: Laptop },
     { label: 'Orders & Fulfillment', href: '/admin/orders', icon: ShoppingBag },

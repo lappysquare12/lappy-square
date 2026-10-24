@@ -10,7 +10,8 @@ import {
   ArrowRight,
   CheckCircle2,
   Clock,
-  ExternalLink
+  ExternalLink,
+  BarChart3
 } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/ui/SocialIcons';
 import { requireAuth } from '@/lib/auth';
@@ -75,6 +76,13 @@ export default async function AdminDashboardPage() {
         </div>
 
         <div className="flex items-center gap-3">
+          <Link
+            href="/admin/reports"
+            className="px-4 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl text-xs font-bold shadow-xs flex items-center gap-1.5 transition-all"
+          >
+            <BarChart3 className="w-3.5 h-3.5" />
+            <span>Website Reports & SEO</span>
+          </Link>
           <Link
             href="/admin/products/new"
             className="px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold shadow-sm flex items-center gap-1.5"

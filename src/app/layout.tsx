@@ -65,10 +65,11 @@ export default async function RootLayout({
     const setting = await prisma.websiteSetting.findFirst({
       select: { googleSiteVerification: true, googleAnalyticsId: true },
     });
-    gsc = setting?.googleSiteVerification || process.env.GOOGLE_SITE_VERIFICATION || '';
-    gaId = setting?.googleAnalyticsId || process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || '';
+    gsc = setting?.googleSiteVerification || process.env.GOOGLE_SITE_VERIFICATION || process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '';
+    gaId = setting?.googleAnalyticsId || process.env.NEXT_PUBLIC_GA_ID || process.env.GOOGLE_ANALYTICS_ID || process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || '';
   } catch (err) {
-    // fallback if db during build
+    gsc = process.env.GOOGLE_SITE_VERIFICATION || process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '';
+    gaId = process.env.NEXT_PUBLIC_GA_ID || process.env.GOOGLE_ANALYTICS_ID || process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || '';
   }
 
   return (

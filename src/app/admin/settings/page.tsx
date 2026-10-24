@@ -53,6 +53,8 @@ export default async function AdminSettingsPage() {
           linkedinUrl: setting.linkedinUrl,
           twitterUrl: setting.twitterUrl,
           whatsappNumber: setting.whatsappNumber,
+          googleSiteVerification: setting.googleSiteVerification || '',
+          googleAnalyticsId: setting.googleAnalyticsId || '',
         }}
       />
     </div>

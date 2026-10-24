@@ -31,7 +31,7 @@ function getDatabaseUrl(): string {
   let existingDbPath = '';
 
   for (const candidate of candidates) {
-    if (candidate && fs.existsSync(candidate)) {
+    if (candidate && fs.existsSync(/*turbopackIgnore: true*/ candidate)) {
       existingDbPath = candidate;
       if (!isReadOnlyFs) {
         try {
@@ -72,7 +72,7 @@ function getDatabaseUrl(): string {
 }
 
 const resolvedUrl = getDatabaseUrl();
-process.env.DATABASE_URL = resolvedUrl;
+process.env['DATABASE_URL'] = resolvedUrl;
 
 export const prisma =
   globalForPrisma.prisma ||
