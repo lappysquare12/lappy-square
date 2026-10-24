@@ -87,4 +87,55 @@ export const prisma =
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
 
+// Non-blocking, idempotent SQLite schema check to prevent missing-column runtime crashes
+let schemaChecked = false;
+async function ensureSqliteSchemaSafe() {
+  if (schemaChecked || !resolvedUrl.startsWith('file:')) return;
+  schemaChecked = true;
+  try {
+    const settingCols = (await prisma.$queryRawUnsafe("PRAGMA table_info('WebsiteSetting');")) as Array<{ name: string }>;
+    if (Array.isArray(settingCols) && settingCols.length > 0) {
+      const colNames = new Set(settingCols.map((c) => c.name));
+      if (!colNames.has('googleSiteVerification')) {
+        await prisma.$executeRawUnsafe(
+          "ALTER TABLE \"WebsiteSetting\" ADD COLUMN \"googleSiteVerification\" TEXT DEFAULT '';"
+        );
+      }
+      if (!colNames.has('googleAnalyticsId')) {
+        await prisma.$executeRawUnsafe(
+          "ALTER TABLE \"WebsiteSetting\" ADD COLUMN \"googleAnalyticsId\" TEXT DEFAULT '';"
+        );
+      }
+    }
+
+    const tables = (await prisma.$queryRawUnsafe(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name='VideoReview';"
+    )) as Array<{ name: string }>;
+
+    if (!tables || tables.length === 0) {
+      await prisma.$executeRawUnsafe(`
+        CREATE TABLE IF NOT EXISTS "VideoReview" (
+          "id" TEXT NOT NULL PRIMARY KEY,
+          "title" TEXT NOT NULL,
+          "customerName" TEXT NOT NULL,
+          "videoUrl" TEXT NOT NULL,
+          "thumbnailUrl" TEXT,
+          "laptopModel" TEXT,
+          "rating" INTEGER NOT NULL DEFAULT 5,
+          "featured" BOOLEAN NOT NULL DEFAULT 1,
+          "displayOrder" INTEGER NOT NULL DEFAULT 0,
+          "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+      `);
+    }
+  } catch (err) {
+    // Non-fatal, prevent breaking standard operations
+    console.warn('SQLite schema alignment notice:', err);
+  }
+}
+
+// Trigger asynchronously in background
+ensureSqliteSchemaSafe().catch(() => {});
+
 export default prisma;
+
