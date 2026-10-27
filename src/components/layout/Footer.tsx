@@ -35,7 +35,7 @@ export default function Footer() {
     twitter: 'https://twitter.com/lappysquare',
     whatsapp: '919376988788',
     phone: '+91 93769 88788',
-    supportEmail: 'lappysquare12@gmail.com',
+    supportEmail: 'lappysquare@gmail.com',
   });
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function Footer() {
             twitter: s.twitterUrl || 'https://twitter.com/lappysquare',
             whatsapp: cleanWa.length >= 10 ? cleanWa : '919376988788',
             phone: s.supportPhone || '+91 93769 88788',
-            supportEmail: s.supportEmail || 'lappysquare12@gmail.com',
+            supportEmail: s.supportEmail || 'lappysquare@gmail.com',
           });
         }
       })

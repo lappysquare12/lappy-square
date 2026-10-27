@@ -52,7 +52,7 @@ export default function FirestoreSyncButton() {
       }
 
       setEmailStatus('success');
-      setEmailMessage(data.message || 'Test email sent to lappysquare12@gmail.com!');
+      setEmailMessage(data.message || 'Test email sent to lappysquare@gmail.com!');
     } catch (err: any) {
       setEmailStatus('error');
       setEmailMessage(err.message || 'Email test failed');
@@ -83,7 +83,7 @@ export default function FirestoreSyncButton() {
         <button
           onClick={handleTestEmail}
           disabled={testingEmail}
-          title="Send test email notification to lappysquare12@gmail.com"
+          title="Send test email notification to lappysquare@gmail.com"
           className="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all disabled:opacity-50"
         >
           {testingEmail ? (

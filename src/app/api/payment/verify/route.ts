@@ -56,7 +56,7 @@ export async function POST(req: Request) {
       console.error('WhatsApp notification dispatch error:', whatsappErr);
     }
 
-    // Send Resend Email Notification to lappysquare12@gmail.com
+    // Send Resend Email Notification to lappysquare@gmail.com
     try {
       await sendOrderEmailToAdmin({
         orderNumber: order.orderNumber,

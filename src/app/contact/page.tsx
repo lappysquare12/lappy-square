@@ -73,10 +73,10 @@ export default function ContactPage() {
     {
       icon: Mail,
       title: 'Official Email Support',
-      value: 'lappysquare12@gmail.com',
+      value: 'lappysquare@gmail.com',
       sub: 'Warranty claims & corporate invoicing',
       actionText: 'Send Email',
-      actionHref: 'mailto:lappysquare12@gmail.com',
+      actionHref: 'mailto:lappysquare@gmail.com',
       color: 'text-slate-800 bg-slate-100 border-slate-200',
     },
   ];

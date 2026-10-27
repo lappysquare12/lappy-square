@@ -235,7 +235,7 @@ export async function POST(req: Request) {
       }
     }
 
-    // 9. Dispatch Email Notification to lappysquare12@gmail.com via Resend
+    // 9. Dispatch Email Notification to lappysquare@gmail.com via Resend
     try {
       await sendOrderEmailToAdmin({
         orderNumber: order.orderNumber,

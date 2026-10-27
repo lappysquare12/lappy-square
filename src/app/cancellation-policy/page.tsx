@@ -18,7 +18,7 @@ export default function CancellationPolicyPage() {
             <span>1. Cancellation Before Dispatch (100% Full Refund)</span>
           </h2>
           <p className="mt-2 text-slate-600 leading-relaxed">
-            You may cancel any order at zero penalty or cost at any time prior to package dispatch and courier AWB generation. To cancel before dispatch, simply call or WhatsApp our desk at <strong>+91 93769 88788</strong> or email <strong>lappysquare12@gmail.com</strong>. The full paid amount will be reversed immediately.
+            You may cancel any order at zero penalty or cost at any time prior to package dispatch and courier AWB generation. To cancel before dispatch, simply call or WhatsApp our desk at <strong>+91 93769 88788</strong> or email <strong>lappysquare@gmail.com</strong>. The full paid amount will be reversed immediately.
           </p>
         </div>
 

@@ -15,7 +15,7 @@ async function main() {
       siteName: 'Lappy Square',
       tagline: 'Certified Pre-Owned & Refurbished Laptops',
       brandAccent: '#0F172A',
-      supportEmail: 'lappysquare12@gmail.com',
+      supportEmail: 'lappysquare@gmail.com',
       supportPhone: '+91 93769 88788',
       supportAddress: 'Peris, Near, Vijay Path, Ward 27, Chauraha, Mansarover, Jaipur, Rajasthan 302020',
       announcementText: '⚡ Certified Refurbished Laptops with 45-Point Lab Quality Check • Up to 1-Year Warranty • Free Insured Pan-India Delivery',

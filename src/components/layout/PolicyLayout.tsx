@@ -124,11 +124,11 @@ export default function PolicyLayout({
                   <span>+91 93769 88788</span>
                 </a>
                 <a
-                  href="mailto:lappysquare12@gmail.com"
+                  href="mailto:lappysquare@gmail.com"
                   className="flex items-center gap-2 text-slate-300 hover:text-white transition-colors text-[11px]"
                 >
                   <Mail className="w-3.5 h-3.5 text-slate-400" />
-                  <span>lappysquare12@gmail.com</span>
+                  <span>lappysquare@gmail.com</span>
                 </a>
               </div>
             </div>

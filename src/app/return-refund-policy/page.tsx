@@ -70,7 +70,7 @@ export default function ReturnRefundPolicyPage() {
             <span>How to Initiate a Return</span>
           </div>
           <p className="text-[11px] leading-relaxed text-slate-700">
-            Simply send a WhatsApp message to <strong>+91 93769 88788</strong> or email <strong>lappysquare12@gmail.com</strong> with your Order ID and photos. Our team initiates the reverse pickup immediately.
+            Simply send a WhatsApp message to <strong>+91 93769 88788</strong> or email <strong>lappysquare@gmail.com</strong> with your Order ID and photos. Our team initiates the reverse pickup immediately.
           </p>
         </div>
       </div>

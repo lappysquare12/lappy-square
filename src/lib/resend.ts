@@ -7,11 +7,11 @@ export function getResendClient(): Resend | null {
 
 export const resend = getResendClient();
 
-export const ADMIN_NOTIFICATION_EMAIL = process.env.ADMIN_NOTIFICATION_EMAIL || 'lappysquare12@gmail.com';
+export const ADMIN_NOTIFICATION_EMAIL = process.env.ADMIN_NOTIFICATION_EMAIL || 'lappysquare@gmail.com';
 export const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Lappy Square <onboarding@resend.dev>';
 
 /**
- * Send order notification email to lappysquare12@gmail.com
+ * Send order notification email to lappysquare@gmail.com
  */
 export async function sendOrderEmailToAdmin(order: {
   orderNumber: string;
@@ -161,7 +161,7 @@ export async function sendOrderEmailToAdmin(order: {
 }
 
 /**
- * Send Customer Enquiry / Sell Laptop Notification to lappysquare12@gmail.com
+ * Send Customer Enquiry / Sell Laptop Notification to lappysquare@gmail.com
  */
 export async function sendEnquiryEmailToAdmin(enquiry: {
   name: string;

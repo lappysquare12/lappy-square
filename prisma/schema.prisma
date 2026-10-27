@@ -425,7 +425,7 @@ model WebsiteSetting {
   tagline                String   @default("Certified Pre-Owned & Refurbished Laptops")
   logoUrl                String?  @default("")
   brandAccent            String   @default("#0F172A")
-  supportEmail           String   @default("lappysquare12@gmail.com")
+  supportEmail           String   @default("lappysquare@gmail.com")
   supportPhone           String   @default("+91 93769 88788")
   supportAddress         String   @default("Peris, Near, Vijay Path, Ward 27, Chauraha, Mansarover, Jaipur, Rajasthan 302020")
   announcementText       String   @default("⚡ Special Offer: Free Pan-India Insured Express Shipping & 1-Year Comprehensive Warranty on all Laptops!")

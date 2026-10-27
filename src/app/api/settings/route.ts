@@ -29,7 +29,7 @@ export async function GET() {
       setting: setting || {
         siteName: 'Lappy Square',
         tagline: 'Certified Pre-Owned & Refurbished Laptops',
-        supportEmail: 'lappysquare12@gmail.com',
+        supportEmail: 'lappysquare@gmail.com',
         supportPhone: '+91 93769 88788',
         supportAddress: 'Peris, Near, Vijay Path, Ward 27, Chauraha, Mansarover, Jaipur, Rajasthan 302020',
         announcementText: 'Special Offer: Free Pan-India Insured Express Shipping & 1-Year Comprehensive Warranty on all Laptops!',

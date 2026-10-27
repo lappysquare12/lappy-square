@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     const stringDeviceDetails = typeof deviceDetails === 'object' ? JSON.stringify(deviceDetails) : (deviceDetails || null);
     const enquiryId = `enq_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
 
-    // 1. Dispatch email notification to lappysquare12@gmail.com via Resend
+    // 1. Dispatch email notification to lappysquare@gmail.com via Resend
     let emailStatus = false;
     try {
       const emailResult = await sendEnquiryEmailToAdmin({
