@@ -383,9 +383,9 @@ export default function Header() {
 
         {/* Secondary Desktop Navigation Row — Renewfy Aligned Category Layout */}
         <nav suppressHydrationWarning className="hidden lg:block border-t border-[#F0F0F0] bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-12 text-xs xl:text-sm font-medium text-slate-700 gap-3">
-              <div className="flex items-center gap-3.5 xl:gap-5 whitespace-nowrap min-w-0 overflow-x-auto no-scrollbar py-1">
+          <div suppressHydrationWarning className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div suppressHydrationWarning className="flex items-center justify-between h-12 text-xs xl:text-sm font-medium text-slate-700 gap-3">
+              <div suppressHydrationWarning className="flex items-center gap-3.5 xl:gap-5 whitespace-nowrap min-w-0 overflow-x-auto no-scrollbar py-1">
                 
                 {/* 1. Shop Dropdown */}
                 <div
@@ -730,9 +730,10 @@ export default function Header() {
               </div>
 
               {/* Right Side Header CTA */}
-              <div className="flex items-center gap-2 xl:gap-3 text-xs text-slate-500 font-normal whitespace-nowrap shrink-0 pl-3 border-l border-slate-100">
+              <div suppressHydrationWarning className="flex items-center gap-2 xl:gap-3 text-xs text-slate-500 font-normal whitespace-nowrap shrink-0 pl-3 border-l border-slate-100">
                 <Link
                   href="/contact"
+                  suppressHydrationWarning
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs rounded-full shadow-xs transition-all whitespace-nowrap"
                 >
                   <PhoneCall className="w-3 h-3 text-white" />
