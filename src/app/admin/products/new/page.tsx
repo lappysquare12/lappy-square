@@ -11,6 +11,8 @@ export default function NewProductPage() {
 
   const [brands, setBrands] = useState<Array<{ id: string; name: string }>>([]);
   const [categories, setCategories] = useState<Array<{ id: string; name: string }>>([]);
+  const [seriesList, setSeriesList] = useState<Array<{ id: string; brandId: string; name: string; slug: string }>>([]);
+  const [isCustomSeries, setIsCustomSeries] = useState(false);
   const [loading, setLoading] = useState(false);
   const [images, setImages] = useState<string[]>([
     'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80',
@@ -22,6 +24,7 @@ export default function NewProductPage() {
     slug: '',
     sku: '',
     brandId: '',
+    series: '',
     categoryId: '',
     conditionGrade: 'LIKE_NEW',
     price: '',
@@ -52,7 +55,7 @@ export default function NewProductPage() {
   });
 
   useEffect(() => {
-    // Fetch live brands and categories from DB
+    // Fetch live brands, categories and brand series from DB
     fetch('/api/admin/meta')
       .then((r) => r.json())
       .then((data) => {
@@ -64,6 +67,9 @@ export default function NewProductPage() {
           setCategories(data.categories);
           setFormData((prev) => ({ ...prev, categoryId: prev.categoryId || data.categories[0].id }));
         }
+        if (data.brandSeries) {
+          setSeriesList(data.brandSeries);
+        }
       })
       .catch(() => {});
   }, []);
@@ -73,7 +79,8 @@ export default function NewProductPage() {
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)/g, '');
-    const genSku = `LS-${val.slice(0, 3).toUpperCase()}-${Math.floor(100 + Math.random() * 900)}`;
+    const cleanPrefix = val.replace(/[^a-zA-Z]/g, '').slice(0, 3).toUpperCase() || 'LAP';
+    const genSku = `LS-${cleanPrefix}-${Math.floor(100 + Math.random() * 900)}`;
 
     setFormData((prev) => ({
       ...prev,
@@ -81,6 +88,22 @@ export default function NewProductPage() {
       slug: slugified,
       sku: prev.sku || genSku,
     }));
+  };
+
+  const handleRegenerateSlug = () => {
+    const slugified = formData.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    setFormData((prev) => ({ ...prev, slug: slugified || 'refurbished-laptop' }));
+  };
+
+  const handleRegenerateSku = () => {
+    const brandObj = brands.find((b) => b.id === formData.brandId);
+    const bCode = (brandObj?.name || 'LAP').slice(0, 3).toUpperCase();
+    const sCode = (formData.series || 'MOD').slice(0, 3).toUpperCase().replace(/[^A-Z]/g, '');
+    const genSku = `LS-${bCode}-${sCode || 'GEN'}-${Math.floor(100 + Math.random() * 900)}`;
+    setFormData((prev) => ({ ...prev, sku: genSku }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -156,44 +179,73 @@ export default function NewProductPage() {
                 value={formData.title}
                 onChange={(e) => handleTitleChange(e.target.value)}
                 required
-                placeholder="e.g. Dell Latitude 7420 (2-in-1 Touch) — Core i7 11th Gen / 16GB / 512GB SSD"
-                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none focus:border-slate-800"
+                placeholder="e.g. Apple MacBook Pro 14 (M1 Pro) / Dell Latitude 7420 / Lenovo ThinkPad X1"
+                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none focus:border-slate-800 text-slate-900 font-semibold"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
-                <label className="block font-bold text-slate-700 mb-1">URL Slug *</label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="font-bold text-slate-700">URL Slug (Auto-Filled) *</label>
+                  <button
+                    type="button"
+                    onClick={handleRegenerateSlug}
+                    className="text-[11px] text-blue-700 font-bold hover:underline"
+                  >
+                    🔄 Re-sync from Title
+                  </button>
+                </div>
                 <input
                   type="text"
                   value={formData.slug}
                   onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
                   required
-                  placeholder="dell-latitude-7420-touch"
-                  className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none focus:border-slate-800"
+                  placeholder="e.g. apple-macbook-pro-14-m1"
+                  className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none focus:border-slate-800 text-slate-800 font-mono text-xs"
                 />
+                <p className="text-[11px] text-slate-400 mt-1">
+                  💡 <strong>What is a Slug?</strong> This is the web link URL for this laptop page (e.g. lappy.com/product/<strong>{formData.slug || 'laptop-slug'}</strong>). It auto-fills automatically when you type the title.
+                </p>
               </div>
 
               <div>
-                <label className="block font-bold text-slate-700 mb-1">Unique SKU *</label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="font-bold text-slate-700">Product Item Code (SKU) *</label>
+                  <button
+                    type="button"
+                    onClick={handleRegenerateSku}
+                    className="text-[11px] text-blue-700 font-bold hover:underline"
+                  >
+                    ⚡ Auto Code
+                  </button>
+                </div>
                 <input
                   type="text"
                   value={formData.sku}
                   onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
                   required
-                  placeholder="LS-DEL-LAT7420-01"
-                  className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none focus:border-slate-800 uppercase"
+                  placeholder="e.g. LS-MAC-PRO-101"
+                  className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none focus:border-slate-800 uppercase font-mono text-xs font-bold text-slate-900"
                 />
+                <p className="text-[11px] text-slate-400 mt-1">
+                  🏷️ Unique product item code for quick customer WhatsApp inquiries and billing.
+                </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* Brand, Brand Series/Type, Category, Grade */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div>
                 <label className="block font-bold text-slate-700 mb-1">Brand *</label>
                 <select
                   value={formData.brandId}
-                  onChange={(e) => setFormData({ ...formData, brandId: e.target.value })}
-                  className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
+                  onChange={(e) => {
+                    const newBrandId = e.target.value;
+                    setFormData((prev) => ({ ...prev, brandId: newBrandId, series: '' }));
+                    setIsCustomSeries(false);
+                  }}
+                  className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none font-semibold text-slate-800 text-xs"
                 >
                   <option value="">Select Brand</option>
                   {brands.map((b) => (
@@ -203,11 +255,102 @@ export default function NewProductPage() {
               </div>
 
               <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="font-bold text-slate-700">
+                    Series / Model Line
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setIsCustomSeries(!isCustomSeries)}
+                      className="text-[11px] text-blue-700 font-bold hover:underline"
+                    >
+                      {isCustomSeries ? '← Select from List' : '+ Type New Series'}
+                    </button>
+                    <span className="text-slate-300">•</span>
+                    <Link
+                      href="/admin/brands"
+                      target="_blank"
+                      className="text-[10px] text-slate-500 hover:text-black font-semibold"
+                    >
+                      Manage All →
+                    </Link>
+                  </div>
+                </div>
+                {!isCustomSeries ? (
+                  <select
+                    value={formData.series}
+                    onChange={(e) => {
+                      if (e.target.value === '__custom__') {
+                        setIsCustomSeries(true);
+                        setFormData({ ...formData, series: '' });
+                      } else {
+                        setFormData({ ...formData, series: e.target.value });
+                      }
+                    }}
+                    className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none font-semibold text-slate-800 text-xs"
+                  >
+                    <option value="">Select Series / Model (e.g. MacBook Air, Latitude)</option>
+                    {(() => {
+                      const selectedBrand = brands.find((b) => b.id === formData.brandId);
+                      const brandNameLower = (selectedBrand?.name || '').toLowerCase();
+                      
+                      const dbMatches = seriesList.filter(
+                        (s) => !formData.brandId || s.brandId === formData.brandId
+                      );
+
+                      const fallbackMap: Record<string, string[]> = {
+                        apple: ['MacBook Air', 'MacBook Pro', 'iMac & Mac Mini'],
+                        dell: ['Latitude', 'XPS', 'Inspiron', 'Precision', 'Alienware', 'Vostro'],
+                        lenovo: ['ThinkPad', 'ThinkPad X1', 'IdeaPad', 'Legion', 'ThinkBook', 'Yoga'],
+                        hp: ['EliteBook', 'ProBook', 'ZBook', 'Pavilion', 'Envy', 'Omen', 'Spectre'],
+                        asus: ['ZenBook', 'ROG Gaming', 'TUF Gaming', 'VivoBook', 'ExpertBook'],
+                        acer: ['Swift', 'Aspire', 'Predator', 'Nitro'],
+                      };
+
+                      const fallbackList = fallbackMap[brandNameLower] || [];
+
+                      const options = dbMatches.length > 0 
+                        ? dbMatches.map((s) => s.name)
+                        : fallbackList;
+
+                      return options.map((optName) => (
+                        <option key={optName} value={optName}>
+                          {optName}
+                        </option>
+                      ));
+                    })()}
+                    <option value="__custom__">+ Type New Series Name...</option>
+                  </select>
+                ) : (
+                  <div className="flex items-center gap-1.5">
+                    <input
+                      type="text"
+                      value={formData.series}
+                      onChange={(e) => setFormData({ ...formData, series: e.target.value })}
+                      placeholder="Type series name (e.g. MacBook Air M2, Latitude 5420, Yoga 7i)"
+                      className="w-full bg-[#F7F8FA] border border-blue-500 rounded-xl p-3 outline-none text-xs text-slate-900 font-semibold"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setIsCustomSeries(false)}
+                      className="text-[11px] text-slate-500 hover:text-black px-2.5 py-3 rounded-xl bg-slate-100 whitespace-nowrap"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                )}
+                <p className="text-[10px] text-slate-400 mt-1">
+                  e.g. MacBook Air or Pro for Apple; Latitude or XPS for Dell.
+                </p>
+              </div>
+
+              <div>
                 <label className="block font-bold text-slate-700 mb-1">Category / Use Case *</label>
                 <select
                   value={formData.categoryId}
                   onChange={(e) => setFormData({ ...formData, categoryId: e.target.value })}
-                  className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
+                  className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none font-semibold text-slate-800 text-xs"
                 >
                   <option value="">Select Category</option>
                   {categories.map((c) => (
@@ -221,7 +364,7 @@ export default function NewProductPage() {
                 <select
                   value={formData.conditionGrade}
                   onChange={(e) => setFormData({ ...formData, conditionGrade: e.target.value })}
-                  className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
+                  className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none font-semibold text-slate-800 text-xs"
                 >
                   <option value="LIKE_NEW">Grade A+ (Like New)</option>
                   <option value="EXCELLENT">Grade A (Excellent)</option>
@@ -465,28 +608,63 @@ export default function NewProductPage() {
           </div>
 
           {/* Row 5: Warranty & What's in the Box */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label className="block font-bold text-slate-700 mb-1">Warranty Period (Months)</label>
-              <select
-                value={formData.warrantyMonths}
-                onChange={(e) => setFormData({ ...formData, warrantyMonths: e.target.value })}
-                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none font-semibold"
-              >
-                <option value="6">6 Months Comprehensive Warranty</option>
-                <option value="12">12 Months Comprehensive Warranty</option>
-                <option value="24">24 Months Extended Warranty</option>
-              </select>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+            <div className="lg:col-span-5 space-y-2">
+              <label className="block font-bold text-slate-700">
+                Warranty Coverage (Months) *
+              </label>
+              
+              {/* Manual numeric input */}
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  min="1"
+                  max="60"
+                  value={formData.warrantyMonths}
+                  onChange={(e) => setFormData({ ...formData, warrantyMonths: e.target.value })}
+                  placeholder="Enter months (e.g. 1, 3, 6, 12, 24, 36)"
+                  className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none font-black text-slate-950 text-sm focus:border-blue-700"
+                />
+                <span className="text-xs font-bold text-slate-500 whitespace-nowrap">Months</span>
+              </div>
+
+              {/* Quick 1 to 3 Presets & Common Durations */}
+              <div className="space-y-1">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Quick 1 to 3 Selectors:</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {[
+                    { label: '1 Year (12M)', val: '12' },
+                    { label: '2 Years (24M)', val: '24' },
+                    { label: '3 Years (36M)', val: '36' },
+                    { label: '6 Months', val: '6' },
+                    { label: '3 Months', val: '3' },
+                    { label: '1 Month', val: '1' },
+                  ].map((preset) => (
+                    <button
+                      key={preset.val}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, warrantyMonths: preset.val })}
+                      className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all border ${
+                        formData.warrantyMonths === preset.val
+                          ? 'bg-blue-700 text-white border-blue-700 shadow-2xs'
+                          : 'bg-white hover:bg-slate-100 text-slate-700 border-slate-200'
+                      }`}
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
 
-            <div className="sm:col-span-2">
-              <label className="block font-bold text-slate-700 mb-1">What&apos;s in the Box & Accessories (Comma-separated)</label>
-              <input
-                type="text"
+            <div className="lg:col-span-7">
+              <label className="block font-bold text-slate-700 mb-1">What&apos;s in the Box &amp; Accessories (Comma-separated)</label>
+              <textarea
+                rows={3}
                 value={formData.includedAccessories}
                 onChange={(e) => setFormData({ ...formData, includedAccessories: e.target.value })}
                 placeholder="e.g. 1x Original OEM Power Adapter & Power Cable, 1x Lappy Square Laptop Bag, 1x 45-Point Certificate, 1x Warranty Card"
-                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none"
+                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-3 outline-none text-xs"
               />
             </div>
           </div>

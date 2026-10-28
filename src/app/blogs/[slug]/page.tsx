@@ -118,7 +118,7 @@ export default async function SingleBlogPostPage({ params }: BlogPageProps) {
                 <span>Ready to buy certified hardware?</span>
               </h4>
               <p className="text-xs text-slate-500">
-                Explore laptops tested across our 45-point diagnostic checklist with 1-year warranty.
+                Explore laptops tested across our 45-point diagnostic checklist with genuine OEM accessories.
               </p>
             </div>
 

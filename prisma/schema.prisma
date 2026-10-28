@@ -94,16 +94,28 @@ model Address {
 }
 
 model Brand {
-  id           String    @id @default(cuid())
-  name         String    @unique
-  slug         String    @unique
+  id           String        @id @default(cuid())
+  name         String        @unique
+  slug         String        @unique
   logoUrl      String?
   description  String?
-  featured     Boolean   @default(false)
+  featured     Boolean       @default(false)
+  displayOrder Int           @default(0)
+  active       Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  products     Product[]
+  series       BrandSeries[]
+}
+
+model BrandSeries {
+  id           String    @id @default(cuid())
+  brandId      String
+  brand        Brand     @relation(fields: [brandId], references: [id], onDelete: Cascade)
+  name         String
+  slug         String
   displayOrder Int       @default(0)
   active       Boolean   @default(true)
   createdAt    DateTime  @default(now())
-  products     Product[]
 }
 
 model Category {
@@ -123,6 +135,7 @@ model Product {
   title               String
   slug                String             @unique
   sku                 String             @unique
+  series              String?            @default("")
   brandId             String
   brand               Brand              @relation(fields: [brandId], references: [id])
   categoryId          String

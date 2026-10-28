@@ -70,6 +70,7 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
     { label: 'Website Reports & SEO', href: '/admin/reports', icon: BarChart3, badge: 'New' },
     { label: 'Hero Banners Slider', href: '/admin/banners', icon: ImageIcon, badge: 'Slider' },
     { label: 'Product Inventory', href: '/admin/products', icon: Laptop },
+    { label: 'Brands & Series Types', href: '/admin/brands', icon: Tag, badge: 'Series' },
     { label: 'Orders & Fulfillment', href: '/admin/orders', icon: ShoppingBag },
     { label: 'WhatsApp Integration', href: '/admin/whatsapp', icon: WhatsAppIcon, badge: 'Live' },
     { label: 'Leads & Enquiries', href: '/admin/enquiries', icon: Users },

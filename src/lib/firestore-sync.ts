@@ -18,17 +18,24 @@ export async function ensureFirestoreProductsSynced(): Promise<void> {
   if (now - lastSyncTime < SYNC_INTERVAL_MS) {
     return;
   }
+  // Throttle immediately so timeout/offline state doesn't re-trigger on every render
+  lastSyncTime = now;
 
   try {
     const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'lappy-square';
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 2000);
+
     const res = await fetch(
       `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/products`,
-      { cache: 'no-store', signal: AbortSignal.timeout(1500) }
-    );
-    if (!res.ok) return;
+      { cache: 'no-store', signal: controller.signal }
+    ).catch(() => null);
 
-    const data = await res.json();
-    if (!data.documents || !Array.isArray(data.documents)) return;
+    clearTimeout(timeoutId);
+    if (!res || !res.ok) return;
+
+    const data = await res.json().catch(() => null);
+    if (!data?.documents || !Array.isArray(data.documents)) return;
 
     // Extract all live product IDs from Firestore cloud source of truth
     const firestoreIds = new Set<string>();
@@ -190,7 +197,10 @@ export async function ensureFirestoreProductsSynced(): Promise<void> {
     }
 
     lastSyncTime = Date.now();
-  } catch (err) {
-    console.error('[Firestore Sync Error]:', err);
+  } catch (err: unknown) {
+    if (process.env.NODE_ENV === 'development') {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.warn(`[Firestore Sync (offline/timeout)]: Using local database (${msg})`);
+    }
   }
 }

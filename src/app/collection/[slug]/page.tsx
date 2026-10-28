@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: CollectionPageProps): Promise
 
   return {
     title,
-    description: `Shop certified 45-point tested ${isApple ? 'Apple MacBooks' : isWindows ? 'Windows laptops' : slug} with 1-year warranty and in-store live testing.`,
+    description: `Shop certified 45-point tested ${isApple ? 'Apple MacBooks' : isWindows ? 'Windows laptops' : slug} with 45-point quality check and genuine accessories.`,
   };
 }
 
@@ -36,7 +36,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
 
   let whereClause: any = { active: true };
   let title = 'Laptop Collection';
-  let subtitle = 'Explore certified refurbished and open-box laptops with 1-year warranty.';
+  let subtitle = 'Explore certified refurbished and open-box laptops with 45-point testing report.';
 
   if (slug === 'macbook' || slug === 'apple') {
     whereClause.brand = { slug: 'apple' };
@@ -75,7 +75,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
     if (slug === 'under-20k') {
       whereClause.price = { lte: 20000 };
       title = 'Laptops Under ₹20,000';
-      subtitle = 'Affordable certified laptops with 1-year warranty and live store testing.';
+      subtitle = 'Affordable certified laptops with 45-point testing report and genuine accessories.';
     } else if (slug === '20k-40k') {
       whereClause.price = { gte: 20000, lte: 40000 };
       title = 'Laptops Between ₹20,000 - ₹40,000';
@@ -115,7 +115,7 @@ export default async function CollectionPage({ params }: CollectionPageProps) {
             <div className="max-w-3xl space-y-2 relative z-10">
               <span className="inline-flex items-center gap-1.5 bg-blue-50 text-blue-800 border border-blue-200 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">
                 <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-                <span>Verified Stock • 1-Year Warranty</span>
+                <span>Verified Stock • 45-Point Tested</span>
               </span>
               <h1 className="text-2xl sm:text-4xl font-black text-slate-950 tracking-tight">
                 {title}

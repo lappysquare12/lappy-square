@@ -7,15 +7,17 @@ import { SlidersHorizontal, X, RotateCcw } from 'lucide-react';
 interface FilterProps {
   brands: Array<{ id: string; name: string; slug: string }>;
   categories: Array<{ id: string; name: string; slug: string }>;
+  brandSeries?: Array<{ id: string; brandId: string; name: string; slug: string }>;
 }
 
-export default function ShopFilters({ brands }: FilterProps) {
+export default function ShopFilters({ brands, brandSeries = [] }: FilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
   const currentBrand = searchParams.get('brand') || '';
+  const currentSeries = searchParams.get('series') || '';
   const currentSort = searchParams.get('sort') || '';
   const currentRam = searchParams.get('ram') || '';
   const currentStorage = searchParams.get('storage') || '';
@@ -50,7 +52,7 @@ export default function ShopFilters({ brands }: FilterProps) {
   };
 
   const hasActiveFilters =
-    Boolean(currentBrand || currentRam || currentStorage || currentGrade || currentUseCase || currentMinPrice || currentMaxPrice);
+    Boolean(currentBrand || currentSeries || currentRam || currentStorage || currentGrade || currentUseCase || currentMinPrice || currentMaxPrice);
 
   const FilterContent = () => (
     <div className="space-y-6">
@@ -72,7 +74,13 @@ export default function ShopFilters({ brands }: FilterProps) {
             {currentBrand && (
               <span className="bg-white border border-slate-200 text-blue-700 text-[11px] px-2 py-0.5 rounded-full flex items-center gap-1 font-medium shadow-2xs">
                 Brand: {currentBrand}
-                <button onClick={() => updateParam('brand', '')}><X className="w-3 h-3 text-slate-400 hover:text-slate-700" /></button>
+                <button onClick={() => { updateParam('brand', ''); updateParam('series', ''); }}><X className="w-3 h-3 text-slate-400 hover:text-slate-700" /></button>
+              </span>
+            )}
+            {currentSeries && (
+              <span className="bg-white border border-slate-200 text-blue-700 text-[11px] px-2 py-0.5 rounded-full flex items-center gap-1 font-medium shadow-2xs">
+                Series: {currentSeries}
+                <button onClick={() => updateParam('series', '')}><X className="w-3 h-3 text-slate-400 hover:text-slate-700" /></button>
               </span>
             )}
             {currentRam && (
@@ -185,6 +193,54 @@ export default function ShopFilters({ brands }: FilterProps) {
           })}
         </div>
       </div>
+
+      {/* Series / Model Type Filter */}
+      {(() => {
+        const selectedBrandObj = brands.find((b) => b.slug === currentBrand);
+        const filteredSeries = brandSeries.filter(
+          (s) => !currentBrand || (selectedBrandObj && s.brandId === selectedBrandObj.id)
+        );
+
+        if (filteredSeries.length === 0) return null;
+
+        return (
+          <div className="border-t border-slate-100 pt-4">
+            <div className="flex items-center justify-between mb-2.5">
+              <label className="block text-xs font-bold text-slate-900 uppercase tracking-wider">
+                Series / Model Type
+              </label>
+              {currentSeries && (
+                <button
+                  type="button"
+                  onClick={() => updateParam('series', '')}
+                  className="text-[10px] text-rose-600 font-semibold hover:underline"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              {filteredSeries.map((s) => {
+                const isSelected = currentSeries.toLowerCase() === s.name.toLowerCase();
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => updateParam('series', isSelected ? '' : s.name)}
+                    className={`text-[11px] px-2.5 py-1.5 rounded-xl font-medium transition-all ${
+                      isSelected
+                        ? 'bg-blue-600 text-white font-bold shadow-xs'
+                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900'
+                    }`}
+                  >
+                    {s.name}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Condition Grade */}
       <div className="border-t border-slate-100 pt-4">

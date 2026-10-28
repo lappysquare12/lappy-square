@@ -18,8 +18,9 @@ export async function POST(req: Request) {
 
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
+      const whiteBg = formData.get('white_bg') === 'true' || formData.get('white_background') === 'true';
 
-      const result = await uploadImageToCloudinary(buffer, folder, resourceType);
+      const result = await uploadImageToCloudinary(buffer, folder, resourceType, { whiteBackground: whiteBg });
 
       return NextResponse.json({
         success: true,
@@ -34,7 +35,8 @@ export async function POST(req: Request) {
     if (body.image || body.file) {
       const folder = body.folder || 'lappy-square/uploads';
       const resourceType = body.resource_type || 'auto';
-      const result = await uploadImageToCloudinary(body.image || body.file, folder, resourceType);
+      const whiteBg = Boolean(body.white_bg || body.white_background);
+      const result = await uploadImageToCloudinary(body.image || body.file, folder, resourceType, { whiteBackground: whiteBg });
       return NextResponse.json({
         success: true,
         url: result.url,

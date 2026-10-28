@@ -61,7 +61,7 @@ export default function WarrantyPage() {
     { step: '01', title: 'Instant WhatsApp Claim', desc: 'Ping our care line with your Order ID or Serial Number. No complicated forms.' },
     { step: '02', title: 'Remote Video Triage', desc: 'A senior engineer assists over video to verify software vs hardware triggers.' },
     { step: '03', title: 'Store Service / Walk-In', desc: 'Bring your device to our service center or coordinate directly with our technicians.' },
-    { step: '04', title: 'Repair or Replacement', desc: 'Genuine component replacement or swift unit upgrade handed over to you.' },
+    { step: '04', title: 'Servicing & Handover', desc: 'Precision hardware servicing or genuine upgrade handed over to you.' },
   ];
 
   return (
@@ -72,7 +72,7 @@ export default function WarrantyPage() {
         <nav className="text-xs text-slate-500 flex items-center gap-2">
           <Link href="/" className="hover:text-blue-700 transition-colors font-medium">Home</Link>
           <span className="text-slate-300">/</span>
-          <span className="text-slate-900 font-bold">1-Year Warranty & 45-Point Lab Testing</span>
+          <span className="text-slate-900 font-bold">45-Point Lab Testing & Quality Certification</span>
         </nav>
 
         {/* HERO BANNER */}
@@ -83,15 +83,15 @@ export default function WarrantyPage() {
             <div className="relative z-10 max-w-3xl space-y-6">
               <div className="inline-flex items-center gap-2 bg-blue-500/15 border border-blue-400/30 px-3.5 py-1.5 rounded-full text-xs font-bold text-blue-300 tracking-wide uppercase backdrop-blur-md">
                 <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-                <span>Lappy Square Assured Protection</span>
+                <span>Lappy Square Quality Standard</span>
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight sm:leading-none text-white">
-                1-Year Comprehensive Warranty <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">& 45-Point Lab Certification</span>
+                45-Point Lab Certification <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">& Genuine Hardware Assurance</span>
               </h1>
 
               <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
-                Peace of mind shouldn&apos;t be an expensive add-on. Every certified refurbished laptop we sell includes our full written warranty, certified lab testing, and 7-day money-back satisfaction guarantee.
+                Every certified refurbished laptop we sell includes our comprehensive 45-point diagnostic lab report and 100% genuine OEM chargers.
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-4">
@@ -104,12 +104,12 @@ export default function WarrantyPage() {
                 </a>
 
                 <a
-                  href="https://wa.me/919376988788?text=Hello%20Lappy%20Square%2C%20I%20want%20to%20register%20or%20inquire%20about%20my%20laptop%20warranty."
+                  href="https://wa.me/919376988788?text=Hello%20Lappy%20Square%2C%20I%20want%20to%20inquire%20about%20your%20certified%20laptops."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-6 py-3.5 bg-white/10 hover:bg-white/15 text-white border border-white/15 text-xs sm:text-sm font-bold rounded-2xl transition-all backdrop-blur-md"
                 >
-                  Register / Claim Warranty
+                  Contact Store Support
                 </a>
               </div>
             </div>
@@ -120,21 +120,21 @@ export default function WarrantyPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs space-y-2">
             <div className="w-12 h-12 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-700">
-              <ShieldCheck className="w-6 h-6" />
+              <CheckCircle2 className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-slate-950">1-Year Full Coverage</h3>
+            <h3 className="text-base font-bold text-slate-950">45-Point Lab Testing</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Covers motherboard, memory, internal storage, power circuits, and display hardware faults with free repair or replacement.
+              Motherboard circuits, memory, thermal stress run, screen uniformity, and port connectivity 100% verified.
             </p>
           </div>
 
           <div className="bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-7 shadow-xs space-y-2">
             <div className="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-700">
-              <RotateCcw className="w-6 h-6" />
+              <ShieldCheck className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-slate-950">7-Day Replacement Window</h3>
+            <h3 className="text-base font-bold text-slate-950">100% Genuine Hardware</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Test your device in your daily workflow. If any hardware defect appears within 7 days, get an instant swap or 100% refund.
+              Original brand chargers, tested batteries with healthy life cycle, and authentic components.
             </p>
           </div>
 
@@ -142,9 +142,9 @@ export default function WarrantyPage() {
             <div className="w-12 h-12 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800">
               <Store className="w-6 h-6" />
             </div>
-            <h3 className="text-base font-bold text-slate-950">Direct Store & Tech Support</h3>
+            <h3 className="text-base font-bold text-slate-950">Direct Store Consultation</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
-              Visit our store or get direct engineer assistance on WhatsApp for hassle-free diagnostics and rapid resolution.
+              Visit our Jaipur experience center at Paris Tower, Mansarovar for direct guidance.
             </p>
           </div>
         </div>

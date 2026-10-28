@@ -11,7 +11,8 @@ import {
   CheckCircle2,
   Clock,
   ExternalLink,
-  BarChart3
+  BarChart3,
+  MessageSquare
 } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/ui/SocialIcons';
 import { requireAuth } from '@/lib/auth';
@@ -28,6 +29,7 @@ export default async function AdminDashboardPage() {
     totalOrders,
     pendingOrders,
     confirmedOrders,
+    totalEnquiries,
     orders,
     recentEnquiries,
     whatsAppLogs,
@@ -38,6 +40,7 @@ export default async function AdminDashboardPage() {
     prisma.order.count(),
     prisma.order.count({ where: { status: 'PENDING' } }),
     prisma.order.count({ where: { status: { in: ['CONFIRMED', 'DELIVERED', 'SHIPPED'] } } }),
+    prisma.contactEnquiry.count(),
     prisma.order.findMany({
       take: 6,
       orderBy: { createdAt: 'desc' },
@@ -53,13 +56,6 @@ export default async function AdminDashboardPage() {
       include: { order: true },
     }),
   ]);
-
-  // Genuine database-backed revenue
-  const verifiedOrders = await prisma.order.findMany({
-    where: { paymentStatus: 'VERIFIED_PAID' },
-    select: { totalAmount: true },
-  });
-  const totalVerifiedRevenue = verifiedOrders.reduce((sum, o) => sum + o.totalAmount, 0);
 
   return (
     <div className="space-y-8">
@@ -95,23 +91,7 @@ export default async function AdminDashboardPage() {
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         
-        {/* Metric 1: Verified Revenue */}
-        <div className="bg-white border border-[#E8E8E8] rounded-2xl p-5 shadow-xs">
-          <div className="flex items-center justify-between text-slate-500 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider">Verified Revenue</span>
-            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-              <IndianRupee className="w-4 h-4" />
-            </div>
-          </div>
-          <h3 className="text-2xl font-black text-slate-950">
-            ₹{totalVerifiedRevenue.toLocaleString('en-IN')}
-          </h3>
-          <p className="text-[11px] text-emerald-700 font-medium mt-1">
-            Based on verified paid customer transactions
-          </p>
-        </div>
-
-        {/* Metric 2: Orders */}
+        {/* Metric 1: Orders */}
         <div className="bg-white border border-[#E8E8E8] rounded-2xl p-5 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">Total Orders</span>
@@ -125,7 +105,7 @@ export default async function AdminDashboardPage() {
           </p>
         </div>
 
-        {/* Metric 3: Active Laptops */}
+        {/* Metric 2: Active Inventory */}
         <div className="bg-white border border-[#E8E8E8] rounded-2xl p-5 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 mb-2">
             <span className="text-xs font-bold uppercase tracking-wider">Active Inventory</span>
@@ -136,6 +116,20 @@ export default async function AdminDashboardPage() {
           <h3 className="text-2xl font-black text-slate-950">{activeProducts}</h3>
           <p className="text-[11px] text-slate-500 mt-1">
             {totalProducts} total catalogued models
+          </p>
+        </div>
+
+        {/* Metric 3: Customer Leads & Enquiries */}
+        <div className="bg-white border border-[#E8E8E8] rounded-2xl p-5 shadow-xs">
+          <div className="flex items-center justify-between text-slate-500 mb-2">
+            <span className="text-xs font-bold uppercase tracking-wider">Customer Leads</span>
+            <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+              <MessageSquare className="w-4 h-4" />
+            </div>
+          </div>
+          <h3 className="text-2xl font-black text-slate-950">{totalEnquiries}</h3>
+          <p className="text-[11px] text-emerald-700 font-medium mt-1">
+            WhatsApp &amp; store inquiries
           </p>
         </div>
 

@@ -30,13 +30,12 @@ export default function BrandBar({ brands }: { brands: BrandItem[] }) {
 
   // Collections Row 2: Diagnostic & Trust Guarantees
   const rowTwoItems = [
-    { label: 'Written 45-Point Lab Diagnostic Report', href: '/warranty' },
-    { label: '1-Year Comprehensive Warranty', href: '/warranty' },
+    { label: 'Written 45-Point Lab Diagnostic Report', href: '/about' },
+    { label: '100% Genuine OEM Hardware & Parts', href: '/shop' },
     { label: 'Like-New Grade A+ Certified Pristine', href: '/shop?grade=LIKE_NEW' },
-    { label: 'Direct Store Walk-in & Live Testing', href: '/about' },
+    { label: 'Paris Tower, Mansarovar Jaipur Store', href: '/about' },
     { label: 'Up to 70% Off Retail Showroom MRP', href: '/deals' },
-    { label: '7-Day Zero-Risk Replacement Guarantee', href: '/return-refund-policy' },
-    { label: 'Original OEM Chargers & Accessories', href: '/warranty' },
+    { label: 'Original OEM Chargers & Accessories', href: '/shop' },
     { label: 'Instant Buyback & Exchange ₹3,000 Bonus', href: '/exchange' },
     { label: 'Full 18% GST Input Tax Credit Invoice', href: '/corporate-enquiry' },
   ];

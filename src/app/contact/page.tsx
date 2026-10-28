@@ -273,7 +273,7 @@ export default function ContactPage() {
                   Lappy Square Experience Center
                 </h3>
                 <p className="text-xs text-slate-400 mt-2 leading-relaxed">
-                  Peris, Near, Vijay Path, Ward 27, Chauraha, Mansarover, Jaipur, Rajasthan 302020
+                  Paris Tower, Near Vijay Path Chauraha, Madhyam Marg, Mansarovar, Jaipur, Rajasthan 302020
                 </p>
               </div>
 

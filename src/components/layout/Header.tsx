@@ -56,6 +56,7 @@ export default function Header() {
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
+  const [appleOpen, setAppleOpen] = useState(false);
   const [brandsOpen, setBrandsOpen] = useState(false);
   const [useCaseOpen, setUseCaseOpen] = useState(false);
   const [budgetOpen, setBudgetOpen] = useState(false);
@@ -428,14 +429,69 @@ export default function Header() {
                   )}
                 </div>
 
-                {/* 2. Direct Apple Products link */}
-                <Link
-                  href="/collection/macbook"
-                  className="hover:text-blue-700 font-semibold text-slate-800 flex items-center gap-1.5 transition-colors whitespace-nowrap"
+                {/* 2. Apple Products Dropdown */}
+                <div
+                  className="relative"
+                  onMouseEnter={() => setAppleOpen(true)}
+                  onMouseLeave={() => setAppleOpen(false)}
                 >
-                  <AppleLogo className="w-3.5 h-3.5 text-slate-900" />
-                  <span className="font-bold text-sm">Apple Products</span>
-                </Link>
+                  <Link
+                    href="/collection/macbook"
+                    className="hover:text-blue-700 font-semibold text-slate-800 flex items-center gap-1.5 transition-colors whitespace-nowrap py-3"
+                  >
+                    <AppleLogo className="w-3.5 h-3.5 text-slate-900" />
+                    <span className="font-bold text-sm">Apple Products</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
+                  </Link>
+
+                  {appleOpen && (
+                    <div className="absolute top-full left-0 w-72 bg-white border border-[#E2E8F0] shadow-xl rounded-2xl p-2.5 z-50 grid grid-cols-1 gap-1">
+                      <Link
+                        href="/collection/macbook"
+                        className="p-2.5 hover:bg-slate-50 rounded-xl text-slate-900 hover:text-blue-700 text-xs font-bold flex items-center justify-between"
+                      >
+                        <div className="flex items-center gap-2">
+                          <AppleLogo className="w-3.5 h-3.5 text-slate-900" />
+                          <span>All Apple MacBooks</span>
+                        </div>
+                        <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+                      </Link>
+
+                      <Link
+                        href="/shop?brand=apple&series=MacBook+Air"
+                        className="p-2.5 hover:bg-blue-50/80 rounded-xl text-slate-800 hover:text-blue-700 text-xs font-semibold flex items-center justify-between transition-colors"
+                      >
+                        <div>
+                          <p className="font-bold text-slate-900">MacBook Air</p>
+                          <p className="text-[10px] text-slate-500">M1/M2/M3 Silicon • Thin & Light</p>
+                        </div>
+                        <span className="text-[10px] bg-blue-100 text-blue-800 font-bold px-1.5 py-0.5 rounded">Air</span>
+                      </Link>
+
+                      <Link
+                        href="/shop?brand=apple&series=MacBook+Pro"
+                        className="p-2.5 hover:bg-blue-50/80 rounded-xl text-slate-800 hover:text-blue-700 text-xs font-semibold flex items-center justify-between transition-colors"
+                      >
+                        <div>
+                          <p className="font-bold text-slate-900">MacBook Pro</p>
+                          <p className="text-[10px] text-slate-500">Retina Display • Creators & Devs</p>
+                        </div>
+                        <span className="text-[10px] bg-slate-900 text-white font-bold px-1.5 py-0.5 rounded">Pro</span>
+                      </Link>
+
+                      <Link
+                        href="/shop?brand=apple&series=iMac"
+                        className="p-2.5 hover:bg-slate-50 rounded-xl text-slate-800 hover:text-blue-700 text-xs font-semibold flex items-center justify-between transition-colors"
+                      >
+                        <div>
+                          <p className="font-bold text-slate-900">iMac & Mac Mini</p>
+                          <p className="text-[10px] text-slate-500">Apple Desktop Workstations</p>
+                        </div>
+                        <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+                      </Link>
+                    </div>
+                  )}
+                </div>
 
                 {/* 3. Direct Windows Products link */}
                 <Link
@@ -446,7 +502,7 @@ export default function Header() {
                   <span>Windows Products</span>
                 </Link>
 
-                {/* 4. By Brands Dropdown */}
+                {/* 4. By Brands & Series Mega-Dropdown */}
                 <div
                   className="relative"
                   onMouseEnter={() => setBrandsOpen(true)}
@@ -455,41 +511,118 @@ export default function Header() {
                   <button
                     type="button"
                     suppressHydrationWarning
-                    className="flex items-center gap-1 hover:text-blue-700 py-3 transition-colors whitespace-nowrap"
+                    className="flex items-center gap-1 hover:text-blue-700 py-3 transition-colors whitespace-nowrap font-medium"
                   >
                     <span>By Brands</span>
                     <ChevronDown className="w-3.5 h-3.5 text-slate-400" />
                   </button>
                   {brandsOpen && (
-                    <div className="absolute top-full left-0 w-80 bg-white border border-[#E2E8F0] shadow-xl rounded-2xl p-3 z-50 grid grid-cols-1 gap-1">
-                      {[
-                        { name: 'Apple (MacBook Pro & Air)', slug: 'apple' },
-                        { name: 'Dell (Latitude & XPS)', slug: 'dell' },
-                        { name: 'HP (EliteBook & ProBook)', slug: 'hp' },
-                        { name: 'Lenovo (ThinkPad & IdeaPad)', slug: 'lenovo' },
-                        { name: 'ASUS (ZenBook & ROG)', slug: 'asus' },
-                        { name: 'Acer (Swift & Aspire)', slug: 'acer' },
-                      ].map((b) => (
-                        <Link
-                          key={b.slug}
-                          href={`/brands/${b.slug}`}
-                          className="p-2.5 hover:bg-slate-50 rounded-xl text-slate-800 hover:text-blue-700 text-xs font-semibold flex items-center justify-between transition-colors group"
-                        >
-                          <div className="flex items-center gap-2.5 min-w-0 flex-1 pr-1">
-                            <div className="w-16 h-7 flex items-center justify-center flex-shrink-0 bg-slate-50 border border-slate-100 rounded-lg px-1.5 overflow-hidden">
-                              <BrandLogo brand={b.slug} size="sm" />
+                    <div className="absolute top-full left-0 w-[550px] bg-white border border-[#E2E8F0] shadow-2xl rounded-2xl p-4 z-50">
+                      <div className="grid grid-cols-2 gap-3">
+                        {[
+                          {
+                            name: 'Apple',
+                            slug: 'apple',
+                            series: [
+                              { name: 'MacBook Air', query: 'MacBook Air' },
+                              { name: 'MacBook Pro', query: 'MacBook Pro' },
+                              { name: 'iMac & Mini', query: 'iMac' },
+                            ],
+                          },
+                          {
+                            name: 'Dell',
+                            slug: 'dell',
+                            series: [
+                              { name: 'Latitude', query: 'Latitude' },
+                              { name: 'XPS', query: 'XPS' },
+                              { name: 'Precision', query: 'Precision' },
+                              { name: 'Inspiron', query: 'Inspiron' },
+                            ],
+                          },
+                          {
+                            name: 'Lenovo',
+                            slug: 'lenovo',
+                            series: [
+                              { name: 'ThinkPad', query: 'ThinkPad' },
+                              { name: 'IdeaPad', query: 'IdeaPad' },
+                              { name: 'Legion', query: 'Legion' },
+                            ],
+                          },
+                          {
+                            name: 'HP',
+                            slug: 'hp',
+                            series: [
+                              { name: 'EliteBook', query: 'EliteBook' },
+                              { name: 'ProBook', query: 'ProBook' },
+                              { name: 'ZBook', query: 'ZBook' },
+                              { name: 'Pavilion', query: 'Pavilion' },
+                            ],
+                          },
+                          {
+                            name: 'ASUS',
+                            slug: 'asus',
+                            series: [
+                              { name: 'ZenBook', query: 'ZenBook' },
+                              { name: 'ROG Gaming', query: 'ROG' },
+                              { name: 'VivoBook', query: 'VivoBook' },
+                            ],
+                          },
+                          {
+                            name: 'Acer',
+                            slug: 'acer',
+                            series: [
+                              { name: 'Swift', query: 'Swift' },
+                              { name: 'Aspire', query: 'Aspire' },
+                              { name: 'Predator', query: 'Predator' },
+                            ],
+                          },
+                        ].map((b) => (
+                          <div
+                            key={b.slug}
+                            className="p-3 bg-[#F8FAFC] border border-slate-100 rounded-xl hover:border-blue-200 transition-colors"
+                          >
+                            <div className="flex items-center justify-between mb-2">
+                              <Link
+                                href={`/brands/${b.slug}`}
+                                className="flex items-center gap-2 font-bold text-xs text-slate-900 hover:text-blue-700"
+                              >
+                                <div className="w-12 h-5 flex items-center justify-center bg-white border border-slate-200/80 rounded px-1">
+                                  <BrandLogo brand={b.slug} size="sm" />
+                                </div>
+                                <span>{b.name}</span>
+                              </Link>
+                              <Link
+                                href={`/brands/${b.slug}`}
+                                className="text-[10px] text-blue-600 font-semibold hover:underline"
+                              >
+                                All →
+                              </Link>
                             </div>
-                            <span className="truncate flex-1 font-medium">{b.name}</span>
+
+                            <div className="flex flex-wrap gap-1">
+                              {b.series.map((s) => (
+                                <Link
+                                  key={s.name}
+                                  href={`/shop?brand=${b.slug}&series=${encodeURIComponent(s.query)}`}
+                                  className="text-[10px] font-medium bg-white hover:bg-blue-600 hover:text-white text-slate-700 border border-slate-200 px-2 py-0.5 rounded-md transition-colors"
+                                >
+                                  {s.name}
+                                </Link>
+                              ))}
+                            </div>
                           </div>
-                          <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-blue-600 transition-all flex-shrink-0" />
-                        </Link>
-                      ))}
-                      <div className="border-t border-slate-100 pt-2 mt-1">
+                        ))}
+                      </div>
+
+                      <div className="border-t border-slate-100 pt-3 mt-3 flex items-center justify-between text-xs">
+                        <span className="text-slate-400 text-[11px]">
+                          💡 Click any type above (e.g. MacBook Air or ThinkPad) to view laptops.
+                        </span>
                         <Link
                           href="/brands"
-                          className="text-xs text-slate-900 font-semibold hover:underline block text-center"
+                          className="font-bold text-blue-700 hover:underline"
                         >
-                          View All Brands →
+                          View All Brands & Series →
                         </Link>
                       </div>
                     </div>
@@ -748,19 +881,48 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Shop by Brand */}
+            {/* Shop by Brand & Series in mobile */}
             <div>
-              <p className="text-[11px] font-black text-slate-400 uppercase tracking-wider mb-2">Top Brands</p>
-              <div className="grid grid-cols-3 gap-2 text-xs">
-                {['Apple', 'Dell', 'HP', 'Lenovo', 'ASUS', 'Acer'].map((brand) => (
-                  <Link
-                    key={brand}
-                    href={`/brands/${brand.toLowerCase()}`}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="p-2.5 border border-slate-200 rounded-xl font-bold text-center text-slate-800 hover:bg-slate-50"
-                  >
-                    {brand}
-                  </Link>
+              <p className="text-[11px] font-black text-slate-400 uppercase tracking-wider mb-2">Brands & Series</p>
+              <div className="space-y-2">
+                {[
+                  { name: 'Apple', slug: 'apple', series: ['MacBook Air', 'MacBook Pro', 'iMac'] },
+                  { name: 'Dell', slug: 'dell', series: ['Latitude', 'XPS', 'Precision', 'Inspiron'] },
+                  { name: 'Lenovo', slug: 'lenovo', series: ['ThinkPad', 'IdeaPad', 'Legion'] },
+                  { name: 'HP', slug: 'hp', series: ['EliteBook', 'ProBook', 'ZBook', 'Pavilion'] },
+                  { name: 'ASUS', slug: 'asus', series: ['ZenBook', 'ROG Gaming', 'VivoBook'] },
+                  { name: 'Acer', slug: 'acer', series: ['Swift', 'Aspire', 'Predator'] },
+                ].map((b) => (
+                  <div key={b.slug} className="p-2.5 bg-slate-50 border border-slate-200/80 rounded-xl">
+                    <div className="flex items-center justify-between mb-1.5">
+                      <Link
+                        href={`/brands/${b.slug}`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="font-bold text-xs text-slate-900 hover:text-blue-700"
+                      >
+                        {b.name}
+                      </Link>
+                      <Link
+                        href={`/brands/${b.slug}`}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="text-[10px] text-blue-600 font-semibold"
+                      >
+                        All →
+                      </Link>
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {b.series.map((s) => (
+                        <Link
+                          key={s}
+                          href={`/shop?brand=${b.slug}&series=${encodeURIComponent(s)}`}
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="text-[10px] bg-white text-slate-700 border border-slate-200 px-2 py-0.5 rounded-md font-medium hover:bg-blue-600 hover:text-white transition-colors"
+                        >
+                          {s}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
                 ))}
               </div>
             </div>

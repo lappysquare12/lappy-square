@@ -31,7 +31,7 @@ export async function GET() {
         tagline: 'Certified Pre-Owned & Refurbished Laptops',
         supportEmail: 'lappysquare@gmail.com',
         supportPhone: '+91 93769 88788',
-        supportAddress: 'Peris, Near, Vijay Path, Ward 27, Chauraha, Mansarover, Jaipur, Rajasthan 302020',
+        supportAddress: 'Paris Tower, Near Vijay Path Chauraha, Madhyam Marg, Mansarovar, Jaipur, Rajasthan 302020',
         announcementText: 'Special Offer: Free Pan-India Insured Express Shipping & 1-Year Comprehensive Warranty on all Laptops!',
         announcementActive: true,
         warrantyText: '1-Year Certified Warranty with 45-point testing report included.',

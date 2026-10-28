@@ -343,16 +343,16 @@ export default function ReportsClient({ data }: { data: ReportData }) {
 
         <div className="bg-white border border-[#E8E8E8] rounded-2xl p-4 shadow-xs">
           <div className="flex items-center justify-between text-slate-500 mb-1">
-            <span className="text-[11px] font-bold uppercase tracking-wider">Verified Sales</span>
-            <IndianRupee className="w-4 h-4 text-emerald-600" />
+            <span className="text-[11px] font-bold uppercase tracking-wider">Total Orders</span>
+            <ShoppingBag className="w-4 h-4 text-emerald-600" />
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-2xl font-black text-slate-900">
-              ₹{data.totalVerifiedRevenue.toLocaleString('en-IN')}
+              {data.totalOrders}
             </span>
-            <span className="text-[11px] font-bold text-slate-500">({data.totalOrders} orders)</span>
+            <span className="text-[11px] font-bold text-slate-500">Bookings</span>
           </div>
-          <p className="text-[10px] text-slate-400 mt-1">Total completed payments</p>
+          <p className="text-[10px] text-slate-400 mt-1">Confirmed &amp; store reservations</p>
         </div>
       </div>
 

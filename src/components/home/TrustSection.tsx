@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 
 export default function TrustSection() {
-  const [activeTab, setActiveTab] = useState<'45point' | 'grades' | 'warranty'>('45point');
+  const [activeTab, setActiveTab] = useState<'45point' | 'grades'>('45point');
 
   return (
     <section className="py-20 bg-[#F7F8FA] border-y border-[#E8E8E8]">
@@ -60,18 +60,6 @@ export default function TrustSection() {
               }`}
             >
               Honest Grading System
-            </button>
-            <button
-              type="button"
-              suppressHydrationWarning
-              onClick={() => setActiveTab('warranty')}
-              className={`px-5 py-2.5 rounded-xl text-xs font-bold transition-all ${
-                activeTab === 'warranty'
-                  ? 'bg-slate-900 text-white shadow'
-                  : 'text-slate-600 hover:text-slate-950 hover:bg-slate-50'
-              }`}
-            >
-              1-Year Warranty & Returns
             </button>
           </div>
         </div>
@@ -238,7 +226,7 @@ export default function TrustSection() {
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-                  <span>Includes 6-Month Lappy Square Warranty</span>
+                  <span>100% Diagnostic Tested & Certified</span>
                 </li>
               </ul>
               <Link href="/shop?grade=GOOD" className="block text-center py-2.5 border border-slate-300 text-slate-900 text-xs font-semibold rounded-xl hover:border-black">
@@ -246,33 +234,6 @@ export default function TrustSection() {
               </Link>
             </div>
 
-          </div>
-        )}
-
-        {/* Tab 3: Warranty & Returns */}
-        {activeTab === 'warranty' && (
-          <div className="bg-white border border-[#E8E8E8] rounded-3xl p-6 sm:p-10 shadow-sm animate-in fade-in duration-300">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-slate-900 text-white flex items-center justify-center">
-                  <ShieldCheck className="w-5 h-5 text-emerald-400" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900">1-Year Comprehensive Warranty</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  We cover motherboard, RAM, SSD, screen, and charging circuitry. If any issue arises, just call or WhatsApp our technical support team or visit our store. We provide quick certified diagnosis, on-site testing, and repair or unit replacement.
-                </p>
-              </div>
-
-              <div className="space-y-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
-                  <CheckCircle2 className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900">7-Day Zero Risk Replacement</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  Inspect your laptop thoroughly at home. If you are not 100% satisfied with the cosmetic condition or performance, return or exchange it within 7 days for a hassle-free replacement or full refund.
-                </p>
-              </div>
-            </div>
           </div>
         )}
 

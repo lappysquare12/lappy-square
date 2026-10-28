@@ -77,9 +77,9 @@ ${itemsList}
 *TOTAL PAYABLE:* *₹${totalAmount.toLocaleString('en-IN')}*
 
 *Lappy Square Assurance:*
-• 1-Year Comprehensive Warranty
 • 45-Point Lab Diagnostics Report
-• 7-Day Replacement Guarantee
+• 100% Genuine OEM Hardware & Tested Accessories
+• Paris Tower, Mansarovar, Jaipur
 
 Hello Lappy Square Team, I want to book this order on WhatsApp for store pickup / direct purchase. Please guide me with store visit and device reservation details.`;
 
@@ -114,7 +114,7 @@ Hello Lappy Square Team, I want to book this order on WhatsApp for store pickup 
           </div>
 
           <div className="pt-4 border-t border-slate-100 flex items-center justify-center gap-4 text-[11px] text-slate-500">
-            <span className="flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> 1-Year Warranty</span>
+            <span className="flex items-center gap-1"><ShieldCheck className="w-3.5 h-3.5 text-emerald-600" /> 45-Point Tested</span>
             <span>•</span>
             <span className="flex items-center gap-1"><Store className="w-3.5 h-3.5 text-blue-600" /> Store Pickup</span>
           </div>
@@ -140,13 +140,13 @@ Hello Lappy Square Team, I want to book this order on WhatsApp for store pickup 
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/60 text-blue-700 text-xs font-semibold mb-2">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Store Walk-in & Live Testing Active</span>
+                <span>Store Visit & Consultation Active</span>
               </div>
               <h1 className="text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
                 Review Your Cart
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                {itemCount} {itemCount === 1 ? 'machine' : 'machines'} reserved with 45-point testing report & 1-year warranty coverage.
+                {itemCount} {itemCount === 1 ? 'machine' : 'machines'} reserved with 45-point testing report and genuine accessories.
               </p>
             </div>
 
@@ -407,10 +407,10 @@ Hello Lappy Square Team, I want to book this order on WhatsApp for store pickup 
               <div className="pt-2 text-center text-[10px] text-slate-500 space-y-1.5 border-t border-slate-100">
                 <div className="flex items-center justify-center gap-1.5 text-slate-700 font-semibold">
                   <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>WhatsApp Booking & Store Pickup • 7-Day Replacement</span>
+                  <span>WhatsApp Booking & Store Pickup • 45-Point Tested</span>
                 </div>
                 <p className="text-slate-500">
-                  Live hardware inspection and demo available before taking the device.
+                  Store consultation and reservation available at Paris Tower, Mansarovar, Jaipur.
                 </p>
               </div>
             </div>

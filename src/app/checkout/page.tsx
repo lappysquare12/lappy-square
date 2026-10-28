@@ -159,7 +159,7 @@ export default function CheckoutPage() {
                 Express Checkout & Delivery
               </h1>
               <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                Direct lab dispatch with complimentary transit insurance and 1-year warranty certificate.
+                Verified stock reserved with 45-point testing report and genuine OEM accessories.
               </p>
             </div>
 
@@ -492,7 +492,7 @@ export default function CheckoutPage() {
                   <div className="pt-3 border-t border-slate-100 flex justify-between items-baseline">
                     <div>
                       <span className="text-sm font-bold text-slate-900 block">Total Payable</span>
-                      <span className="text-[10px] text-slate-500">Includes all taxes and 1-year warranty</span>
+                      <span className="text-[10px] text-slate-500">Includes all taxes and 45-point testing report</span>
                     </div>
                     <span className="text-2xl font-black text-slate-950">
                       ₹{totalAmount.toLocaleString('en-IN')}

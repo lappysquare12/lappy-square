@@ -101,32 +101,32 @@ export default function Footer() {
             </div>
 
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0 text-slate-900">
-                <ShieldCheck className="w-6 h-6 text-slate-900" />
+              <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center flex-shrink-0 text-slate-900">
+                <ShieldCheck className="w-6 h-6 text-emerald-600" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-slate-900">Up to 1-Year Warranty</h4>
-                <p className="text-xs text-slate-500">Pan-India doorstep coverage</p>
+                <h4 className="text-sm font-bold text-slate-900">100% Genuine Hardware</h4>
+                <p className="text-xs text-slate-500">Original OEM chargers & tested parts</p>
               </div>
             </div>
 
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0 text-slate-900">
-                <RotateCcw className="w-6 h-6 text-blue-600" />
+              <div className="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center flex-shrink-0 text-slate-900">
+                <Laptop className="w-6 h-6 text-indigo-600" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-slate-900">7-Day Replacement</h4>
-                <p className="text-xs text-slate-500">100% money back guarantee</p>
+                <h4 className="text-sm font-bold text-slate-900">Best Price in Jaipur</h4>
+                <p className="text-xs text-slate-500">Save up to 70% compared to new</p>
               </div>
             </div>
 
             <div className="flex items-center gap-3.5">
-              <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0 text-slate-900">
-                <Store className="w-6 h-6 text-amber-600" />
+              <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center flex-shrink-0 text-slate-900">
+                <MapPin className="w-6 h-6 text-amber-600" />
               </div>
               <div>
-                <h4 className="text-sm font-bold text-slate-900">Store Walk-In & Demo</h4>
-                <p className="text-xs text-slate-500">Live testing before purchase</p>
+                <h4 className="text-sm font-bold text-slate-900">Store Consultation</h4>
+                <p className="text-xs text-slate-500">Paris Tower, Mansarovar Jaipur</p>
               </div>
             </div>
           </div>
@@ -151,7 +151,7 @@ export default function Footer() {
             <div className="space-y-2 text-xs text-slate-600 pt-2">
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-slate-400 flex-shrink-0 mt-0.5" />
-                <span>Peris, Near, Vijay Path, Ward 27, Chauraha, Mansarover, Jaipur, Rajasthan 302020</span>
+                <span>Paris Tower, Near Vijay Path Chauraha, Madhyam Marg, Mansarovar, Jaipur, Rajasthan 302020</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Phone className="w-4 h-4 text-slate-400 flex-shrink-0" />
@@ -207,10 +207,8 @@ export default function Footer() {
           <div className="space-y-3">
             <h5 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Help & Policies</h5>
             <ul className="space-y-2 text-sm">
-              <li><Link href="/warranty" className="hover:text-slate-950 transition-colors">Warranty & 45-Pt Lab</Link></li>
+              <li><Link href="/about" className="hover:text-slate-950 transition-colors">45-Point Quality Lab</Link></li>
               <li><Link href="/about" className="hover:text-slate-950 transition-colors">Store Experience & Visit</Link></li>
-              <li><Link href="/return-refund-policy" className="hover:text-slate-950 transition-colors">7-Day Return & Refund</Link></li>
-              <li><Link href="/cancellation-policy" className="hover:text-slate-950 transition-colors">Cancellation Policy</Link></li>
               <li><Link href="/privacy-policy" className="hover:text-slate-950 transition-colors">Privacy Policy</Link></li>
               <li><Link href="/terms-and-conditions" className="hover:text-slate-950 transition-colors">Terms of Service</Link></li>
             </ul>

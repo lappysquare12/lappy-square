@@ -21,7 +21,8 @@ import {
   Check,
   Info,
   Layers,
-  Star
+  Star,
+  Copy
 } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/ui/SocialIcons';
 import { useCart } from '@/context/CartContext';
@@ -37,6 +38,7 @@ interface ProductDetailProps {
     title: string;
     slug: string;
     sku: string;
+    series?: string | null;
     price: number;
     originalPrice: number;
     stock: number;
@@ -91,6 +93,7 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'specs' | 'reviews' | 'box' | 'testing'>('specs');
   const [addedToast, setAddedToast] = useState(false);
+  const [copiedSku, setCopiedSku] = useState(false);
 
   // Customer Reviews state
   const [reviewsList, setReviewsList] = useState(product.reviews || []);
@@ -352,21 +355,42 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
             {/* Product Meta & Purchase Actions (Right: 6 Cols) */}
             <div className="lg:col-span-6 space-y-5 sm:space-y-6">
               
-              {/* Brand & SKU */}
+              {/* Brand, Series & Item Code */}
               <div className="flex flex-wrap items-center justify-between gap-2.5 sm:gap-4 border-b border-slate-100 pb-3">
-                <div className="flex items-center gap-2.5 min-w-0">
+                <div className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-wrap">
                   <div className="h-6 sm:h-7 flex items-center shrink-0">
                     <BrandLogo brand={product.brand.slug} size="md" />
                   </div>
                   <span className="text-[11px] sm:text-xs font-black uppercase tracking-wider text-slate-500 truncate">
                     {product.brand.name}
                   </span>
+                  {product.series && (
+                    <span className="text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                      {product.series}
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex items-center gap-2 sm:gap-3 shrink-0 ml-auto">
-                  <span className="text-[10px] sm:text-xs text-slate-400 font-mono font-medium whitespace-nowrap">
-                    SKU: {product.sku}
-                  </span>
+                  {/* Item Code Copy Button */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText(product.sku);
+                      setCopiedSku(true);
+                      setTimeout(() => setCopiedSku(false), 2000);
+                    }}
+                    className="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 px-2 sm:px-2.5 py-1 rounded-lg text-[10px] sm:text-xs font-medium transition-colors cursor-pointer"
+                    title="Click to copy Item Code"
+                  >
+                    <span className="text-slate-400">Item Code:</span>
+                    <span className="font-mono font-bold text-slate-900">{product.sku}</span>
+                    {copiedSku ? (
+                      <Check className="w-3 h-3 text-emerald-600" />
+                    ) : (
+                      <Copy className="w-3 h-3 text-slate-400" />
+                    )}
+                  </button>
                   <button
                     type="button"
                     suppressHydrationWarning
@@ -553,19 +577,19 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
               {/* Guarantees Bar */}
               <div className="border-t border-slate-100 pt-4 grid grid-cols-3 gap-2 text-center text-[11px] text-slate-600">
                 <div className="p-2 bg-slate-50 rounded-xl">
-                  <ShieldCheck className="w-4 h-4 text-slate-900 mx-auto mb-1" />
-                  <span className="font-semibold block text-slate-900">{product.warrantyMonths} Months</span>
-                  <span>Store Warranty</span>
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600 mx-auto mb-1" />
+                  <span className="font-semibold block text-slate-900">45-Point</span>
+                  <span>Tested Quality</span>
                 </div>
                 <div className="p-2 bg-slate-50 rounded-xl">
-                  <RotateCcw className="w-4 h-4 text-slate-900 mx-auto mb-1" />
-                  <span className="font-semibold block text-slate-900">7 Days</span>
-                  <span>Replacement</span>
+                  <ShieldCheck className="w-4 h-4 text-blue-600 mx-auto mb-1" />
+                  <span className="font-semibold block text-slate-900">100% Genuine</span>
+                  <span>OEM Hardware</span>
                 </div>
                 <div className="p-2 bg-slate-50 rounded-xl">
                   <Store className="w-4 h-4 text-slate-900 mx-auto mb-1" />
                   <span className="font-semibold block text-slate-900">Store Pickup</span>
-                  <span>Live Testing</span>
+                  <span>Mansarovar, Jaipur</span>
                 </div>
               </div>
 
@@ -632,6 +656,24 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
           {activeTab === 'specs' && (
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 text-xs text-slate-700">
+                <div className="p-3 bg-[#F7F8FA] rounded-xl flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 sm:gap-2">
+                  <span className="font-medium text-slate-500 shrink-0">Item Code (SKU)</span>
+                  <span className="font-mono font-bold text-slate-900 text-right break-words min-w-0">{product.sku}</span>
+                </div>
+                {product.series && (
+                  <div className="p-3 bg-[#F7F8FA] rounded-xl flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 sm:gap-2">
+                    <span className="font-medium text-slate-500 shrink-0">Brand Series / Type</span>
+                    <span className="font-bold text-blue-700 text-right break-words min-w-0">{product.series}</span>
+                  </div>
+                )}
+                <div className="p-3 bg-[#F7F8FA] rounded-xl flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 sm:gap-2">
+                  <span className="font-medium text-slate-500 shrink-0">Warranty Protection</span>
+                  <span className="font-bold text-slate-900 text-right break-words min-w-0">
+                    {product.warrantyMonths >= 12 && product.warrantyMonths % 12 === 0
+                      ? `${product.warrantyMonths / 12} Year Comprehensive Lappy Square Warranty`
+                      : `${product.warrantyMonths} Months Comprehensive Lappy Square Warranty`}
+                  </span>
+                </div>
                 <div className="p-3 bg-[#F7F8FA] rounded-xl flex flex-wrap sm:flex-nowrap items-center justify-between gap-1.5 sm:gap-2">
                   <span className="font-medium text-slate-500 shrink-0">Processor & Model</span>
                   <span className="font-bold text-slate-900 text-right break-words min-w-0">

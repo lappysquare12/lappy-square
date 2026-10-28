@@ -23,20 +23,20 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: 'Lappy Square — Certified Refurbished & Second-Hand Laptops in India',
   description:
-    'Shop certified second-hand, open-box and refurbished laptops from Apple, Dell, HP, Lenovo & ASUS. 45-point quality check, up to 1-year warranty, in-store live testing & pickup.',
+    'Shop certified second-hand, open-box and refurbished laptops from Apple, Dell, HP, Lenovo & ASUS. 45-point quality check, genuine accessories, best prices in Jaipur.',
   keywords: [
     'refurbished laptops',
     'second hand laptops',
     'used macbook pro india',
     'refurbished dell latitude',
     'cheap laptops for coding',
-    'buy refurbished laptop delhi',
+    'buy refurbished laptop jaipur',
     'lappy square',
   ],
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
   openGraph: {
     title: 'Lappy Square — Certified Refurbished Laptops',
-    description: 'Up to 70% off retail prices on Apple MacBooks, ThinkPads, and Dell laptops with 1-year warranty.',
+    description: 'Up to 70% off retail prices on Apple MacBooks, ThinkPads, and Dell laptops with 45-point testing report.',
     type: 'website',
   },
   icons: {
@@ -48,27 +48,32 @@ export const metadata: Metadata = {
     shortcut: '/favicon.png?v=3',
     apple: '/apple-icon.png?v=3',
   },
+  verification: {
+    google: 'Ns81kohTB9WgHYt48KBOZ68FqyfffHgwnwaaRnmGGE4',
+  },
 };
 
 import Script from 'next/script';
 import prisma from '@/lib/prisma';
+
+const GOOGLE_VERIFICATION_TOKEN = 'Ns81kohTB9WgHYt48KBOZ68FqyfffHgwnwaaRnmGGE4';
 
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  let gsc = '';
+  let gsc = GOOGLE_VERIFICATION_TOKEN;
   let gaId = '';
 
   try {
     const setting = await prisma.websiteSetting.findFirst({
       select: { googleSiteVerification: true, googleAnalyticsId: true },
     });
-    gsc = setting?.googleSiteVerification || process.env.GOOGLE_SITE_VERIFICATION || process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '';
+    gsc = setting?.googleSiteVerification || process.env.GOOGLE_SITE_VERIFICATION || process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || GOOGLE_VERIFICATION_TOKEN;
     gaId = setting?.googleAnalyticsId || process.env.NEXT_PUBLIC_GA_ID || process.env.GOOGLE_ANALYTICS_ID || process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || '';
   } catch (err) {
-    gsc = process.env.GOOGLE_SITE_VERIFICATION || process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '';
+    gsc = process.env.GOOGLE_SITE_VERIFICATION || process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || GOOGLE_VERIFICATION_TOKEN;
     gaId = process.env.NEXT_PUBLIC_GA_ID || process.env.GOOGLE_ANALYTICS_ID || process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || '';
   }
 
@@ -79,7 +84,6 @@ export default async function RootLayout({
         <link rel="icon" type="image/png" sizes="192x192" href="/icon.png?v=3" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon.png?v=3" />
         <link rel="shortcut icon" href="/favicon.ico?v=3" />
-        {gsc && <meta name="google-site-verification" content={gsc} />}
         {gaId && (
           <>
             <Script

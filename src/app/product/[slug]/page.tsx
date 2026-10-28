@@ -42,7 +42,7 @@ export async function generateMetadata({ params }: ProductPageProps): Promise<Me
 
   return {
     title: `${product.title} — Lappy Square Refurbished`,
-    description: `Buy certified refurbished ${product.title} with ${product.ramGb}GB RAM, ${product.storageGb}GB ${product.storageType}, 45-point testing, and 1-year warranty.`,
+    description: `Buy certified refurbished ${product.title} with ${product.ramGb}GB RAM, ${product.storageGb}GB ${product.storageType}, 45-point testing report and genuine accessories.`,
     openGraph: {
       title: `${product.title} | Lappy Square`,
       description: `Certified Refurbished • ₹${product.price.toLocaleString('en-IN')} (Original: ₹${product.originalPrice.toLocaleString('en-IN')})`,

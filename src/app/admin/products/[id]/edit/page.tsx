@@ -16,7 +16,7 @@ export default async function ProductEditPage({ params }: ProductEditPageProps) 
   await requireAuth(['SUPER_ADMIN', 'ADMIN', 'CONTENT_MANAGER']);
   const { id } = await params;
 
-  const [product, brands, categories] = await Promise.all([
+  const [product, brands, categories, brandSeries] = await Promise.all([
     prisma.product.findUnique({
       where: { id },
       include: {
@@ -35,6 +35,11 @@ export default async function ProductEditPage({ params }: ProductEditPageProps) 
       select: { id: true, name: true, slug: true },
       orderBy: { name: 'asc' },
     }),
+    prisma.brandSeries.findMany({
+      where: { active: true },
+      select: { id: true, brandId: true, name: true, slug: true },
+      orderBy: { displayOrder: 'asc' },
+    }),
   ]);
 
   if (!product) {
@@ -47,6 +52,7 @@ export default async function ProductEditPage({ params }: ProductEditPageProps) 
         product={product}
         brands={brands}
         categories={categories}
+        brandSeries={brandSeries}
       />
     </div>
   );

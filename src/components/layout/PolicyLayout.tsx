@@ -36,9 +36,7 @@ export default function PolicyLayout({
 
   const links = [
     { href: '/shipping-policy', label: 'Store Visit & Pickup', icon: Store },
-    { href: '/return-refund-policy', label: 'Returns & Replacements', icon: RotateCcw },
-    { href: '/cancellation-policy', label: 'Order Cancellations', icon: XCircle },
-    { href: '/warranty', label: '1-Year Warranty & Lab Testing', icon: ShieldCheck },
+    { href: '/about', label: '45-Point Lab Testing', icon: ShieldCheck },
     { href: '/terms-and-conditions', label: 'Terms & Conditions', icon: FileText },
     { href: '/privacy-policy', label: 'Privacy & Data Protection', icon: Lock },
   ];

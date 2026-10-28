@@ -6,7 +6,7 @@ import { Store, ShieldCheck, Clock, MapPin, PackageCheck, CheckCircle2 } from 'l
 
 export default function ShippingPolicyPage() {
   const storeHighlights = [
-    { area: 'Store Location', time: 'Vijay Path Chauraha, Mansarovar, Jaipur', desc: 'Peris, Near Vijay Path, Ward 27, Mansarover, Jaipur, Rajasthan 302020.' },
+    { area: 'Store Location', time: 'Paris Tower, Vijay Path Chauraha, Mansarovar, Jaipur', desc: 'Paris Tower, Near Vijay Path Chauraha, Madhyam Marg, Mansarovar, Jaipur, Rajasthan 302020.' },
     { area: 'Timings', time: 'Open 7 Days a Week (11:00 AM - 8:30 PM)', desc: 'Visit at your convenience for live demos and direct purchase.' },
     { area: 'Live Testing', time: 'Full Diagnostic Run on Spot', desc: 'Test keyboard, display, battery health, and ports before buying.' },
     { area: 'Instant Handover', time: 'Zero Waiting Period', desc: 'Walk out with your certified laptop, genuine OEM charger & invoice.' },

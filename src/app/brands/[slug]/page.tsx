@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import prisma from '@/lib/prisma';
 import ProductCard from '@/components/ui/ProductCard';
-import { ArrowLeft, CheckCircle2, ShieldCheck, Truck, ChevronRight, Award } from 'lucide-react';
+import { ArrowLeft, CheckCircle2, ShieldCheck, Truck, ChevronRight, Award, Store } from 'lucide-react';
 import { ensureFirestoreProductsSynced } from '@/lib/firestore-sync';
 
 export const revalidate = 0;
@@ -100,11 +100,11 @@ export default async function SingleBrandPage({ params }: BrandPageProps) {
               </span>
               <span className="flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-emerald-600 flex-shrink-0" />
-                1-Year Warranty Included
+                100% Genuine Hardware
               </span>
               <span className="flex items-center gap-1.5">
-                <Truck className="w-4 h-4 text-blue-600 flex-shrink-0" />
-                Free Express Pan-India Shipping
+                <Store className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                Store Pickup & Consultation
               </span>
               <span className="text-blue-700 font-bold bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200/60">
                 {brand.products.length} Units Available

@@ -22,6 +22,7 @@ interface ShopPageProps {
     storage?: string;
     grade?: string;
     useCase?: string;
+    series?: string;
     sort?: string;
   }>;
 }
@@ -39,6 +40,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     storage,
     grade,
     useCase,
+    series,
     sort,
   } = params;
 
@@ -60,6 +62,13 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     where.brand = {
       slug: brand,
     };
+  }
+
+  if (series) {
+    where.OR = [
+      { series: { contains: series } },
+      { title: { contains: series } },
+    ];
   }
 
   if (minPrice || maxPrice) {
@@ -104,7 +113,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
   }
 
   // Fetch products and available filter data
-  const [products, brands, categories] = await Promise.all([
+  const [products, brands, categories, brandSeries] = await Promise.all([
     prisma.product.findMany({
       where,
       orderBy,
@@ -115,6 +124,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
     }),
     prisma.brand.findMany({ where: { active: true } }),
     prisma.category.findMany({ where: { active: true } }),
+    prisma.brandSeries.findMany({ where: { active: true }, orderBy: { displayOrder: 'asc' } }),
   ]);
 
   return (
@@ -146,13 +156,13 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
                 All Certified Laptops
               </h1>
               <p className="text-xs sm:text-sm text-slate-500">
-                Displaying <strong className="text-slate-900 font-bold">{products.length}</strong> lab-certified machines with 45-point testing report and 1-year warranty.
+                Displaying <strong className="text-slate-900 font-bold">{products.length}</strong> lab-certified machines with 45-point testing report and genuine accessories.
               </p>
             </div>
 
             <div className="flex flex-wrap items-center gap-4 text-xs text-slate-600">
               <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-600" /> 45-Point Inspected</span>
-              <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-emerald-600" /> 1-Year Comprehensive Warranty</span>
+              <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-emerald-600" /> 100% Genuine Hardware</span>
             </div>
           </div>
 
@@ -166,7 +176,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
           {/* Left Column: Filters */}
           <div className="lg:col-span-1 sticky top-24">
             <Suspense fallback={<div className="h-96 bg-white rounded-3xl animate-pulse border border-slate-200" />}>
-              <ShopFilters brands={brands} categories={categories} />
+              <ShopFilters brands={brands} categories={categories} brandSeries={brandSeries} />
             </Suspense>
           </div>
 

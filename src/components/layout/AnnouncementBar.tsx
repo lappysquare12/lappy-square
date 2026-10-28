@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Phone, ShieldCheck, X, Sparkles, Tag, Store, RotateCcw } from 'lucide-react';
+import { Phone, ShieldCheck, X, Sparkles, Tag, Store, CheckCircle2, MapPin } from 'lucide-react';
 
 export default function AnnouncementBar() {
   const [visible, setVisible] = useState(true);
@@ -17,9 +17,9 @@ export default function AnnouncementBar() {
       badge: 'FLAT ₹2000 OFF',
     },
     {
-      icon: Store,
-      text: 'VISIT OUR STORE FOR LIVE TESTING & HANDS-ON DEMO ON ALL LAPTOPS',
-      badge: 'STORE VISIT',
+      icon: MapPin,
+      text: 'VISIT LAPPY SQUARE: PARIS TOWER, NEAR VIJAY PATH, MANSAROVAR, JAIPUR',
+      badge: 'STORE LOCATION',
     },
     {
       icon: Sparkles,
@@ -27,9 +27,9 @@ export default function AnnouncementBar() {
       badge: 'NEW USER',
     },
     {
-      icon: ShieldCheck,
-      text: 'EVERY LAPTOP INCLUDES WRITTEN 45-POINT DIAGNOSTIC REPORT + 1-YEAR WARRANTY',
-      badge: 'CERTIFIED',
+      icon: CheckCircle2,
+      text: 'EVERY LAPTOP INCLUDES COMPREHENSIVE 45-POINT LAB DIAGNOSTIC REPORT',
+      badge: '45-PT TESTED',
     },
     {
       icon: Tag,
@@ -37,9 +37,9 @@ export default function AnnouncementBar() {
       badge: 'STUDENT EXCLUSIVE',
     },
     {
-      icon: RotateCcw,
-      text: '7-DAY ZERO-RISK REPLACEMENT GUARANTEE ON ALL CERTIFIED LAPTOPS',
-      badge: '7-DAY RETURN',
+      icon: ShieldCheck,
+      text: '100% GENUINE OEM HARDWARE & CHARGERS INCLUDED ON ALL LAPTOPS',
+      badge: '100% GENUINE',
     },
   ];
 
@@ -99,11 +99,11 @@ export default function AnnouncementBar() {
         {/* Fixed Right Links */}
         <div className="hidden lg:flex items-center gap-4 flex-shrink-0 text-slate-300 z-10 bg-[#0B1120] pl-3 border-l border-slate-800 text-[11px]">
           <Link
-            href="/warranty"
+            href="/about"
             className="hover:text-white transition-colors flex items-center gap-1 font-medium"
           >
-            <ShieldCheck className="w-3.5 h-3.5 text-blue-400" />
-            <span>Warranty</span>
+            <MapPin className="w-3.5 h-3.5 text-blue-400" />
+            <span>Store Visit</span>
           </Link>
 
           <a

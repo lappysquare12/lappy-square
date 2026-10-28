@@ -1,9 +1,21 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Save, Check, Loader2, Sparkles, Laptop, ShieldCheck, Upload, Image as ImageIcon } from 'lucide-react';
+import {
+  ArrowLeft,
+  Save,
+  Check,
+  Loader2,
+  Sparkles,
+  Laptop,
+  ShieldCheck,
+  Upload,
+  Image as ImageIcon,
+  Copy,
+  Tag
+} from 'lucide-react';
 import CloudinaryMultiImageUploader from '@/components/admin/CloudinaryMultiImageUploader';
 
 interface Brand {
@@ -23,6 +35,7 @@ interface ProductData {
   title: string;
   slug: string;
   sku: string;
+  series?: string | null;
   brandId: string;
   categoryId: string;
   conditionGrade: string;
@@ -58,14 +71,20 @@ export default function ProductEditForm({
   product,
   brands,
   categories,
+  brandSeries = [],
 }: {
   product: ProductData;
   brands: Brand[];
   categories: Category[];
+  brandSeries?: Array<{ id: string; brandId: string; name: string; slug: string }>;
 }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [copiedId, setCopiedId] = useState(false);
+  const [copiedSku, setCopiedSku] = useState(false);
+  const [seriesList, setSeriesList] = useState<Array<{ id: string; brandId: string; name: string; slug: string }>>(brandSeries);
+  const [isCustomSeries, setIsCustomSeries] = useState(false);
   const [images, setImages] = useState<string[]>(
     product.images && product.images.length > 0
       ? product.images.map((img) => img.url)
@@ -75,7 +94,10 @@ export default function ProductEditForm({
 
   const [formData, setFormData] = useState({
     title: product.title,
+    slug: product.slug,
+    sku: product.sku,
     brandId: product.brandId,
+    series: product.series || '',
     categoryId: product.categoryId,
     conditionGrade: product.conditionGrade,
     price: String(product.price),
@@ -105,6 +127,44 @@ export default function ProductEditForm({
     active: product.active,
     imageUrl: product.images[0]?.url || 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80',
   });
+
+  useEffect(() => {
+    fetch('/api/admin/meta')
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.brandSeries) {
+          setSeriesList(data.brandSeries);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleCopy = (text: string, type: 'id' | 'sku') => {
+    navigator.clipboard.writeText(text);
+    if (type === 'id') {
+      setCopiedId(true);
+      setTimeout(() => setCopiedId(false), 2000);
+    } else {
+      setCopiedSku(true);
+      setTimeout(() => setCopiedSku(false), 2000);
+    }
+  };
+
+  const handleRegenerateSlug = () => {
+    const slugified = formData.title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+    setFormData((prev) => ({ ...prev, slug: slugified || 'laptop' }));
+  };
+
+  const handleRegenerateSku = () => {
+    const brandObj = brands.find((b) => b.id === formData.brandId);
+    const bCode = (brandObj?.name || 'LAP').slice(0, 3).toUpperCase();
+    const sCode = (formData.series || 'MOD').slice(0, 3).toUpperCase().replace(/[^A-Z]/g, '');
+    const genSku = `LS-${bCode}-${sCode || 'GEN'}-${Math.floor(100 + Math.random() * 900)}`;
+    setFormData((prev) => ({ ...prev, sku: genSku }));
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -156,12 +216,32 @@ export default function ProductEditForm({
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <div>
-            <h1 className="text-2xl font-black text-slate-950 tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-black text-slate-950 tracking-tight">
               Edit Laptop: {product.title}
             </h1>
-            <p className="text-xs text-slate-500 font-mono">
-              SKU: {product.sku} • ID: {product.id}
-            </p>
+            <div className="flex flex-wrap items-center gap-2 mt-1">
+              {/* Product ID Pill with Copy */}
+              <button
+                type="button"
+                onClick={() => handleCopy(product.id, 'id')}
+                className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-mono transition-colors"
+                title="Click to copy Product ID"
+              >
+                <span>ID: {product.id}</span>
+                {copiedId ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3 text-slate-400" />}
+              </button>
+
+              {/* SKU / Item Code Pill with Copy */}
+              <button
+                type="button"
+                onClick={() => handleCopy(formData.sku, 'sku')}
+                className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-200 text-[11px] font-mono font-bold transition-colors"
+                title="Click to copy Item Code"
+              >
+                <span>Item Code: {formData.sku}</span>
+                {copiedSku ? <Check className="w-3 h-3 text-emerald-600" /> : <Copy className="w-3 h-3 text-blue-600" />}
+              </button>
+            </div>
           </div>
         </div>
 
@@ -201,7 +281,7 @@ export default function ProductEditForm({
       <div className="bg-white border border-[#E8E8E8] rounded-3xl p-6 sm:p-7 shadow-xs space-y-4">
         <h2 className="text-base font-bold text-slate-950 flex items-center gap-2 border-b border-slate-100 pb-3">
           <Laptop className="w-4 h-4 text-blue-700" />
-          <span>1. Core Model & Brand Identity</span>
+          <span>1. Core Model &amp; Brand Identity</span>
         </h2>
 
         <div>
@@ -217,12 +297,66 @@ export default function ProductEditForm({
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {/* Slug & Item Code (SKU) row */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-xs font-bold text-slate-700">URL Slug *</label>
+              <button
+                type="button"
+                onClick={handleRegenerateSlug}
+                className="text-[11px] text-blue-700 font-bold hover:underline"
+              >
+                🔄 Re-sync from Title
+              </button>
+            </div>
+            <input
+              type="text"
+              required
+              value={formData.slug}
+              onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+              className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-2.5 outline-none focus:border-blue-600 font-mono text-xs text-slate-800"
+            />
+            <p className="text-[11px] text-slate-400 mt-1">
+              💡 <strong>Slug:</strong> Web URL link identifier (e.g. lappy.com/product/<strong>{formData.slug}</strong>).
+            </p>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-xs font-bold text-slate-700">Product Item Code (SKU) *</label>
+              <button
+                type="button"
+                onClick={handleRegenerateSku}
+                className="text-[11px] text-blue-700 font-bold hover:underline"
+              >
+                ⚡ Auto Code
+              </button>
+            </div>
+            <input
+              type="text"
+              required
+              value={formData.sku}
+              onChange={(e) => setFormData({ ...formData, sku: e.target.value })}
+              className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-2.5 outline-none focus:border-blue-600 font-mono text-xs uppercase font-bold text-slate-900"
+            />
+            <p className="text-[11px] text-slate-400 mt-1">
+              🏷️ Product item code used by clients for orders, WhatsApp inquiry, and store lookup.
+            </p>
+          </div>
+        </div>
+
+        {/* Brand, Brand Series/Type, Category, Grade */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
             <label className="block text-xs font-bold text-slate-700 mb-1">Brand</label>
             <select
               value={formData.brandId}
-              onChange={(e) => setFormData({ ...formData, brandId: e.target.value })}
+              onChange={(e) => {
+                const newBrandId = e.target.value;
+                setFormData((prev) => ({ ...prev, brandId: newBrandId, series: '' }));
+                setIsCustomSeries(false);
+              }}
               className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-2.5 outline-none focus:border-blue-600 font-semibold text-slate-800 text-xs"
             >
               {brands.map((b) => (
@@ -231,6 +365,97 @@ export default function ProductEditForm({
                 </option>
               ))}
             </select>
+          </div>
+
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <label className="text-xs font-bold text-slate-700">
+                Series / Model Line
+              </label>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setIsCustomSeries(!isCustomSeries)}
+                  className="text-[11px] text-blue-700 font-bold hover:underline"
+                >
+                  {isCustomSeries ? '← Select from List' : '+ Type New Series'}
+                </button>
+                <span className="text-slate-300">•</span>
+                <Link
+                  href="/admin/brands"
+                  target="_blank"
+                  className="text-[10px] text-slate-500 hover:text-black font-semibold"
+                >
+                  Manage All →
+                </Link>
+              </div>
+            </div>
+            {!isCustomSeries ? (
+              <select
+                value={formData.series}
+                onChange={(e) => {
+                  if (e.target.value === '__custom__') {
+                    setIsCustomSeries(true);
+                    setFormData({ ...formData, series: '' });
+                  } else {
+                    setFormData({ ...formData, series: e.target.value });
+                  }
+                }}
+                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-2.5 outline-none focus:border-blue-600 font-semibold text-slate-800 text-xs"
+              >
+                <option value="">Select Series / Model (e.g. MacBook Air, Latitude)</option>
+                {(() => {
+                  const selectedBrand = brands.find((b) => b.id === formData.brandId);
+                  const brandNameLower = (selectedBrand?.name || '').toLowerCase();
+                  
+                  const dbMatches = seriesList.filter(
+                    (s) => !formData.brandId || s.brandId === formData.brandId
+                  );
+
+                  const fallbackMap: Record<string, string[]> = {
+                    apple: ['MacBook Air', 'MacBook Pro', 'iMac & Mac Mini'],
+                    dell: ['Latitude', 'XPS', 'Inspiron', 'Precision', 'Alienware', 'Vostro'],
+                    lenovo: ['ThinkPad', 'ThinkPad X1', 'IdeaPad', 'Legion', 'ThinkBook', 'Yoga'],
+                    hp: ['EliteBook', 'ProBook', 'ZBook', 'Pavilion', 'Envy', 'Omen', 'Spectre'],
+                    asus: ['ZenBook', 'ROG Gaming', 'TUF Gaming', 'VivoBook', 'ExpertBook'],
+                    acer: ['Swift', 'Aspire', 'Predator', 'Nitro'],
+                  };
+
+                  const fallbackList = fallbackMap[brandNameLower] || [];
+
+                  const options = dbMatches.length > 0 
+                    ? dbMatches.map((s) => s.name)
+                    : fallbackList;
+
+                  return options.map((optName) => (
+                    <option key={optName} value={optName}>
+                      {optName}
+                    </option>
+                  ));
+                })()}
+                <option value="__custom__">+ Type New Series Name...</option>
+              </select>
+            ) : (
+              <div className="flex items-center gap-1.5">
+                <input
+                  type="text"
+                  value={formData.series}
+                  onChange={(e) => setFormData({ ...formData, series: e.target.value })}
+                  placeholder="Type series name (e.g. MacBook Air M2, Latitude 5420)"
+                  className="w-full bg-[#F7F8FA] border border-blue-500 rounded-xl p-2.5 outline-none text-xs text-slate-900 font-semibold"
+                />
+                <button
+                  type="button"
+                  onClick={() => setIsCustomSeries(false)}
+                  className="text-[11px] text-slate-500 hover:text-black px-2.5 py-2.5 rounded-xl bg-slate-100 whitespace-nowrap"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+            <p className="text-[10px] text-slate-400 mt-1">
+              e.g. MacBook Air or Pro for Apple; Latitude or XPS for Dell.
+            </p>
           </div>
 
           <div>
@@ -496,18 +721,53 @@ export default function ProductEditForm({
         </div>
 
         {/* Row 5: Warranty & What's in the Box */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
-          <div>
-            <label className="block font-bold text-slate-700 mb-1">Warranty Period (Months)</label>
-            <select
-              value={formData.warrantyMonths}
-              onChange={(e) => setFormData({ ...formData, warrantyMonths: e.target.value })}
-              className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-2.5 outline-none focus:border-blue-600 font-semibold"
-            >
-              <option value="6">6 Months Comprehensive Warranty</option>
-              <option value="12">12 Months Comprehensive Warranty</option>
-              <option value="24">24 Months Extended Warranty</option>
-            </select>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 text-xs">
+          <div className="lg:col-span-5 space-y-2">
+            <label className="block font-bold text-slate-700">
+              Warranty Coverage (Months) *
+            </label>
+            
+            {/* Manual numeric input */}
+            <div className="flex items-center gap-2">
+              <input
+                type="number"
+                min="1"
+                max="60"
+                value={formData.warrantyMonths}
+                onChange={(e) => setFormData({ ...formData, warrantyMonths: e.target.value })}
+                placeholder="Enter months (e.g. 1, 3, 6, 12, 24, 36)"
+                className="w-full bg-[#F7F8FA] border border-[#E8E8E8] rounded-xl p-2.5 outline-none font-black text-slate-950 text-sm focus:border-blue-600"
+              />
+              <span className="text-xs font-bold text-slate-500 whitespace-nowrap">Months</span>
+            </div>
+
+            {/* Quick 1 to 3 Presets */}
+            <div className="space-y-1">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Quick 1 to 3 Selectors:</p>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { label: '1 Year (12M)', val: '12' },
+                  { label: '2 Years (24M)', val: '24' },
+                  { label: '3 Years (36M)', val: '36' },
+                  { label: '6 Months', val: '6' },
+                  { label: '3 Months', val: '3' },
+                  { label: '1 Month', val: '1' },
+                ].map((preset) => (
+                  <button
+                    key={preset.val}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, warrantyMonths: preset.val })}
+                    className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition-all border ${
+                      formData.warrantyMonths === preset.val
+                        ? 'bg-blue-700 text-white border-blue-700 shadow-2xs'
+                        : 'bg-white hover:bg-slate-100 text-slate-700 border-slate-200'
+                    }`}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="sm:col-span-2">

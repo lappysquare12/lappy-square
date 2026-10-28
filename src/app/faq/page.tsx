@@ -23,7 +23,7 @@ export default function FullFAQPage() {
 
   const categories = [
     { key: 'ALL', label: 'All Questions' },
-    { key: 'WARRANTY', label: 'Warranty & Testing' },
+    { key: 'TESTING', label: 'Quality & 45-Pt Testing' },
     { key: 'STORE', label: 'Store Visit & Pickup' },
     { key: 'QUALITY', label: 'Grades & Condition' },
     { key: 'PAYMENT', label: 'Payment & GST Invoice' },
@@ -36,19 +36,19 @@ export default function FullFAQPage() {
       a: 'Grade A+ Like New devices are practically indistinguishable from factory-new units with zero noticeable scratches, flawless displays, and battery health above 90%. Grade A Pristine laptops are in exceptional cosmetic condition with minor imperceptible microscopic marks on the outer chassis, but 100% flawless screens and keyboards.',
     },
     {
-      category: 'WARRANTY',
-      q: 'What does the 1-Year Comprehensive Warranty cover?',
-      a: 'Our written 1-Year warranty covers internal motherboard components, memory (RAM), NVMe SSD storage, cooling assemblies, keyboard, trackpad, and power circuits. If any hardware issue occurs, we provide certified diagnostic support, component repair or unit replacement.',
+      category: 'TESTING',
+      q: 'How does your 45-Point Quality Lab Diagnostic process work?',
+      a: 'Every laptop goes through rigorous hardware testing covering motherboard health, CPU/GPU thermal load, RAM integrity, SSD read/write speeds, battery cycle health, display uniformity with zero dead pixels, keyboard switch responsiveness, and port connectivity.',
     },
     {
-      category: 'WARRANTY',
-      q: 'What if I am unhappy with the laptop after receiving it?',
-      a: 'Every purchase includes our 7-Day Hassle-Free Replacement or Money-Back Guarantee. If the laptop has any hardware issue or does not meet your expectations, we provide an immediate 1-to-1 unit replacement or full refund.',
+      category: 'TESTING',
+      q: 'Are genuine OEM chargers and accessories included with each laptop?',
+      a: 'Yes, every laptop purchased from Lappy Square comes with its compatible genuine high-wattage OEM charger and power cable.',
     },
     {
       category: 'STORE',
       q: 'Can I visit your store to test the laptop before buying?',
-      a: 'Yes! We warmly invite you to visit our experience center at Peris, Near Vijay Path Chauraha, Ward 27, Mansarover, Jaipur, Rajasthan. You can test multiple machines, check battery health, benchmark performance, and purchase your laptop on the spot.',
+      a: 'Yes! We warmly invite you to visit our experience center at Paris Tower, Near Vijay Path Chauraha, Madhyam Marg, Mansarovar, Jaipur, Rajasthan 302020. You can test multiple machines, check battery health, benchmark performance, and purchase your laptop on the spot.',
     },
     {
       category: 'STORE',

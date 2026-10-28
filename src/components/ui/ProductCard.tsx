@@ -163,7 +163,7 @@ export default function ProductCard({ product }: ProductCardProps) {
             {/* Grade Badge */}
             <div className="pointer-events-auto flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border border-slate-200/90 shadow-xs min-w-0 shrink">
               <span className={`w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0 ${gradeDisplay.dot}`} />
-              <span className="text-[10px] sm:text-xs font-bold text-slate-800 tracking-tight whitespace-nowrap truncate">
+              <span className="text-[10px] sm:text-xs font-bold text-slate-800 tracking-tight whitespace-nowrap truncate max-w-[105px] sm:max-w-none">
                 {gradeDisplay.text}
               </span>
             </div>
@@ -245,17 +245,20 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
 
-        {/* Brand Row & SKU */}
-        <div className="flex items-center justify-between mb-2 px-0.5 min-h-[30px]">
+        {/* Brand Row & Item Code */}
+        <div className="flex items-center justify-between mb-2 px-0.5 min-h-[30px] gap-2">
           {product.brand ? (
-            <div className="h-7 sm:h-8 flex items-center text-slate-800">
+            <div className="h-7 sm:h-8 flex items-center text-slate-800 shrink-0">
               <BrandLogo brand={product.brand.slug} size="md" />
             </div>
           ) : (
-            <span className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider">Lappy Square</span>
+            <span className="text-[10px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider shrink-0">Lappy Square</span>
           )}
-          <span className="text-[10px] sm:text-xs text-slate-400 font-mono font-medium whitespace-nowrap">
-            SKU: {product.sku}
+          <span
+            className="text-[10px] sm:text-xs text-slate-600 font-mono font-bold bg-slate-100 hover:bg-slate-200 border border-slate-200/90 px-2 py-0.5 rounded-md whitespace-nowrap truncate max-w-[140px]"
+            title={`Item Code: ${product.sku}`}
+          >
+            Code: {product.sku}
           </span>
         </div>
 
@@ -282,7 +285,11 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
           <div className="flex items-center gap-2 bg-blue-50/90 border border-blue-200 px-2.5 sm:px-3.5 py-2 sm:py-2.5 rounded-xl text-blue-900">
             <ShieldCheck className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-700 flex-shrink-0" />
-            <span className="truncate font-extrabold">{product.warrantyMonths}M Warranty</span>
+            <span className="truncate font-extrabold">
+              {product.warrantyMonths >= 12 && product.warrantyMonths % 12 === 0
+                ? `${product.warrantyMonths / 12}Y Warranty`
+                : `${product.warrantyMonths}M Warranty`}
+            </span>
           </div>
         </div>
       </div>

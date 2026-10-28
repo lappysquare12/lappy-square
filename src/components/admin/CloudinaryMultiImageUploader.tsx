@@ -40,108 +40,20 @@ export default function CloudinaryMultiImageUploader({
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   /**
-   * Client-side studio background optimizer:
-   * 1. Creates a clean white canvas.
-   * 2. Detects background lighting & border tint.
-   * 3. Blends perimeter highlights to pure #FFFFFF so the laptop stands out cleanly on a pure white background.
+   * Helper to toggle Cloudinary AI pure studio white background for any image
    */
-  const processImageToWhiteBg = async (file: File): Promise<Blob | File> => {
-    return new Promise((resolve) => {
-      const img = new window.Image();
-      const objectUrl = URL.createObjectURL(file);
-
-      img.onload = () => {
-        URL.revokeObjectURL(objectUrl);
-        try {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          if (!ctx) return resolve(file);
-
-          const maxDim = 1600;
-          let w = img.width;
-          let h = img.height;
-          if (w > maxDim || h > maxDim) {
-            if (w > h) {
-              h = Math.round((h * maxDim) / w);
-              w = maxDim;
-            } else {
-              w = Math.round((w * maxDim) / h);
-              h = maxDim;
-            }
-          }
-
-          canvas.width = w;
-          canvas.height = h;
-
-          // Fill canvas with pure studio white
-          ctx.fillStyle = '#FFFFFF';
-          ctx.fillRect(0, 0, w, h);
-
-          // Draw image
-          ctx.drawImage(img, 0, 0, w, h);
-
-          const imgData = ctx.getImageData(0, 0, w, h);
-          const data = imgData.data;
-
-          // Sample border pixels to detect background color
-          let bgR = 0, bgG = 0, bgB = 0, count = 0;
-          const step = Math.max(1, Math.floor(w / 40));
-          for (let x = 0; x < w; x += step) {
-            let idx = (0 * w + x) * 4;
-            bgR += data[idx]; bgG += data[idx + 1]; bgB += data[idx + 2]; count++;
-            idx = ((h - 1) * w + x) * 4;
-            bgR += data[idx]; bgG += data[idx + 1]; bgB += data[idx + 2]; count++;
-          }
-          for (let y = 0; y < h; y += step) {
-            let idx = (y * w + 0) * 4;
-            bgR += data[idx]; bgG += data[idx + 1]; bgB += data[idx + 2]; count++;
-            idx = (y * w + (w - 1)) * 4;
-            bgR += data[idx]; bgG += data[idx + 1]; bgB += data[idx + 2]; count++;
-          }
-
-          bgR /= count; bgG /= count; bgB /= count;
-
-          // Replace surrounding near-white, light gray, or transparent pixels with pure white (#FFFFFF)
-          for (let i = 0; i < data.length; i += 4) {
-            const r = data[i];
-            const g = data[i + 1];
-            const b = data[i + 2];
-            const a = data[i + 3];
-
-            if (a < 25) {
-              data[i] = 255; data[i + 1] = 255; data[i + 2] = 255; data[i + 3] = 255;
-              continue;
-            }
-
-            const dist = Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
-            const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-
-            // If close to sampled border background or high brightness tint, turn into pure crisp white
-            if (dist < 55 || luminance > 235) {
-              data[i] = 255;
-              data[i + 1] = 255;
-              data[i + 2] = 255;
-            }
-          }
-
-          ctx.putImageData(imgData, 0, 0);
-
-          canvas.toBlob(
-            (blob) => {
-              if (blob) resolve(blob);
-              else resolve(file);
-            },
-            'image/jpeg',
-            0.92
-          );
-        } catch {
-          resolve(file);
-        }
-      };
-
-      img.onerror = () => resolve(file);
-      img.src = objectUrl;
-    });
+  const handleToggleWhiteBg = (index: number) => {
+    const url = images[index];
+    if (!url) return;
+    let newUrl = url;
+    if (url.includes('e_background_removal,b_white/')) {
+      newUrl = url.replace('e_background_removal,b_white/', '');
+    } else if (url.includes('/image/upload/')) {
+      newUrl = url.replace('/image/upload/', '/image/upload/e_background_removal,b_white/');
+    }
+    const updated = [...images];
+    updated[index] = newUrl;
+    onChange(updated);
   };
 
   const handleFiles = async (files: FileList | null) => {
@@ -156,19 +68,15 @@ export default function CloudinaryMultiImageUploader({
         const file = files[i];
         setUploadProgress(
           autoWhiteBg
-            ? `Optimizing white background & uploading (${i + 1}/${files.length})...`
+            ? `AI removing background & uploading (${i + 1}/${files.length})...`
             : `Uploading (${i + 1}/${files.length})...`
         );
 
-        // Process to white background if enabled
-        const processedPayload = autoWhiteBg
-          ? await processImageToWhiteBg(file)
-          : file;
-
         const formData = new FormData();
-        formData.append('file', processedPayload, file.name.replace(/\.[^.]+$/, '.jpg'));
+        formData.append('file', file);
         formData.append('folder', folder);
         formData.append('resource_type', 'image');
+        formData.append('white_bg', autoWhiteBg ? 'true' : 'false');
 
         const res = await fetch('/api/upload', {
           method: 'POST',
@@ -262,7 +170,7 @@ export default function CloudinaryMultiImageUploader({
               </span>
             </div>
             <span className="text-[11px] text-slate-500 block">
-              Cleans shadows and automatically makes the image background pure studio white.
+              AI automatically cuts out any room, floor, or desk background and makes it 100% pure studio white.
             </span>
           </div>
         </div>
@@ -318,27 +226,45 @@ export default function CloudinaryMultiImageUploader({
               />
 
               {/* Top Bar Badges & Remove */}
-              <div className="absolute top-1.5 inset-x-1.5 z-10 flex items-center justify-between pointer-events-none">
-                {idx === 0 ? (
-                  <span className="pointer-events-auto bg-blue-600 text-white text-[9px] font-black px-2 py-0.5 rounded-md flex items-center gap-1 shadow-xs">
-                    <Star className="w-2.5 h-2.5 fill-white" />
-                    Cover Photo
-                  </span>
-                ) : (
-                  <button
-                    type="button"
-                    onClick={() => handleSetPrimary(idx)}
-                    className="pointer-events-auto bg-white/90 hover:bg-white text-slate-700 hover:text-blue-700 text-[9px] font-bold px-1.5 py-0.5 rounded-md border border-slate-200 shadow-xs opacity-90 group-hover:opacity-100 transition-opacity cursor-pointer"
-                    title="Set as Cover Photo"
-                  >
-                    Set Primary
-                  </button>
-                )}
+              <div className="absolute top-1.5 inset-x-1.5 z-10 flex items-center justify-between gap-1 pointer-events-none">
+                <div className="flex items-center gap-1 pointer-events-auto flex-wrap">
+                  {idx === 0 ? (
+                    <span className="bg-blue-600 text-white text-[9px] font-black px-1.5 py-0.5 rounded-md flex items-center gap-1 shadow-xs">
+                      <Star className="w-2.5 h-2.5 fill-white" />
+                      Cover
+                    </span>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => handleSetPrimary(idx)}
+                      className="bg-white/90 hover:bg-white text-slate-700 hover:text-blue-700 text-[9px] font-bold px-1.5 py-0.5 rounded-md border border-slate-200 shadow-xs opacity-90 group-hover:opacity-100 transition-opacity cursor-pointer"
+                      title="Set as Cover Photo"
+                    >
+                      Primary
+                    </button>
+                  )}
+
+                  {url.includes('cloudinary.com') && (
+                    <button
+                      type="button"
+                      onClick={() => handleToggleWhiteBg(idx)}
+                      className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md flex items-center gap-0.5 shadow-xs cursor-pointer transition-colors ${
+                        url.includes('e_background_removal,b_white')
+                          ? 'bg-emerald-600 text-white'
+                          : 'bg-white/95 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-200'
+                      }`}
+                      title={url.includes('e_background_removal,b_white') ? 'White background active. Click to revert.' : 'Make background pure studio white'}
+                    >
+                      <Sparkles className="w-2.5 h-2.5" />
+                      <span>{url.includes('e_background_removal,b_white') ? 'White BG' : '+ White BG'}</span>
+                    </button>
+                  )}
+                </div>
 
                 <button
                   type="button"
                   onClick={() => handleRemove(idx)}
-                  className="pointer-events-auto w-6 h-6 rounded-full bg-slate-900/80 hover:bg-rose-600 text-white flex items-center justify-center transition-colors shadow-xs cursor-pointer"
+                  className="pointer-events-auto w-6 h-6 rounded-full bg-slate-900/80 hover:bg-rose-600 text-white flex items-center justify-center transition-colors shadow-xs cursor-pointer shrink-0"
                   title="Remove image"
                 >
                   <X className="w-3.5 h-3.5" />

@@ -72,9 +72,9 @@ ${data.discountAmount && data.discountAmount > 0 ? `• Discount: -₹${data.dis
 • Payment Method: ${paymentLabel}
 
 *Lappy Square Assurance:*
-• 1-Year Comprehensive Warranty
 • 45-Point Lab Diagnostics QA Report
-• 7-Day Replacement Policy
+• 100% Genuine OEM Hardware & Battery Tested
+• Paris Tower, Mansarovar, Jaipur
 ━━━━━━━━━━━━━━━━━━━━
 Hello Lappy Square Team, I have booked this order on your website. Please verify availability and share store visit / reservation details.`;
 }

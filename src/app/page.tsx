@@ -114,7 +114,7 @@ export default async function HomePage() {
       <ScrollReveal direction="up" delay={0.1}>
         <section className="py-16 bg-white border-b border-[#E8E8E8]">
           <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
               <div>
                 <div className="flex items-center gap-1.5 text-blue-700 text-xs font-bold uppercase tracking-wider mb-1">
                   <TrendingUp className="w-4 h-4 text-blue-600" />
@@ -127,7 +127,7 @@ export default async function HomePage() {
 
               <Link
                 href="/shop"
-                className="text-xs sm:text-sm font-bold text-blue-700 hover:text-blue-900 flex items-center gap-1 transition-colors"
+                className="self-start sm:self-auto text-xs sm:text-sm font-bold text-blue-700 hover:text-blue-900 flex items-center gap-1 transition-colors"
               >
                 <span>Explore All Laptops</span>
                 <ArrowRight className="w-4 h-4" />
@@ -153,7 +153,7 @@ export default async function HomePage() {
         <ScrollReveal direction="up" delay={0.1}>
           <section className="py-16 bg-white border-b border-[#E8E8E8]">
             <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-between mb-8">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-6 sm:mb-8">
                 <div>
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Fresh Lab Certification</span>
                   <h2 className="text-2xl sm:text-3xl font-black text-slate-950 tracking-tight mt-0.5">
@@ -163,7 +163,7 @@ export default async function HomePage() {
 
                 <Link
                   href="/shop?sort=newest"
-                  className="text-xs sm:text-sm font-bold text-blue-700 hover:text-blue-900 flex items-center gap-1 transition-colors"
+                  className="self-start sm:self-auto text-xs sm:text-sm font-bold text-blue-700 hover:text-blue-900 flex items-center gap-1 transition-colors"
                 >
                   <span>See All New Drops</span>
                   <ArrowRight className="w-4 h-4" />
@@ -180,7 +180,7 @@ export default async function HomePage() {
         </ScrollReveal>
       )}
 
-      {/* 8. Trust: 45-Point Inspection & 1-Year Warranty */}
+      {/* 8. Trust: 45-Point Inspection & Quality Standards */}
       <ScrollReveal direction="up" delay={0.1}>
         <TrustSection />
       </ScrollReveal>

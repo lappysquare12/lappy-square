@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import {
   Laptop,
@@ -16,7 +17,9 @@ import {
   HeartHandshake,
   MapPin,
   Clock,
-  ThumbsUp
+  ThumbsUp,
+  Quote,
+  BadgeCheck
 } from 'lucide-react';
 import ScrollReveal from '@/components/ui/ScrollReveal';
 
@@ -59,7 +62,7 @@ export default function AboutPage() {
     { num: '01', title: 'Enterprise Sourcing', desc: 'Direct corporate lease returns from MNC tech parks in Gurugram, Bengaluru & Pune.' },
     { num: '02', title: 'Ultrasonic Sanitize', desc: 'Deep surgical cleaning, keyboard dust extraction, and thermal compound re-paste.' },
     { num: '03', title: '45-Point Stress Run', desc: '6-hour burn-in benchmark checking GPU load, SSD SMART health, and battery cycle life.' },
-    { num: '04', title: 'Certified Packaging', desc: 'Sealed in electrostatic tamper-proof air-cushion boxes with 1-Year warranty card.' },
+    { num: '04', title: 'Certified Packaging', desc: 'Sealed in electrostatic tamper-proof air-cushion boxes with 45-Point diagnostic certificate.' },
   ];
 
   return (
@@ -194,6 +197,113 @@ export default function AboutPage() {
           </div>
         </ScrollReveal>
 
+        {/* FOUNDER & CEO LEADERSHIP SECTION */}
+        <ScrollReveal direction="up" delay={0.1}>
+          <div className="relative overflow-hidden bg-white border border-slate-200/90 rounded-3xl p-6 sm:p-10 lg:p-12 shadow-md">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+              
+              {/* Founder Image Column */}
+              <div className="lg:col-span-5 flex justify-center">
+                <div className="relative w-full max-w-sm sm:max-w-md aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-slate-100 group">
+                  <Image
+                    src="/images/pankaj-jain-founder.jpg"
+                    alt="Pankaj Jain — Founder & CEO of Lappy Square"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 400px"
+                    className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    priority
+                  />
+                  {/* Subtle Gradient Shadow at bottom */}
+                  <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-slate-950/80 via-slate-950/40 to-transparent pointer-events-none" />
+                  
+                  {/* Floating Badge on photo */}
+                  <div className="absolute bottom-4 inset-x-4 flex items-center justify-between text-white z-10">
+                    <div>
+                      <p className="font-black text-lg text-white tracking-tight flex items-center gap-1.5">
+                        <span>Pankaj Jain</span>
+                        <BadgeCheck className="w-5 h-5 text-blue-400 fill-blue-500/20" />
+                      </p>
+                      <p className="text-xs text-blue-200 font-semibold">Founder & CEO</p>
+                    </div>
+                    <span className="text-[11px] font-bold bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30 text-white">
+                      Lappy Square
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Founder Narrative & Vision Column */}
+              <div className="lg:col-span-7 space-y-6">
+                <div>
+                  <div className="inline-flex items-center gap-2 bg-blue-50 border border-blue-200/70 px-3.5 py-1.5 rounded-full text-xs font-bold text-blue-700 tracking-wide uppercase mb-3">
+                    <Quote className="w-3.5 h-3.5 text-blue-600" />
+                    <span>Founder&apos;s Vision</span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 tracking-tight leading-tight">
+                    &quot;Building India&apos;s Most Trusted Hub for Enterprise Computing.&quot;
+                  </h2>
+                  <div className="mt-2 flex items-center gap-2">
+                    <span className="text-base font-black text-slate-900">Pankaj Jain</span>
+                    <span className="text-slate-400">•</span>
+                    <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
+                      Founder &amp; CEO
+                    </span>
+                  </div>
+                </div>
+
+                <div className="space-y-3.5 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
+                  <p>
+                    When I founded <strong className="text-slate-900">Lappy Square</strong>, the second-hand and refurbished laptop market was plagued by unverified sellers, hidden hardware flaws, and zero after-sales accountability. Customers often felt forced to choose between spending Rs. 80,000+ on a basic new machine or gambling on an untrusted used device.
+                  </p>
+                  <p>
+                    We set out to disrupt that paradigm entirely. Today, every Apple MacBook and enterprise laptop in our inventory undergoes a rigorous <strong>45-point diagnostic lab audit</strong> — verifying motherboard thermals, battery cycles, displays, and keyboard performance before it ever reaches our shelves.
+                  </p>
+                  <p>
+                    Our mission is simple: to empower Indian students, developers, creators, and businesses with authentic, flagship-grade computing at a fraction of the cost, fully backed by real warranty protection and transparent support.
+                  </p>
+                </div>
+
+                {/* Highlights Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-2">
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
+                    <p className="text-xl sm:text-2xl font-black text-slate-950">12,500+</p>
+                    <p className="text-[11px] text-slate-500 font-medium">Laptops Delivered</p>
+                  </div>
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
+                    <p className="text-xl sm:text-2xl font-black text-blue-700">45-Point</p>
+                    <p className="text-[11px] text-slate-500 font-medium">Lab Diagnostics</p>
+                  </div>
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 col-span-2 sm:col-span-1">
+                    <p className="text-xl sm:text-2xl font-black text-emerald-700">100%</p>
+                    <p className="text-[11px] text-slate-500 font-medium">Genuine Hardware</p>
+                  </div>
+                </div>
+
+                {/* Connect on WhatsApp with the Founder's Desk */}
+                <div className="pt-2 flex flex-wrap items-center gap-3">
+                  <a
+                    href="https://wa.me/919376988788?text=Hello%20Pankaj%20sir%2C%20I%20would%20like%20to%20connect%20regarding%20laptops%20at%20Lappy%20Square."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#25D366] hover:bg-[#20BD5A] text-white text-xs font-bold rounded-2xl transition-all shadow-md shadow-[#25D366]/20"
+                  >
+                    <span>Connect With Founder&apos;s Desk</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </a>
+
+                  <Link
+                    href="/contact"
+                    className="inline-flex items-center gap-2 px-5 py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-2xl transition-all"
+                  >
+                    <span>Visit Experience Center</span>
+                  </Link>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </ScrollReveal>
+
         {/* EXPERIENCE CENTER CARD */}
         <ScrollReveal direction="up" delay={0.1}>
           <div className="bg-white border border-slate-200 rounded-3xl p-8 sm:p-10 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
@@ -203,10 +313,10 @@ export default function AboutPage() {
                 <span>Visit Us In Person</span>
               </div>
               <h3 className="text-xl sm:text-2xl font-black text-slate-950">
-                Lappy Square Experience & Diagnostic Center
+                Lappy Square Experience &amp; Diagnostic Center
               </h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Want to touch, feel, and run benchmarks in person before buying? Visit our flagship diagnostic hub in Mansarovar, Jaipur. Test displays, keyboards, and battery health directly on our test benches.
+                Want to touch, feel, and run benchmarks in person before buying? Visit our flagship diagnostic hub at Paris Tower, Near Vijay Path Chauraha, Madhyam Marg, Mansarovar, Jaipur. Test displays, keyboards, and battery health directly on our test benches.
               </p>
             </div>
 

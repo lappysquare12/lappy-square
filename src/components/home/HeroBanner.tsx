@@ -37,7 +37,7 @@ const DEFAULT_SLIDES = [
   {
     id: 'default-1',
     title: 'Certified Second-Hand & Open-Box MacBooks',
-    subtitle: 'Apple MacBook Pro & MacBook Air with M-Series & Intel Chips. 45-Point Tested, OEM Battery, 1-Year Warranty.',
+    subtitle: 'Apple MacBook Pro & MacBook Air with M-Series & Intel Chips. 45-Point Tested, OEM Battery, Genuine Hardware.',
     imageUrl: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=2000&q=85',
     linkUrl: '/collection/macbook',
     badgeText: 'Flat 35% to 50% OFF Today',
@@ -263,24 +263,24 @@ export default function HeroBanner({ banners }: HeroBannerProps) {
           <div className="flex items-center gap-2.5 py-1">
             <ShieldCheck className="w-4 h-4 text-blue-400 shrink-0" />
             <div>
-              <p className="font-bold leading-tight">1-Year Warranty</p>
-              <p className="text-[10px] text-slate-400">Comprehensive Coverage</p>
+              <p className="font-bold leading-tight">100% Genuine Hardware</p>
+              <p className="text-[10px] text-slate-400">Original OEM Components</p>
             </div>
           </div>
 
           <div className="flex items-center gap-2.5 py-1">
-            <RotateCcw className="w-4 h-4 text-amber-400 shrink-0" />
+            <Sparkles className="w-4 h-4 text-amber-400 shrink-0" />
             <div>
-              <p className="font-bold leading-tight">7 Days Replacement</p>
-              <p className="text-[10px] text-slate-400">Guaranteed Peace of Mind</p>
+              <p className="font-bold leading-tight">Best Price in Jaipur</p>
+              <p className="text-[10px] text-slate-400">Save Up to 70% vs New</p>
             </div>
           </div>
 
           <div className="flex items-center gap-2.5 py-1">
             <Store className="w-4 h-4 text-indigo-400 shrink-0" />
             <div>
-              <p className="font-bold leading-tight">Store Walk-in & Demo</p>
-              <p className="text-[10px] text-slate-400">Live Hardware Testing</p>
+              <p className="font-bold leading-tight">Store Consultation</p>
+              <p className="text-[10px] text-slate-400">Paris Tower, Mansarovar</p>
             </div>
           </div>
         </div>

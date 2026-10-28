@@ -80,12 +80,41 @@ export async function PUT(
       if (foundCat) resolvedCategoryId = foundCat.id;
     }
 
+    // Auto-persist new series into BrandSeries if not present
+    const targetBrandId = resolvedBrandId || existing?.brandId;
+    if (body.series && targetBrandId) {
+      try {
+        const sName = String(body.series).trim();
+        if (sName) {
+          const ex = await prisma.brandSeries.findFirst({
+            where: { brandId: targetBrandId, name: { equals: sName } },
+          });
+          if (!ex) {
+            const sSlug = sName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+            await prisma.brandSeries.create({
+              data: {
+                brandId: targetBrandId,
+                name: sName,
+                slug: sSlug || `series-${Date.now()}`,
+                active: true,
+              },
+            });
+          }
+        }
+      } catch {
+        // ignore duplicate
+      }
+    }
+
     let updated = null;
     if (existing) {
       updated = await prisma.product.update({
         where: { id },
         data: {
           title: title !== undefined ? title : undefined,
+          slug: body.slug !== undefined ? body.slug.toLowerCase().trim() : undefined,
+          sku: body.sku !== undefined ? body.sku.toUpperCase().trim() : undefined,
+          series: body.series !== undefined ? (body.series ? String(body.series).trim() : '') : undefined,
           brandId: resolvedBrandId,
           categoryId: resolvedCategoryId,
           price: price !== undefined ? Number(price) : undefined,

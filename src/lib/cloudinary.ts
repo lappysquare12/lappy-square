@@ -16,7 +16,8 @@ export default cloudinary;
 export async function uploadImageToCloudinary(
   fileBufferOrBase64: Buffer | string,
   folder: string = 'lappy-square/products',
-  resourceType: 'auto' | 'image' | 'video' = 'auto'
+  resourceType: 'auto' | 'image' | 'video' = 'auto',
+  options?: { whiteBackground?: boolean }
 ): Promise<{ url: string; public_id: string; resource_type?: string }> {
   return new Promise((resolve, reject) => {
     const uploadOptions: Record<string, unknown> = {
@@ -26,6 +27,14 @@ export async function uploadImageToCloudinary(
     if (resourceType === 'image') {
       uploadOptions.transformation = [{ quality: 'auto', fetch_format: 'auto' }];
     }
+
+    const finalizeUrl = (secureUrl: string) => {
+      if (options?.whiteBackground && resourceType === 'image' && secureUrl.includes('/image/upload/')) {
+        // Cloudinary AI background removal + pure crisp studio white background
+        return secureUrl.replace('/image/upload/', '/image/upload/e_background_removal,b_white/');
+      }
+      return secureUrl;
+    };
 
     if (typeof fileBufferOrBase64 === 'string' && fileBufferOrBase64.startsWith('data:')) {
       // Base64 upload
@@ -37,7 +46,7 @@ export async function uploadImageToCloudinary(
             return reject(error || new Error('Upload to Cloudinary failed'));
           }
           resolve({
-            url: result.secure_url,
+            url: finalizeUrl(result.secure_url),
             public_id: result.public_id,
             resource_type: result.resource_type,
           });
@@ -52,7 +61,7 @@ export async function uploadImageToCloudinary(
             return reject(error || new Error('Upload to Cloudinary failed'));
           }
           resolve({
-            url: result.secure_url,
+            url: finalizeUrl(result.secure_url),
             public_id: result.public_id,
             resource_type: result.resource_type,
           });

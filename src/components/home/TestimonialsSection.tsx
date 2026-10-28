@@ -24,7 +24,7 @@ export default function TestimonialsSection() {
       rating: 5,
       date: 'Google Verified Review • 1 month ago',
       review:
-        'Found them through Google and Instagram. Staff is super transparent, showed me multiple options and gave 1-Year warranty with immediate bill. The laptop runs smoothly without any heating issues. Highly recommended for students and professionals!',
+        'Found them through Google and Instagram. Staff is super transparent, showed me multiple options and gave 45-point testing report with immediate bill. The laptop runs smoothly without any heating issues. Highly recommended for students and professionals!',
     },
     {
       name: 'Ankit Meena',

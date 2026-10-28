@@ -129,11 +129,34 @@ export async function POST(req: Request) {
       rawImages = ['https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80'];
     }
 
+    const seriesTrimmed = body.series ? String(body.series).trim() : '';
+    if (seriesTrimmed && foundBrand?.id) {
+      try {
+        const existing = await prisma.brandSeries.findFirst({
+          where: { brandId: foundBrand.id, name: { equals: seriesTrimmed } },
+        });
+        if (!existing) {
+          const sSlug = seriesTrimmed.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+          await prisma.brandSeries.create({
+            data: {
+              brandId: foundBrand.id,
+              name: seriesTrimmed,
+              slug: sSlug || `series-${Date.now()}`,
+              active: true,
+            },
+          });
+        }
+      } catch {
+        // ignore duplicate
+      }
+    }
+
     const newProduct = await prisma.product.create({
       data: {
         title: title.trim(),
         slug,
         sku,
+        series: seriesTrimmed,
         brand: {
           connect: { id: foundBrand.id },
         },
