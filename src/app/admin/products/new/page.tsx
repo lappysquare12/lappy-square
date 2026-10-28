@@ -255,28 +255,9 @@ export default function NewProductPage() {
               </div>
 
               <div>
-                <div className="flex items-center justify-between mb-1">
-                  <label className="font-bold text-slate-700">
-                    Series / Model Line
-                  </label>
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setIsCustomSeries(!isCustomSeries)}
-                      className="text-[11px] text-blue-700 font-bold hover:underline"
-                    >
-                      {isCustomSeries ? '← Select from List' : '+ Type New Series'}
-                    </button>
-                    <span className="text-slate-300">•</span>
-                    <Link
-                      href="/admin/brands"
-                      target="_blank"
-                      className="text-[10px] text-slate-500 hover:text-black font-semibold"
-                    >
-                      Manage All →
-                    </Link>
-                  </div>
-                </div>
+                <label className="block font-bold text-slate-700 mb-1">
+                  Series / Model Line
+                </label>
                 {!isCustomSeries ? (
                   <select
                     value={formData.series}
@@ -328,7 +309,7 @@ export default function NewProductPage() {
                       type="text"
                       value={formData.series}
                       onChange={(e) => setFormData({ ...formData, series: e.target.value })}
-                      placeholder="Type series name (e.g. MacBook Air M2, Latitude 5420, Yoga 7i)"
+                      placeholder="Type series name (e.g. MacBook Air M2, Latitude 5420)"
                       className="w-full bg-[#F7F8FA] border border-blue-500 rounded-xl p-3 outline-none text-xs text-slate-900 font-semibold"
                     />
                     <button
@@ -340,9 +321,25 @@ export default function NewProductPage() {
                     </button>
                   </div>
                 )}
-                <p className="text-[10px] text-slate-400 mt-1">
-                  e.g. MacBook Air or Pro for Apple; Latitude or XPS for Dell.
-                </p>
+                
+                {/* Clean Actions & Helpers Row */}
+                <div className="flex items-center justify-between gap-1.5 mt-1.5 text-[11px]">
+                  <button
+                    type="button"
+                    onClick={() => setIsCustomSeries(!isCustomSeries)}
+                    className="text-blue-700 font-bold hover:underline inline-flex items-center gap-1 cursor-pointer"
+                  >
+                    {isCustomSeries ? '← Select from List' : '+ Type New Series'}
+                  </button>
+                  <Link
+                    href="/admin/brands"
+                    target="_blank"
+                    className="text-slate-500 hover:text-blue-700 font-semibold whitespace-nowrap inline-flex items-center gap-0.5"
+                  >
+                    <span>Manage All</span>
+                    <span>→</span>
+                  </Link>
+                </div>
               </div>
 
               <div>
