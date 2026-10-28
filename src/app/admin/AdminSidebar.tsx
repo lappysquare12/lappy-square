@@ -74,7 +74,7 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
     { label: 'Orders & Fulfillment', href: '/admin/orders', icon: ShoppingBag },
     { label: 'WhatsApp Integration', href: '/admin/whatsapp', icon: WhatsAppIcon, badge: 'Live' },
     { label: 'Leads & Enquiries', href: '/admin/enquiries', icon: Users },
-    { label: 'Coupons & Promos', href: '/admin/coupons', icon: Tag },
+    { label: 'About Us Page CMS', href: '/admin/about', icon: Users, badge: 'CMS' },
     { label: 'Customer Reviews', href: '/admin/reviews', icon: Sparkles },
     { label: 'Video Reviews', href: '/admin/video-reviews', icon: Video, badge: 'Videos' },
     { label: 'Blog & CMS', href: '/admin/blogs', icon: FileText },
@@ -84,23 +84,23 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
   return (
     <>
       {/* Mobile Top App Bar (Visible only on < md) */}
-      <div className="md:hidden sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#E8E8E8] px-4 py-3 flex items-center justify-between shadow-xs">
-        <div className="flex items-center gap-3">
+      <div className="md:hidden sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-[#E8E8E8] px-3 py-2.5 flex items-center justify-between shadow-xs gap-2">
+        <div className="flex items-center gap-2 min-w-0 shrink-0">
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-slate-700 hover:text-black rounded-lg hover:bg-slate-100"
+            className="p-1.5 text-slate-700 hover:text-black rounded-lg hover:bg-slate-100 shrink-0"
             aria-label="Toggle admin menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
-          <Link href="/admin">
-            <LappySquareLogo size={32} variant="horizontal" showSubtitle={false} />
+          <Link href="/admin" className="flex items-center shrink-0">
+            <LappySquareLogo size={26} variant="horizontal" showSubtitle={false} />
           </Link>
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] font-black uppercase text-blue-800 bg-blue-100 px-2 py-0.5 rounded">
-            {user.role}
+        <div className="flex items-center gap-1.5 shrink-0">
+          <span className="text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-200/80 px-2 py-0.5 rounded-full whitespace-nowrap">
+            {user.role === 'SUPER_ADMIN' ? 'Super Admin' : user.role === 'CONTENT_MANAGER' ? 'Manager' : 'Admin'}
           </span>
           <Link
             href="/"
@@ -108,7 +108,7 @@ export default function AdminSidebar({ user }: AdminSidebarProps) {
             className="p-1.5 text-slate-500 hover:text-black rounded-lg hover:bg-slate-100"
             title="Open Live Website"
           >
-            <ExternalLink className="w-4 h-4" />
+            <ExternalLink className="w-3.5 h-3.5" />
           </Link>
         </div>
       </div>

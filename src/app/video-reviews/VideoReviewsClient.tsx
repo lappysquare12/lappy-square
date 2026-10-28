@@ -142,24 +142,24 @@ export default function VideoReviewsClient({ initialReviews }: { initialReviews:
               </div>
 
               {/* Action bar */}
-              <div className="p-5 sm:p-6 pt-0 border-t border-slate-100 flex items-center justify-between">
+              <div className="p-4 sm:p-6 pt-0 border-t border-slate-100 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
                 <button
                   type="button"
                   onClick={() => setActiveVideo(rev)}
-                  className="text-xs font-bold text-blue-700 hover:text-blue-900 flex items-center gap-1"
+                  className="text-xs font-bold text-blue-700 hover:text-blue-900 flex items-center justify-center sm:justify-start gap-1.5 py-2 sm:py-0"
                 >
+                  <Play className="w-3.5 h-3.5 fill-blue-700 text-blue-700" />
                   <span>Watch Video Review</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
                 </button>
 
                 <a
                   href="https://wa.me/919376988788?text=Hello%20Lappy%20Square%20Team!%20I%20saw%20your%20customer%20video%20reviews%20and%20want%20to%20know%20more%20about%20your%20available%20laptops."
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs font-bold text-emerald-700 hover:text-emerald-800 flex items-center gap-1.5 bg-emerald-50 px-3 py-1.5 rounded-full"
+                  className="text-xs font-bold text-emerald-800 hover:text-emerald-900 flex items-center justify-center gap-1.5 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200/80 px-3.5 py-2.5 sm:py-1.5 rounded-xl transition-all shadow-xs"
                 >
                   <WhatsAppIcon className="w-3.5 h-3.5 text-emerald-700" />
-                  <span>Ask Today&apos;s Price</span>
+                  <span>Ask Today&apos;s Best Price</span>
                 </a>
               </div>
             </div>

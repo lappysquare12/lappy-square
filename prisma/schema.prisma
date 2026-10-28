@@ -458,6 +458,7 @@ model WebsiteSetting {
   whatsappNumber         String   @default("+91 93769 88788")
   googleSiteVerification String?  @default("")
   googleAnalyticsId      String?  @default("")
+  aboutContent           String?  @default("")
   updatedAt              DateTime @updatedAt
 }
 

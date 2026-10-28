@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
@@ -23,13 +23,42 @@ import {
 } from 'lucide-react';
 import ScrollReveal from '@/components/ui/ScrollReveal';
 
-export default function AboutPage() {
-  const stats = [
+const DEFAULT_ABOUT = {
+  heroBadge: 'Our Heritage & Mission',
+  heroTitle: 'Democratizing Flagship Laptops Through Certified Refurbishing',
+  heroSubtitle: 'Founded with a mission to make enterprise-grade computing accessible to every student, software engineer, creator, and growing business in India. At Lappy Square, we bridge the gap between premium computing and sensible budgets.',
+  founderName: 'Pankaj Jain',
+  founderRole: 'Founder & CEO',
+  founderImage: '/images/pankaj-jain-founder.jpg',
+  founderQuote: 'Quality is not an accident; it is always the result of intelligent hardware diagnostics, certified engineering standards, and sincere customer care.',
+  founderBio1: 'When I founded Lappy Square, the second-hand and refurbished laptop market was plagued by unverified sellers, hidden hardware flaws, and zero after-sales accountability. Customers often felt forced to choose between spending Rs. 80,000+ on a basic new machine or gambling on an untrusted used device.',
+  founderBio2: 'We set out to disrupt that paradigm entirely. Today, every Apple MacBook and enterprise laptop in our inventory undergoes a rigorous 45-point diagnostic lab audit — verifying motherboard thermals, battery cycles, displays, and keyboard performance before it ever reaches our shelves.',
+  stats: [
     { label: 'Refurbished Laptops Delivered', value: '12,500+', desc: 'Across 19,000+ PIN codes in India' },
     { label: 'Hardware Diagnostic Checkpoints', value: '45 Points', desc: 'Tested by certified hardware engineers' },
     { label: 'Customer Satisfaction Score', value: '99.4%', desc: 'Verified 5-star Google & website ratings' },
     { label: 'E-Waste Prevented in Landfills', value: '18+ Tons', desc: 'Enterprise aluminum & silicon revived' },
-  ];
+  ],
+  storeAddress: 'Paris Tower, Near Vijay Path, Ward 27, Chauraha, Mansarovar, Jaipur, Rajasthan 302020',
+  storePhone: '+91 93769 88788',
+  storeEmail: 'lappysquare@gmail.com',
+};
+
+export default function AboutPage() {
+  const [content, setContent] = useState(DEFAULT_ABOUT);
+
+  useEffect(() => {
+    fetch('/api/about')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.content) {
+          setContent((prev) => ({ ...prev, ...data.content }));
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const stats = content.stats && content.stats.length === 4 ? content.stats : DEFAULT_ABOUT.stats;
 
   const pillars = [
     {
@@ -86,15 +115,16 @@ export default function AboutPage() {
             <div className="relative z-10 max-w-3xl space-y-6">
               <div className="inline-flex items-center gap-2 bg-blue-500/15 border border-blue-400/30 px-3.5 py-1.5 rounded-full text-xs font-bold text-blue-300 tracking-wide uppercase backdrop-blur-md">
                 <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-                <span>Our Heritage & Mission</span>
+                <span>{content.heroBadge || 'Our Heritage & Mission'}</span>
               </div>
 
               <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-tight sm:leading-none text-white">
-                Democratizing Flagship Laptops <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">Through Certified Refurbishing</span>
+                {content.heroTitle || 'Democratizing Flagship Laptops Through Certified Refurbishing'}
               </h1>
 
               <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
-                Founded with a mission to make enterprise-grade computing accessible to every student, software engineer, creator, and growing business in India. At Lappy Square, we bridge the gap between premium computing and sensible budgets.
+                {content.heroSubtitle ||
+                  'Founded with a mission to make enterprise-grade computing accessible to every student, software engineer, creator, and growing business in India.'}
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-4">
@@ -206,8 +236,8 @@ export default function AboutPage() {
               <div className="lg:col-span-5 flex justify-center">
                 <div className="relative w-full max-w-sm sm:max-w-md aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-slate-100 group">
                   <Image
-                    src="/images/pankaj-jain-founder.jpg"
-                    alt="Pankaj Jain — Founder & CEO of Lappy Square"
+                    src={content.founderImage || '/images/pankaj-jain-founder.jpg'}
+                    alt={`${content.founderName || 'Founder'} — ${content.founderRole || 'Founder & CEO'} of Lappy Square`}
                     fill
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 45vw, 400px"
                     className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
@@ -220,10 +250,10 @@ export default function AboutPage() {
                   <div className="absolute bottom-4 inset-x-4 flex items-center justify-between text-white z-10">
                     <div>
                       <p className="font-black text-lg text-white tracking-tight flex items-center gap-1.5">
-                        <span>Pankaj Jain</span>
+                        <span>{content.founderName || 'Pankaj Jain'}</span>
                         <BadgeCheck className="w-5 h-5 text-blue-400 fill-blue-500/20" />
                       </p>
-                      <p className="text-xs text-blue-200 font-semibold">Founder & CEO</p>
+                      <p className="text-xs text-blue-200 font-semibold">{content.founderRole || 'Founder & CEO'}</p>
                     </div>
                     <span className="text-[11px] font-bold bg-white/20 backdrop-blur-md px-3 py-1 rounded-full border border-white/30 text-white">
                       Lappy Square
@@ -240,26 +270,25 @@ export default function AboutPage() {
                     <span>Founder&apos;s Vision</span>
                   </div>
                   <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-950 tracking-tight leading-tight">
-                    &quot;Building India&apos;s Most Trusted Hub for Enterprise Computing.&quot;
+                    &quot;{content.founderQuote || 'Building India’s Most Trusted Hub for Enterprise Computing.'}&quot;
                   </h2>
                   <div className="mt-2 flex items-center gap-2">
-                    <span className="text-base font-black text-slate-900">Pankaj Jain</span>
+                    <span className="text-base font-black text-slate-900">{content.founderName || 'Pankaj Jain'}</span>
                     <span className="text-slate-400">•</span>
                     <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200">
-                      Founder &amp; CEO
+                      {content.founderRole || 'Founder & CEO'}
                     </span>
                   </div>
                 </div>
 
                 <div className="space-y-3.5 text-xs sm:text-sm text-slate-600 leading-relaxed font-normal">
                   <p>
-                    When I founded <strong className="text-slate-900">Lappy Square</strong>, the second-hand and refurbished laptop market was plagued by unverified sellers, hidden hardware flaws, and zero after-sales accountability. Customers often felt forced to choose between spending Rs. 80,000+ on a basic new machine or gambling on an untrusted used device.
+                    {content.founderBio1 ||
+                      'When I founded Lappy Square, the second-hand and refurbished laptop market was plagued by unverified sellers, hidden hardware flaws, and zero after-sales accountability. Customers often felt forced to choose between spending Rs. 80,000+ on a basic new machine or gambling on an untrusted used device.'}
                   </p>
                   <p>
-                    We set out to disrupt that paradigm entirely. Today, every Apple MacBook and enterprise laptop in our inventory undergoes a rigorous <strong>45-point diagnostic lab audit</strong> — verifying motherboard thermals, battery cycles, displays, and keyboard performance before it ever reaches our shelves.
-                  </p>
-                  <p>
-                    Our mission is simple: to empower Indian students, developers, creators, and businesses with authentic, flagship-grade computing at a fraction of the cost, fully backed by real warranty protection and transparent support.
+                    {content.founderBio2 ||
+                      'We set out to disrupt that paradigm entirely. Today, every Apple MacBook and enterprise laptop in our inventory undergoes a rigorous 45-point diagnostic lab audit — verifying motherboard thermals, battery cycles, displays, and keyboard performance before it ever reaches our shelves.'}
                   </p>
                 </div>
 

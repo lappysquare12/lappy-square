@@ -31,6 +31,15 @@ async function migrateSqlite() {
         } else {
           console.log('[migrate-sqlite] Column WebsiteSetting.googleAnalyticsId already exists.');
         }
+
+        if (!colNames.has('aboutContent')) {
+          console.log('[migrate-sqlite] Adding missing column: WebsiteSetting.aboutContent');
+          await prisma.$executeRawUnsafe(
+            "ALTER TABLE \"WebsiteSetting\" ADD COLUMN \"aboutContent\" TEXT DEFAULT '';"
+          );
+        } else {
+          console.log('[migrate-sqlite] Column WebsiteSetting.aboutContent already exists.');
+        }
       }
 
       // 2. Check for missing VideoReview table

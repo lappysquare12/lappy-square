@@ -384,8 +384,8 @@ export default function Header() {
         {/* Secondary Desktop Navigation Row — Renewfy Aligned Category Layout */}
         <nav suppressHydrationWarning className="hidden lg:block border-t border-[#F0F0F0] bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center justify-between h-12 text-sm font-medium text-slate-700">
-              <div className="flex items-center gap-4 xl:gap-6 whitespace-nowrap flex-shrink-0">
+            <div className="flex items-center justify-between h-12 text-xs xl:text-sm font-medium text-slate-700 gap-3">
+              <div className="flex items-center gap-3.5 xl:gap-5 whitespace-nowrap min-w-0 overflow-x-auto no-scrollbar py-1">
                 
                 {/* 1. Shop Dropdown */}
                 <div
@@ -730,10 +730,10 @@ export default function Header() {
               </div>
 
               {/* Right Side Header CTA */}
-              <div className="flex items-center gap-3 xl:gap-4 text-xs text-slate-500 font-normal whitespace-nowrap flex-shrink-0">
+              <div className="flex items-center gap-2 xl:gap-3 text-xs text-slate-500 font-normal whitespace-nowrap shrink-0 pl-3 border-l border-slate-100">
                 <Link
                   href="/contact"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs rounded-full shadow-xs transition-all whitespace-nowrap"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-700 hover:bg-blue-800 text-white font-bold text-xs rounded-full shadow-xs transition-all whitespace-nowrap"
                 >
                   <PhoneCall className="w-3 h-3 text-white" />
                   <span>Contact Us</span>
@@ -766,7 +766,7 @@ export default function Header() {
           </div>
 
           {/* Drawer Body */}
-          <div className="flex-1 overflow-y-auto overscroll-contain px-5 pt-4 pb-28 space-y-6">
+          <div className="flex-1 overflow-y-auto overscroll-contain px-5 pt-4 pb-6 space-y-6">
             
             {/* Search Bar */}
             <form onSubmit={handleSearchSubmit} className="relative w-full">
@@ -927,14 +927,74 @@ export default function Header() {
               </div>
             </div>
 
+            {/* Essential Store Pages (Missing Links Added) */}
+            <div className="pt-2 border-t border-slate-100">
+              <p className="text-[11px] font-black text-slate-400 uppercase tracking-wider mb-2.5">Information &amp; Store</p>
+              <div className="grid grid-cols-2 gap-2 text-xs font-semibold">
+                <Link
+                  href="/about"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2.5 bg-slate-50 hover:bg-blue-50 hover:text-blue-700 text-slate-800 rounded-xl border border-slate-200/80 flex items-center justify-between transition-colors"
+                >
+                  <span>About Us</span>
+                  <ArrowRight className="w-3 h-3 text-slate-400" />
+                </Link>
+
+                <Link
+                  href="/sell-your-laptop"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2.5 bg-slate-50 hover:bg-blue-50 hover:text-blue-700 text-slate-800 rounded-xl border border-slate-200/80 flex items-center justify-between transition-colors"
+                >
+                  <span>Sell / Exchange</span>
+                  <ArrowRight className="w-3 h-3 text-slate-400" />
+                </Link>
+
+                <Link
+                  href="/warranty"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2.5 bg-slate-50 hover:bg-blue-50 hover:text-blue-700 text-slate-800 rounded-xl border border-slate-200/80 flex items-center justify-between transition-colors"
+                >
+                  <span>45-Point Lab Check</span>
+                  <ArrowRight className="w-3 h-3 text-slate-400" />
+                </Link>
+
+                <Link
+                  href="/corporate-enquiry"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2.5 bg-slate-50 hover:bg-blue-50 hover:text-blue-700 text-slate-800 rounded-xl border border-slate-200/80 flex items-center justify-between transition-colors"
+                >
+                  <span>Corporate Bulk</span>
+                  <ArrowRight className="w-3 h-3 text-slate-400" />
+                </Link>
+
+                <Link
+                  href="/track-order"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2.5 bg-slate-50 hover:bg-blue-50 hover:text-blue-700 text-slate-800 rounded-xl border border-slate-200/80 flex items-center justify-between transition-colors"
+                >
+                  <span>Track Order</span>
+                  <ArrowRight className="w-3 h-3 text-slate-400" />
+                </Link>
+
+                <Link
+                  href="/faq"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2.5 bg-slate-50 hover:bg-blue-50 hover:text-blue-700 text-slate-800 rounded-xl border border-slate-200/80 flex items-center justify-between transition-colors"
+                >
+                  <span>Help &amp; FAQs</span>
+                  <ArrowRight className="w-3 h-3 text-slate-400" />
+                </Link>
+              </div>
+            </div>
+
             {/* Direct Contact & WhatsApp */}
-            <div className="pt-2 border-t border-slate-100 space-y-2.5">
+            <div className="pt-2 border-t border-slate-100 space-y-2 mb-2">
               <a
                 href="https://wa.me/919376988788?text=Hii%20Lappy%20Square%20Team!%20I%20want%20to%20get%20today%27s%20best%20price%20on%20laptops."
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3.5 px-4 bg-[#25D366] text-white font-bold rounded-2xl flex items-center justify-center gap-2 shadow-md shadow-[#25D366]/25 text-sm"
+                className="w-full py-3 px-4 bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold rounded-xl flex items-center justify-center gap-2 shadow-sm text-xs"
               >
                 <WhatsAppIcon className="w-4 h-4 text-white" />
                 <span>Get Today&apos;s Best Price on WhatsApp</span>
@@ -943,10 +1003,10 @@ export default function Header() {
               <Link
                 href="/contact"
                 onClick={() => setMobileMenuOpen(false)}
-                className="w-full py-3 px-4 bg-slate-900 text-white font-bold rounded-2xl flex items-center justify-center gap-2 text-xs"
+                className="w-full py-2.5 px-4 bg-slate-900 hover:bg-black text-white font-bold rounded-xl flex items-center justify-center gap-2 text-xs"
               >
                 <PhoneCall className="w-3.5 h-3.5 text-white" />
-                <span>Contact Us & Store Addresses</span>
+                <span>Contact Us &amp; Store Addresses</span>
               </Link>
             </div>
 
