@@ -2,7 +2,7 @@ import React from 'react';
 import prisma from '@/lib/prisma';
 import { requireAuth } from '@/lib/auth';
 import AboutCMSClient from './AboutCMSClient';
-import { DEFAULT_ABOUT_CONTENT } from '@/app/api/admin/about/route';
+import { DEFAULT_ABOUT_CONTENT } from '@/lib/about-content';
 
 export const metadata = {
   title: 'About Us Page CMS | Admin Panel',

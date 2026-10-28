@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { DEFAULT_ABOUT_CONTENT } from '@/app/api/admin/about/route';
+import { DEFAULT_ABOUT_CONTENT } from '@/lib/about-content';
 
 export const dynamic = 'force-dynamic';
 
