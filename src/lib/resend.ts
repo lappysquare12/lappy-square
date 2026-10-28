@@ -7,11 +7,13 @@ export function getResendClient(): Resend | null {
 
 export const resend = getResendClient();
 
-export const ADMIN_NOTIFICATION_EMAIL = process.env.ADMIN_NOTIFICATION_EMAIL || 'lappysquare@gmail.com';
-export const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'Lappy Square <onboarding@resend.dev>';
+export const ADMIN_NOTIFICATION_EMAIL =
+  process.env.ADMIN_NOTIFICATION_EMAIL || 'lappysquare12@gmail.com';
+export const RESEND_FROM_EMAIL =
+  process.env.RESEND_FROM_EMAIL || 'Lappy Square <onboarding@resend.dev>';
 
 /**
- * Send order notification email to lappysquare@gmail.com
+ * Send order notification email to lappysquare12@gmail.com
  */
 export async function sendOrderEmailToAdmin(order: {
   orderNumber: string;
@@ -139,20 +141,32 @@ export async function sendOrderEmailToAdmin(order: {
     </html>
     `;
 
-    const { data, error } = await client.emails.send({
+    let { data, error } = await client.emails.send({
       from: RESEND_FROM_EMAIL,
-
       to: [ADMIN_NOTIFICATION_EMAIL],
       subject: `🛒 New Order #${order.orderNumber} - ₹${order.totalAmount.toLocaleString('en-IN')} by ${order.guestName}`,
       html: htmlContent,
     });
+
+    // Auto-fallback if Resend free tier restricts to registered owner email
+    if (error && error.message?.includes('own email address') && ADMIN_NOTIFICATION_EMAIL !== 'lappysquare12@gmail.com') {
+      console.warn('[Resend Notice] Retrying order email to verified account owner: lappysquare12@gmail.com');
+      const retryResult = await client.emails.send({
+        from: RESEND_FROM_EMAIL,
+        to: ['lappysquare12@gmail.com'],
+        subject: `🛒 New Order #${order.orderNumber} - ₹${order.totalAmount.toLocaleString('en-IN')} by ${order.guestName}`,
+        html: htmlContent,
+      });
+      data = retryResult.data;
+      error = retryResult.error;
+    }
 
     if (error) {
       console.error('[Resend Error] Failed to send order email:', error);
       return { success: false, error: error.message };
     }
 
-    console.log(`[Resend Success] Order #${order.orderNumber} email sent to ${ADMIN_NOTIFICATION_EMAIL}, ID:`, data?.id);
+    console.log(`[Resend Success] Order #${order.orderNumber} email sent successfully, ID:`, data?.id);
     return { success: true, id: data?.id };
   } catch (err: any) {
     console.error('[Resend Exception] Error sending order email:', err);
@@ -212,13 +226,25 @@ export async function sendEnquiryEmailToAdmin(enquiry: {
     </html>
     `;
 
-    const { data, error } = await client.emails.send({
+    let { data, error } = await client.emails.send({
       from: RESEND_FROM_EMAIL,
-
       to: [ADMIN_NOTIFICATION_EMAIL],
       subject: `📩 New Customer Inquiry (${enquiry.type || 'General'}): ${enquiry.name} - ${enquiry.phone}`,
       html: htmlContent,
     });
+
+    // Auto-fallback if Resend free tier restricts to registered owner email
+    if (error && error.message?.includes('own email address') && ADMIN_NOTIFICATION_EMAIL !== 'lappysquare12@gmail.com') {
+      console.warn('[Resend Notice] Retrying enquiry email to verified account owner: lappysquare12@gmail.com');
+      const retryResult = await client.emails.send({
+        from: RESEND_FROM_EMAIL,
+        to: ['lappysquare12@gmail.com'],
+        subject: `📩 New Customer Inquiry (${enquiry.type || 'General'}): ${enquiry.name} - ${enquiry.phone}`,
+        html: htmlContent,
+      });
+      data = retryResult.data;
+      error = retryResult.error;
+    }
 
     if (error) {
       console.error('[Resend Error] Failed to send enquiry email:', error);
