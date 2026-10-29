@@ -10,7 +10,7 @@ export const resend = getResendClient();
 export const ADMIN_NOTIFICATION_EMAIL =
   process.env.ADMIN_NOTIFICATION_EMAIL || 'lappysquare@gmail.com';
 export const RESEND_FROM_EMAIL =
-  process.env.RESEND_FROM_EMAIL || 'Lappy Square <onboarding@resend.dev>';
+  process.env.RESEND_FROM_EMAIL || 'Lappy Square <orders@lappysquare.com>';
 
 /**
  * Send order notification email to lappysquare@gmail.com
