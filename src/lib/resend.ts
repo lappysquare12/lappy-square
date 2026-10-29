@@ -8,12 +8,12 @@ export function getResendClient(): Resend | null {
 export const resend = getResendClient();
 
 export const ADMIN_NOTIFICATION_EMAIL =
-  process.env.ADMIN_NOTIFICATION_EMAIL || 'lappysquare12@gmail.com';
+  process.env.ADMIN_NOTIFICATION_EMAIL || 'lappysquare@gmail.com';
 export const RESEND_FROM_EMAIL =
   process.env.RESEND_FROM_EMAIL || 'Lappy Square <onboarding@resend.dev>';
 
 /**
- * Send order notification email to lappysquare12@gmail.com
+ * Send order notification email to lappysquare@gmail.com
  */
 export async function sendOrderEmailToAdmin(order: {
   orderNumber: string;
@@ -149,11 +149,11 @@ export async function sendOrderEmailToAdmin(order: {
     });
 
     // Auto-fallback if Resend free tier restricts to registered owner email
-    if (error && error.message?.includes('own email address') && ADMIN_NOTIFICATION_EMAIL !== 'lappysquare12@gmail.com') {
-      console.warn('[Resend Notice] Retrying order email to verified account owner: lappysquare12@gmail.com');
+    if (error && error.message?.includes('own email address') && ADMIN_NOTIFICATION_EMAIL !== 'lappysquare@gmail.com') {
+      console.warn('[Resend Notice] Retrying order email to verified account owner: lappysquare@gmail.com');
       const retryResult = await client.emails.send({
         from: RESEND_FROM_EMAIL,
-        to: ['lappysquare12@gmail.com'],
+        to: ['lappysquare@gmail.com'],
         subject: `🛒 New Order #${order.orderNumber} - ₹${order.totalAmount.toLocaleString('en-IN')} by ${order.guestName}`,
         html: htmlContent,
       });
@@ -234,11 +234,11 @@ export async function sendEnquiryEmailToAdmin(enquiry: {
     });
 
     // Auto-fallback if Resend free tier restricts to registered owner email
-    if (error && error.message?.includes('own email address') && ADMIN_NOTIFICATION_EMAIL !== 'lappysquare12@gmail.com') {
-      console.warn('[Resend Notice] Retrying enquiry email to verified account owner: lappysquare12@gmail.com');
+    if (error && error.message?.includes('own email address') && ADMIN_NOTIFICATION_EMAIL !== 'lappysquare@gmail.com') {
+      console.warn('[Resend Notice] Retrying enquiry email to verified account owner: lappysquare@gmail.com');
       const retryResult = await client.emails.send({
         from: RESEND_FROM_EMAIL,
-        to: ['lappysquare12@gmail.com'],
+        to: ['lappysquare@gmail.com'],
         subject: `📩 New Customer Inquiry (${enquiry.type || 'General'}): ${enquiry.name} - ${enquiry.phone}`,
         html: htmlContent,
       });
