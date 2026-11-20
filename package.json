@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "prisma generate && node scripts/migrate-sqlite.mjs && next build --webpack",
+    "build": "prisma generate && node scripts/migrate-sqlite.mjs && node scripts/build-static-sitemap.mjs && next build --webpack",
     "build:turbo": "prisma generate && next build",
     "start": "next start",
     "lint": "eslint",
