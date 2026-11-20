@@ -245,38 +245,44 @@ export async function syncOrderToFirestore(order: any): Promise<void> {
 }
 
 /**
- * Delete an order from Firestore via high-speed REST API
+ * Delete an order from Firestore
  */
 export async function deleteOrderFromFirestore(orderId: string): Promise<void> {
   if (!orderId) return;
-  const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'lappy-square';
-
   try {
-    const res = await fetch(
-      `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/orders/${encodeURIComponent(orderId)}`,
-      { method: 'DELETE' }
-    );
-    console.log(`[Firestore REST] Deleted order doc ${orderId}: status ${res.status}`);
-  } catch (err) {
-    console.error(`[Firestore REST Error] Failed to delete order ${orderId}:`, err);
+    const docRef = doc(db, 'orders', orderId);
+    await deleteDoc(docRef);
+    console.log(`[Firestore SDK] Deleted order doc ${orderId}`);
+  } catch (sdkErr) {
+    console.warn(`[Firestore SDK Notice] deleteDoc for order ${orderId}:`, sdkErr);
+    try {
+      const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'lappy-square';
+      await fetch(
+        `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/orders/${encodeURIComponent(orderId)}`,
+        { method: 'DELETE' }
+      );
+    } catch {}
   }
 }
 
 /**
- * Delete an enquiry from Firestore via high-speed REST API
+ * Delete an enquiry from Firestore
  */
 export async function deleteEnquiryFromFirestore(enquiryId: string): Promise<void> {
   if (!enquiryId) return;
-  const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'lappy-square';
-
   try {
-    const res = await fetch(
-      `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/enquiries/${encodeURIComponent(enquiryId)}`,
-      { method: 'DELETE' }
-    );
-    console.log(`[Firestore REST] Deleted enquiry doc ${enquiryId}: status ${res.status}`);
-  } catch (err) {
-    console.error(`[Firestore REST Error] Failed to delete enquiry ${enquiryId}:`, err);
+    const docRef = doc(db, 'enquiries', enquiryId);
+    await deleteDoc(docRef);
+    console.log(`[Firestore SDK] Successfully deleted enquiry doc ${enquiryId}`);
+  } catch (sdkErr) {
+    console.warn(`[Firestore SDK Notice] deleteDoc for enquiry ${enquiryId}:`, sdkErr);
+    try {
+      const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'lappy-square';
+      await fetch(
+        `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/enquiries/${encodeURIComponent(enquiryId)}`,
+        { method: 'DELETE' }
+      );
+    } catch {}
   }
 }
 

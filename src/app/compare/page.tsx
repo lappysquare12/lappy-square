@@ -126,7 +126,7 @@ export default function ComparePage() {
                           alt={item.title}
                           fill
                           sizes="240px"
-                          className="object-cover w-full h-full"
+                          className="object-contain p-2 w-full h-full"
                         />
                       </div>
 

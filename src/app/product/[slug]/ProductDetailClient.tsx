@@ -310,10 +310,10 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
             
             {/* Gallery (Left: 6 Cols) */}
             <div className="lg:col-span-6 space-y-4">
-              {/* Main Preview Box - Clickable with Full Cover Display */}
+              {/* Main Preview Box - Clickable with Full Display (No Crop) */}
               <div
                 onClick={() => setIsLightboxOpen(true)}
-                className="group relative aspect-[4/3] w-full rounded-2xl bg-slate-100 border border-slate-200/90 overflow-hidden flex items-center justify-center cursor-zoom-in shadow-xs hover:border-blue-400 hover:shadow-md transition-all duration-300"
+                className="group relative aspect-[4/3] w-full rounded-2xl bg-white border border-slate-200/90 overflow-hidden flex items-center justify-center p-2 cursor-zoom-in shadow-xs hover:border-blue-400 hover:shadow-md transition-all duration-300"
                 title="Click to view full photo in high resolution"
               >
                 <Image
@@ -321,7 +321,7 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
                   alt={product.title}
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover w-full h-full transition-transform duration-300 group-hover:scale-[1.03]"
+                  className="object-contain w-full h-full p-1 transition-transform duration-300 group-hover:scale-[1.03]"
                   priority
                   onError={(e) => {
                     const target = e.currentTarget as HTMLImageElement;
@@ -371,7 +371,7 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
                         alt={`Thumbnail ${idx + 1}`}
                         fill
                         sizes="80px"
-                        className="object-cover w-full h-full"
+                        className="object-contain w-full h-full p-1"
                       />
                     </button>
                   ))}

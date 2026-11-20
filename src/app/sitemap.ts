@@ -12,7 +12,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ? `https://${process.env.VERCEL_URL}`
       : 'https://lappysquare.com');
 
-  if (baseUrl.includes('localhost') && process.env.NODE_ENV === 'production') {
+  if (baseUrl.includes('localhost')) {
     baseUrl = 'https://lappysquare.com';
   }
   baseUrl = baseUrl.replace(/\/+$/, '');

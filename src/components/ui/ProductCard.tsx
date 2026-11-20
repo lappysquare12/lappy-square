@@ -155,8 +155,8 @@ export default function ProductCard({ product }: ProductCardProps) {
       className="group relative bg-white border border-slate-200/90 hover:border-blue-600/60 rounded-3xl p-3.5 sm:p-5 flex flex-col justify-between transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_25px_50px_-15px_rgba(37,99,235,0.18)]"
     >
       <div>
-        {/* Large Stage Product Image Container */}
-        <div className="relative h-52 sm:h-64 md:h-72 w-full overflow-hidden rounded-2xl bg-slate-100 border border-slate-200/70 mb-4 sm:mb-5 group-hover:border-blue-200 transition-colors">
+        {/* Large Stage Product Image Container - Perfect 4/3 Stage so laptops fill frame without getting cut */}
+        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-gradient-to-b from-slate-50/80 via-slate-100/40 to-white border border-slate-200/80 mb-4 sm:mb-5 group-hover:border-blue-200 transition-colors flex items-center justify-center p-1.5">
           
           {/* Top Header Floating Row: Grade Badge & Floating Actions (Unified flex to prevent overlapping) */}
           <div className="absolute top-2.5 inset-x-2.5 sm:top-3 sm:inset-x-3 z-10 flex items-center justify-between gap-1.5 pointer-events-none">
@@ -222,7 +222,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               alt={product.title}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+              className="object-contain w-full h-full p-0.5 transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
               onError={() => setImgSrc(fallbackUrl)}
             />
