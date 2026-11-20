@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Mail, Lock, ArrowRight, ShieldCheck } from 'lucide-react';
 import LappySquareLogo from '@/components/ui/LappySquareLogo';
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const from = searchParams.get('from') || '/';
@@ -138,5 +138,21 @@ export default function LoginPage() {
 
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="bg-[#F8FAFC] min-h-[85vh] py-14 flex items-center justify-center">
+          <div className="max-w-md w-full mx-auto px-4">
+            <div className="bg-white border border-slate-200/90 rounded-3xl p-9 h-96 animate-pulse" />
+          </div>
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }

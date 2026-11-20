@@ -13,7 +13,6 @@ import {
   Link as LinkIcon,
   Image as ImageIcon,
   CheckCircle2,
-  Sparkles,
 } from 'lucide-react';
 
 interface CloudinaryMultiImageUploaderProps {
@@ -36,25 +35,7 @@ export default function CloudinaryMultiImageUploader({
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [showUrlInput, setShowUrlInput] = useState(false);
   const [urlInput, setUrlInput] = useState('');
-  const [autoWhiteBg, setAutoWhiteBg] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  /**
-   * Helper to toggle Cloudinary AI pure studio white background for any image
-   */
-  const handleToggleWhiteBg = (index: number) => {
-    const url = images[index];
-    if (!url) return;
-    let newUrl = url;
-    if (url.includes('e_background_removal,b_white/')) {
-      newUrl = url.replace('e_background_removal,b_white/', '');
-    } else if (url.includes('/image/upload/')) {
-      newUrl = url.replace('/image/upload/', '/image/upload/e_background_removal,b_white/');
-    }
-    const updated = [...images];
-    updated[index] = newUrl;
-    onChange(updated);
-  };
 
   const handleFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -66,17 +47,12 @@ export default function CloudinaryMultiImageUploader({
     try {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        setUploadProgress(
-          autoWhiteBg
-            ? `AI removing background & uploading (${i + 1}/${files.length})...`
-            : `Uploading (${i + 1}/${files.length})...`
-        );
+        setUploadProgress(`Uploading image (${i + 1}/${files.length})...`);
 
         const formData = new FormData();
         formData.append('file', file);
         formData.append('folder', folder);
         formData.append('resource_type', 'image');
-        formData.append('white_bg', autoWhiteBg ? 'true' : 'false');
 
         const res = await fetch('/api/upload', {
           method: 'POST',
@@ -154,38 +130,6 @@ export default function CloudinaryMultiImageUploader({
         </div>
       </div>
 
-      {/* Auto White Background Studio Toggle */}
-      <div className="flex items-center justify-between p-3 sm:p-3.5 bg-gradient-to-r from-blue-50/90 via-sky-50/60 to-white border border-blue-200/80 rounded-2xl">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-            <Sparkles className="w-4 h-4" />
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <span className="text-xs font-bold text-slate-900">
-                Auto White Background (Studio Mode)
-              </span>
-              <span className="text-[9px] font-black uppercase tracking-wider bg-blue-100 text-blue-800 px-1.5 py-0.5 rounded">
-                AI Enabled
-              </span>
-            </div>
-            <span className="text-[11px] text-slate-500 block">
-              AI automatically cuts out any room, floor, or desk background and makes it 100% pure studio white.
-            </span>
-          </div>
-        </div>
-
-        <label className="relative inline-flex items-center cursor-pointer shrink-0 ml-3">
-          <input
-            type="checkbox"
-            checked={autoWhiteBg}
-            onChange={(e) => setAutoWhiteBg(e.target.checked)}
-            className="sr-only peer"
-          />
-          <div className="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-        </label>
-      </div>
-
       {/* Paste URL Input Drawer */}
       {showUrlInput && (
         <form onSubmit={handleAddUrl} className="flex gap-2 p-3 bg-slate-50 border border-slate-200 rounded-2xl">
@@ -241,22 +185,6 @@ export default function CloudinaryMultiImageUploader({
                       title="Set as Cover Photo"
                     >
                       Primary
-                    </button>
-                  )}
-
-                  {url.includes('cloudinary.com') && (
-                    <button
-                      type="button"
-                      onClick={() => handleToggleWhiteBg(idx)}
-                      className={`text-[9px] font-bold px-1.5 py-0.5 rounded-md flex items-center gap-0.5 shadow-xs cursor-pointer transition-colors ${
-                        url.includes('e_background_removal,b_white')
-                          ? 'bg-emerald-600 text-white'
-                          : 'bg-white/95 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-200'
-                      }`}
-                      title={url.includes('e_background_removal,b_white') ? 'White background active. Click to revert.' : 'Make background pure studio white'}
-                    >
-                      <Sparkles className="w-2.5 h-2.5" />
-                      <span>{url.includes('e_background_removal,b_white') ? 'White BG' : '+ White BG'}</span>
                     </button>
                   )}
                 </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -22,7 +22,12 @@ import {
   Info,
   Layers,
   Star,
-  Copy
+  Copy,
+  ZoomIn,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  Maximize2
 } from 'lucide-react';
 import { WhatsAppIcon } from '@/components/ui/SocialIcons';
 import { useCart } from '@/context/CartContext';
@@ -90,6 +95,7 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
   const { addToCompare, removeFromCompare, isInCompare } = useCompare();
 
   const [selectedImageIdx, setSelectedImageIdx] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'specs' | 'reviews' | 'box' | 'testing'>('specs');
   const [addedToast, setAddedToast] = useState(false);
@@ -116,6 +122,30 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
   const imageUrls = product.images.length > 0
     ? product.images.map((i) => i.url)
     : ['https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80'];
+
+  // Handle keyboard navigation & scroll locking for image Lightbox modal
+  useEffect(() => {
+    if (!isLightboxOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsLightboxOpen(false);
+      } else if (e.key === 'ArrowLeft') {
+        setSelectedImageIdx((prev) => (prev - 1 + imageUrls.length) % imageUrls.length);
+      } else if (e.key === 'ArrowRight') {
+        setSelectedImageIdx((prev) => (prev + 1) % imageUrls.length);
+      }
+    };
+
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isLightboxOpen, imageUrls.length]);
 
   const gradeInfo = {
     LIKE_NEW: {
@@ -280,14 +310,18 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
             
             {/* Gallery (Left: 6 Cols) */}
             <div className="lg:col-span-6 space-y-4">
-              {/* Main Preview Box */}
-              <div className="relative aspect-[4/3] w-full rounded-2xl bg-slate-50 border border-slate-200/80 overflow-hidden flex items-center justify-center p-4 sm:p-6">
+              {/* Main Preview Box - Clickable with Full Cover Display */}
+              <div
+                onClick={() => setIsLightboxOpen(true)}
+                className="group relative aspect-[4/3] w-full rounded-2xl bg-white border border-slate-200/90 overflow-hidden flex items-center justify-center p-2 cursor-zoom-in shadow-xs hover:border-blue-400 hover:shadow-md transition-all duration-300"
+                title="Click to view full photo in high resolution"
+              >
                 <Image
                   src={imageUrls[selectedImageIdx] || imageUrls[0] || 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80'}
                   alt={product.title}
                   fill
                   sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-contain p-2 sm:p-4 transition-transform duration-300 hover:scale-105"
+                  className="object-contain p-1 transition-transform duration-300 group-hover:scale-[1.03]"
                   priority
                   onError={(e) => {
                     const target = e.currentTarget as HTMLImageElement;
@@ -298,17 +332,23 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
                 />
 
                 {discountPercentage > 0 && (
-                  <span className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-rose-600 text-white font-black text-[11px] sm:text-xs px-2.5 py-1 rounded-lg shadow-sm">
+                  <span className="pointer-events-none absolute top-3 left-3 sm:top-4 sm:left-4 bg-rose-600 text-white font-black text-[11px] sm:text-xs px-2.5 py-1 rounded-lg shadow-sm z-10">
                     SAVE {discountPercentage}%
                   </span>
                 )}
 
                 {product.batteryHealth && (
-                  <span className="absolute top-3 right-3 sm:top-4 sm:right-4 bg-slate-900 text-white font-medium text-[11px] sm:text-xs px-2.5 py-1 rounded-lg shadow-sm flex items-center gap-1">
+                  <span className="pointer-events-none absolute top-3 right-3 sm:top-4 sm:right-4 bg-slate-900 text-white font-medium text-[11px] sm:text-xs px-2.5 py-1 rounded-lg shadow-sm flex items-center gap-1 z-10">
                     <BatteryCharging className="w-3.5 h-3.5 text-emerald-400" />
                     <span>{product.batteryHealth}</span>
                   </span>
                 )}
+
+                {/* Click to Zoom Pill */}
+                <div className="pointer-events-none absolute bottom-3 right-3 z-10 bg-slate-900/80 group-hover:bg-blue-600 text-white text-[11px] font-semibold px-2.5 py-1 rounded-lg backdrop-blur-md flex items-center gap-1.5 shadow-sm opacity-85 group-hover:opacity-100 transition-all">
+                  <ZoomIn className="w-3.5 h-3.5" />
+                  <span>Click to view full photo</span>
+                </div>
               </div>
 
               {/* Thumbnail Selector */}
@@ -320,9 +360,9 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
                       type="button"
                       suppressHydrationWarning
                       onClick={() => setSelectedImageIdx(idx)}
-                      className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-slate-50 border-2 overflow-hidden flex-shrink-0 transition-all ${
+                      className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-white border-2 overflow-hidden flex-shrink-0 transition-all cursor-pointer ${
                         selectedImageIdx === idx
-                          ? 'border-slate-900 shadow-sm'
+                          ? 'border-blue-700 ring-2 ring-blue-700/20 shadow-sm'
                           : 'border-slate-200 hover:border-slate-400 opacity-70 hover:opacity-100'
                       }`}
                     >
@@ -331,7 +371,7 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
                         alt={`Thumbnail ${idx + 1}`}
                         fill
                         sizes="80px"
-                        className="object-contain p-1.5"
+                        className="object-contain p-1"
                       />
                     </button>
                   ))}
@@ -960,6 +1000,108 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
         </div>
 
       </div>
+
+      {/* Fullscreen High-Resolution Image Lightbox Modal */}
+      {isLightboxOpen && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setIsLightboxOpen(false)}
+          className="fixed inset-0 z-[9999] bg-slate-950/95 backdrop-blur-md flex flex-col justify-between p-3 sm:p-6 animate-fadeIn select-none"
+        >
+          {/* Lightbox Top Header */}
+          <div
+            className="flex items-center justify-between text-white w-full max-w-7xl mx-auto z-10 pb-3 border-b border-white/10"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="min-w-0 pr-4">
+              <h3 className="text-sm sm:text-base font-bold text-white truncate">
+                {product.title}
+              </h3>
+              <p className="text-xs text-slate-400 mt-0.5">
+                Photo {selectedImageIdx + 1} of {imageUrls.length} • Use Arrow Keys to navigate, Esc to close
+              </p>
+            </div>
+
+            <div className="flex items-center gap-2 shrink-0">
+              <button
+                type="button"
+                onClick={() => setIsLightboxOpen(false)}
+                className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
+                title="Close (Esc)"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          {/* Lightbox Center Image View */}
+          <div
+            className="relative flex-1 flex items-center justify-center w-full max-w-6xl mx-auto my-auto p-2 min-h-0 overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Prev Photo Button */}
+            {imageUrls.length > 1 && (
+              <button
+                type="button"
+                onClick={() => setSelectedImageIdx((prev) => (prev - 1 + imageUrls.length) % imageUrls.length)}
+                className="absolute left-2 sm:left-4 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-slate-900/80 hover:bg-blue-600 text-white border border-white/20 flex items-center justify-center backdrop-blur-md transition-all cursor-pointer hover:scale-105 shadow-2xl"
+                title="Previous photo (Left Arrow)"
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+            )}
+
+            {/* High-res image display */}
+            <div className="relative w-full h-[65vh] sm:h-[75vh] flex items-center justify-center">
+              <img
+                src={imageUrls[selectedImageIdx] || imageUrls[0]}
+                alt={`${product.title} - View ${selectedImageIdx + 1}`}
+                className="max-h-full max-w-full object-contain rounded-2xl shadow-2xl transition-transform duration-200"
+              />
+            </div>
+
+            {/* Next Photo Button */}
+            {imageUrls.length > 1 && (
+              <button
+                type="button"
+                onClick={() => setSelectedImageIdx((prev) => (prev + 1) % imageUrls.length)}
+                className="absolute right-2 sm:right-4 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-slate-900/80 hover:bg-blue-600 text-white border border-white/20 flex items-center justify-center backdrop-blur-md transition-all cursor-pointer hover:scale-105 shadow-2xl"
+                title="Next photo (Right Arrow)"
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+            )}
+          </div>
+
+          {/* Lightbox Bottom Thumbnails */}
+          {imageUrls.length > 1 && (
+            <div
+              className="w-full max-w-3xl mx-auto pt-2 z-10 flex items-center justify-center gap-2 sm:gap-3 overflow-x-auto py-2 scrollbar-none"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {imageUrls.map((url, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setSelectedImageIdx(idx)}
+                  className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-white/10 border-2 overflow-hidden flex-shrink-0 transition-all cursor-pointer ${
+                    selectedImageIdx === idx
+                      ? 'border-blue-500 ring-2 ring-blue-500/40 scale-105'
+                      : 'border-white/20 opacity-50 hover:opacity-100'
+                  }`}
+                >
+                  <img
+                    src={url}
+                    alt={`Thumb ${idx + 1}`}
+                    className="w-full h-full object-contain p-1"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
