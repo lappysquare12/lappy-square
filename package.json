@@ -19,6 +19,8 @@
     "@prisma/client": "^6.19.3",
     "bcryptjs": "^3.0.3",
     "canvas-confetti": "^1.9.4",
+    "cloudinary": "^2.5.1",
+    "firebase": "^10.14.1",
     "framer-motion": "^14.1.0",
     "jsonwebtoken": "^9.0.3",
     "lucide-react": "^1.55.0",
@@ -26,10 +28,9 @@
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "react-hook-form": "^7.90.0",
-    "zod": "^4.6.6",
-    "cloudinary": "^2.5.1",
-    "firebase": "^10.14.1",
-    "resend": "^4.1.2"
+    "resend": "^4.1.2",
+    "xlsx": "^0.18.5",
+    "zod": "^4.6.6"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",

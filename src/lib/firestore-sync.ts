@@ -45,33 +45,7 @@ export async function ensureFirestoreProductsSynced(): Promise<void> {
       if (id) firestoreIds.add(id);
     }
 
-    // 1. Reconcile deleted products:
-    // If a product is in local SQLite but NOT in Firestore, it was deleted!
-    // Remove it from local SQLite so Netlify containers never resurrect deleted laptops!
-    if (firestoreIds.size > 0) {
-      const obsoleteProducts = await prisma.product.findMany({
-        where: { id: { notIn: Array.from(firestoreIds) } },
-        select: { id: true },
-      });
-
-      for (const p of obsoleteProducts) {
-        try {
-          await prisma.$transaction([
-            prisma.productImage.deleteMany({ where: { productId: p.id } }),
-            prisma.inventoryUnit.deleteMany({ where: { productId: p.id } }),
-            prisma.cartItem.deleteMany({ where: { productId: p.id } }),
-            prisma.wishlist.deleteMany({ where: { productId: p.id } }),
-            prisma.review.deleteMany({ where: { productId: p.id } }),
-            prisma.productFAQ.deleteMany({ where: { productId: p.id } }),
-            prisma.orderItem.updateMany({ where: { productId: p.id }, data: { productId: null } }),
-            prisma.product.deleteMany({ where: { id: p.id } }),
-          ]);
-        } catch (cleanupErr) {
-          console.warn(`[Firestore Sync] Cleaned up obsolete local product ${p.id}:`, cleanupErr);
-        }
-      }
-    }
-
+    // Safe sync: Only upsert missing products from Firestore to SQLite without deleting local products
     const existingProducts = await prisma.product.findMany({ select: { id: true } });
     const existingIds = new Set(existingProducts.map((p) => p.id));
 

@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   Search,
   Copy,
@@ -14,10 +15,12 @@ import {
   CheckCircle2,
   Sparkles,
   Laptop,
-  Tag
+  Tag,
+  Camera
 } from 'lucide-react';
 import ProductTableActions from './ProductTableActions';
 import FirestoreSyncButton from './FirestoreSyncButton';
+import ExcelBulkImportModal from './ExcelBulkImportModal';
 
 interface ProductItem {
   id: string;
@@ -44,6 +47,7 @@ export default function ProductInventoryClient({
 }: {
   initialProducts: ProductItem[];
 }) {
+  const router = useRouter();
   const [products] = useState<ProductItem[]>(initialProducts);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedBrand, setSelectedBrand] = useState('ALL');
@@ -105,6 +109,7 @@ export default function ProductInventoryClient({
           <div className="col-span-2 sm:col-auto">
             <FirestoreSyncButton />
           </div>
+          <ExcelBulkImportModal onSuccess={() => router.refresh()} />
           <Link
             href="/admin/brands"
             className="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all text-center"
@@ -350,9 +355,21 @@ export default function ProductInventoryClient({
                       <p className="font-bold text-slate-900 line-clamp-1 text-xs" title={p.title}>
                         {p.title}
                       </p>
-                      <p className="text-[11px] text-slate-500 mt-0.5">
-                        {p.processor} • {p.ramGb}GB RAM • {p.storageGb}GB SSD
-                      </p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <p className="text-[11px] text-slate-500">
+                          {p.processor} • {p.ramGb}GB RAM • {p.storageGb}GB SSD
+                        </p>
+                        {(!p.images?.length || (p.images.length === 1 && p.images[0]?.url.includes('unsplash'))) && (
+                          <Link
+                            href={`/admin/products/${p.id}/edit`}
+                            className="inline-flex items-center gap-1 text-[9px] bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-200 px-1.5 py-0.2 rounded font-bold transition-colors"
+                            title="Click to attach original photos"
+                          >
+                            <Camera className="w-2.5 h-2.5 text-amber-600" />
+                            <span>Add Photos</span>
+                          </Link>
+                        )}
+                      </div>
                     </td>
 
                     {/* Brand & Series Type */}

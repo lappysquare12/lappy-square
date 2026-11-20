@@ -156,7 +156,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     >
       <div>
         {/* Large Stage Product Image Container */}
-        <div className="relative h-52 sm:h-64 md:h-72 w-full overflow-hidden rounded-2xl bg-gradient-to-b from-slate-50 via-slate-100/60 to-white border border-slate-200/70 p-3 sm:p-4 mb-4 sm:mb-5 group-hover:border-blue-200 transition-colors">
+        <div className="relative h-52 sm:h-64 md:h-72 w-full overflow-hidden rounded-2xl bg-slate-100 border border-slate-200/70 mb-4 sm:mb-5 group-hover:border-blue-200 transition-colors">
           
           {/* Top Header Floating Row: Grade Badge & Floating Actions (Unified flex to prevent overlapping) */}
           <div className="absolute top-2.5 inset-x-2.5 sm:top-3 sm:inset-x-3 z-10 flex items-center justify-between gap-1.5 pointer-events-none">
@@ -222,7 +222,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               alt={product.title}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-contain p-2.5 transition-transform duration-500 group-hover:scale-108"
+              className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
               onError={() => setImgSrc(fallbackUrl)}
             />
