@@ -310,26 +310,28 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
             
             {/* Gallery (Left: 6 Cols) */}
             <div className="lg:col-span-6 space-y-4">
-              {/* Main Preview Box - Clickable with Full Cover Display */}
+              {/* Main Preview Box - 100% Full Complete Laptop Display (Zero Cut-Off) */}
               <div
                 onClick={() => setIsLightboxOpen(true)}
-                className="group relative aspect-[4/3] w-full rounded-2xl bg-slate-100 border border-slate-200/90 overflow-hidden flex items-center justify-center cursor-zoom-in shadow-xs hover:border-blue-400 hover:shadow-md transition-all duration-300"
+                className="group relative aspect-[4/3] w-full rounded-2xl bg-[#F8FAFC] border border-slate-200/90 overflow-hidden flex items-center justify-center cursor-zoom-in shadow-xs hover:border-blue-400 hover:shadow-md transition-all duration-300 p-3 sm:p-5"
                 title="Click to view full photo in high resolution"
               >
-                <Image
-                  src={imageUrls[selectedImageIdx] || imageUrls[0] || 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80'}
-                  alt={product.title}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  className="object-cover object-center w-full h-full transition-transform duration-300 group-hover:scale-[1.03]"
-                  priority
-                  onError={(e) => {
-                    const target = e.currentTarget as HTMLImageElement;
-                    if (target && !target.src.includes('1588872657578')) {
-                      target.src = 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80';
-                    }
-                  }}
-                />
+                <div className="relative w-full h-full flex items-center justify-center">
+                  <Image
+                    src={imageUrls[selectedImageIdx] || imageUrls[0] || 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80'}
+                    alt={product.title}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-contain object-center transition-transform duration-300 group-hover:scale-[1.03]"
+                    priority
+                    onError={(e) => {
+                      const target = e.currentTarget as HTMLImageElement;
+                      if (target && !target.src.includes('1588872657578')) {
+                        target.src = 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=1000&q=80';
+                      }
+                    }}
+                  />
+                </div>
 
                 {discountPercentage > 0 && (
                   <span className="pointer-events-none absolute top-3 left-3 sm:top-4 sm:left-4 bg-rose-600 text-white font-black text-[11px] sm:text-xs px-2.5 py-1 rounded-lg shadow-sm z-10">
@@ -415,6 +417,7 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
                   {/* Item Code Copy Button */}
                   <button
                     type="button"
+                    suppressHydrationWarning
                     onClick={() => {
                       navigator.clipboard.writeText(product.sku);
                       setCopiedSku(true);
@@ -922,6 +925,7 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
                         <button
                           key={star}
                           type="button"
+                          suppressHydrationWarning
                           onClick={() => setNewRating(star)}
                           className="p-1 hover:scale-110 transition-transform"
                         >
@@ -987,6 +991,7 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
 
                   <button
                     type="submit"
+                    suppressHydrationWarning
                     disabled={submittingReview}
                     className="px-6 py-2.5 bg-slate-900 hover:bg-black text-white text-xs font-bold rounded-xl shadow-sm transition-all disabled:opacity-50"
                   >
@@ -1026,6 +1031,7 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
             <div className="flex items-center gap-2 shrink-0">
               <button
                 type="button"
+                suppressHydrationWarning
                 onClick={() => setIsLightboxOpen(false)}
                 className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
                 title="Close (Esc)"
@@ -1044,6 +1050,7 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
             {imageUrls.length > 1 && (
               <button
                 type="button"
+                suppressHydrationWarning
                 onClick={() => setSelectedImageIdx((prev) => (prev - 1 + imageUrls.length) % imageUrls.length)}
                 className="absolute left-2 sm:left-4 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-slate-900/80 hover:bg-blue-600 text-white border border-white/20 flex items-center justify-center backdrop-blur-md transition-all cursor-pointer hover:scale-105 shadow-2xl"
                 title="Previous photo (Left Arrow)"
@@ -1065,6 +1072,7 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
             {imageUrls.length > 1 && (
               <button
                 type="button"
+                suppressHydrationWarning
                 onClick={() => setSelectedImageIdx((prev) => (prev + 1) % imageUrls.length)}
                 className="absolute right-2 sm:right-4 z-20 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-slate-900/80 hover:bg-blue-600 text-white border border-white/20 flex items-center justify-center backdrop-blur-md transition-all cursor-pointer hover:scale-105 shadow-2xl"
                 title="Next photo (Right Arrow)"
@@ -1084,6 +1092,7 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
                 <button
                   key={idx}
                   type="button"
+                  suppressHydrationWarning
                   onClick={() => setSelectedImageIdx(idx)}
                   className={`relative w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-white/10 border-2 overflow-hidden flex-shrink-0 transition-all cursor-pointer ${
                     selectedImageIdx === idx

@@ -216,16 +216,18 @@ export default function ProductCard({ product }: ProductCardProps) {
 
 
           {/* Big Laptop Showcase Image - Fully Visible without Top, Bottom, or Corner Cropping */}
-          <Link href={`/product/${product.slug}`} className="block relative w-full h-full py-4 px-2 sm:py-5 sm:px-3">
-            <Image
-              src={imgSrc}
-              alt={product.title}
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-contain object-center transition-transform duration-300 group-hover:scale-105"
-              loading="lazy"
-              onError={() => setImgSrc(fallbackUrl)}
-            />
+          <Link href={`/product/${product.slug}`} className="block w-full h-full p-6 sm:p-7 flex items-center justify-center">
+            <div className="relative w-full h-full">
+              <Image
+                src={imgSrc}
+                alt={product.title}
+                fill
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                className="object-contain object-center transition-transform duration-300 group-hover:scale-105"
+                loading="lazy"
+                onError={() => setImgSrc(fallbackUrl)}
+              />
+            </div>
           </Link>
 
           {/* Bottom Floating Badges */}
