@@ -205,10 +205,11 @@ export default function Footer() {
 
           {/* Customer Support & Policies */}
           <div className="space-y-3">
-            <h5 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Help & Policies</h5>
+            <h5 className="text-xs font-bold text-slate-900 uppercase tracking-wider">Help &amp; Guides</h5>
             <ul className="space-y-2 text-sm">
+              <li><Link href="/blogs" className="text-blue-700 font-semibold hover:underline flex items-center gap-1"><span>Tech Guides &amp; Blog</span> <span className="text-[10px] bg-blue-100 text-blue-800 px-1.5 py-0.2 rounded font-bold">New</span></Link></li>
               <li><Link href="/about" className="hover:text-slate-950 transition-colors">45-Point Quality Lab</Link></li>
-              <li><Link href="/about" className="hover:text-slate-950 transition-colors">Store Experience & Visit</Link></li>
+              <li><Link href="/about" className="hover:text-slate-950 transition-colors">Store Experience &amp; Visit</Link></li>
               <li><Link href="/privacy-policy" className="hover:text-slate-950 transition-colors">Privacy Policy</Link></li>
               <li><Link href="/terms-and-conditions" className="hover:text-slate-950 transition-colors">Terms of Service</Link></li>
             </ul>

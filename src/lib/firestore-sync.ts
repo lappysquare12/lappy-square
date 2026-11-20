@@ -26,8 +26,15 @@ export async function ensureFirestoreProductsSynced(): Promise<void> {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 2000);
 
+    // 1. Fetch live products from Firestore cloud
     const res = await fetch(
       `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/products`,
+      { cache: 'no-store', signal: controller.signal }
+    ).catch(() => null);
+
+    // 2. Fetch tombstones (deleted products) from Firestore so deleted items never resurrect across git pushes
+    const tombstoneRes = await fetch(
+      `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/deleted_products`,
       { cache: 'no-store', signal: controller.signal }
     ).catch(() => null);
 
@@ -37,15 +44,34 @@ export async function ensureFirestoreProductsSynced(): Promise<void> {
     const data = await res.json().catch(() => null);
     if (!data?.documents || !Array.isArray(data.documents)) return;
 
+    // Build tombstone set
+    const tombstoneIds = new Set<string>();
+    if (tombstoneRes && tombstoneRes.ok) {
+      const tombData = await tombstoneRes.json().catch(() => null);
+      if (tombData?.documents && Array.isArray(tombData.documents)) {
+        for (const tDoc of tombData.documents) {
+          const tId = tDoc.fields?.id?.stringValue || tDoc.name.split('/').pop();
+          if (tId) tombstoneIds.add(tId);
+        }
+      }
+    }
+
+    // Purge any resurrected tombstoned products from SQLite immediately
+    if (tombstoneIds.size > 0) {
+      await prisma.product.deleteMany({
+        where: { id: { in: Array.from(tombstoneIds) } },
+      }).catch(() => null);
+    }
+
     // Extract all live product IDs from Firestore cloud source of truth
     const firestoreIds = new Set<string>();
     for (const doc of data.documents) {
       const fields = doc.fields as Record<string, FirestoreField> | undefined;
       const id = fields?.id?.stringValue || doc.name.split('/').pop();
-      if (id) firestoreIds.add(id);
+      if (id && !tombstoneIds.has(id)) firestoreIds.add(id);
     }
 
-    // Safe sync: Only upsert missing products from Firestore to SQLite without deleting local products
+    // Safe sync: Only upsert missing products from Firestore to SQLite without recreating tombstoned products
     const existingProducts = await prisma.product.findMany({ select: { id: true } });
     const existingIds = new Set(existingProducts.map((p) => p.id));
 
@@ -57,7 +83,7 @@ export async function ensureFirestoreProductsSynced(): Promise<void> {
       if (!fields) continue;
 
       const id = fields.id?.stringValue || doc.name.split('/').pop();
-      if (!id || existingIds.has(id)) continue;
+      if (!id || existingIds.has(id) || tombstoneIds.has(id)) continue;
 
       const title = fields.title?.stringValue || 'Refurbished Laptop';
       const slug = fields.slug?.stringValue || `laptop-${id.slice(-6)}`;

@@ -148,42 +148,31 @@ export async function updateProductInFirestore(productId: string, partialData: R
 /**
  * Delete a product from Firestore
  */
+/**
+ * Delete a product from Firestore and record a permanent tombstone
+ */
 export async function deleteProductFromFirestore(productId: string): Promise<void> {
   if (!productId) return;
-  const projectId = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || 'lappy-square';
 
-  // 1. Direct high-speed document delete via Firestore REST API (runs in ~50ms, zero WebChannel hang)
+  // 1. Delete from Firestore products collection using SDK
   try {
-    const res = await fetch(
-      `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/products/${encodeURIComponent(productId)}`,
-      { method: 'DELETE' }
-    );
-    console.log(`[Firestore REST] Deleted product doc ${productId}: status ${res.status}`);
-  } catch (err) {
-    console.error(`[Firestore REST Error] Failed to delete ${productId}:`, err);
+    const docRef = doc(db, 'products', productId);
+    await deleteDoc(docRef);
+    console.log(`[Firestore SDK] Deleted product doc ${productId}`);
+  } catch (sdkErr) {
+    console.warn(`[Firestore SDK Notice] deleteDoc for product ${productId}:`, sdkErr);
   }
 
-  // 2. Also ensure any document with id field matching productId is removed
+  // 2. Record permanent tombstone in deleted_products so it NEVER resurrects across git pushes
   try {
-    const listRes = await fetch(
-      `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/products`,
-      { cache: 'no-store' }
-    );
-    if (listRes.ok) {
-      const data = await listRes.json();
-      if (Array.isArray(data.documents)) {
-        for (const docItem of data.documents) {
-          const docId = docItem.name.split('/').pop();
-          const fieldId = docItem.fields?.id?.stringValue;
-          if (docId === productId || fieldId === productId) {
-            await fetch(`https://firestore.googleapis.com/v1/${docItem.name}`, { method: 'DELETE' });
-            console.log(`[Firestore REST] Cleaned up matching doc ${docItem.name}`);
-          }
-        }
-      }
-    }
-  } catch (err) {
-    console.warn(`[Firestore REST] Matching doc cleanup error for ${productId}:`, err);
+    const tombstoneRef = doc(db, 'deleted_products', productId);
+    await setDoc(tombstoneRef, {
+      id: productId,
+      deletedAt: serverTimestamp(),
+    });
+    console.log(`[Firestore Tombstone] Recorded deleted product ${productId}`);
+  } catch (tombErr) {
+    console.warn(`[Firestore Tombstone Notice]:`, tombErr);
   }
 }
 

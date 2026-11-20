@@ -22,7 +22,8 @@ import {
   GraduationCap,
   Code2,
   Building2,
-  Palette
+  Palette,
+  BookOpen
 } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { useCompare } from '@/context/CompareContext';
@@ -727,6 +728,15 @@ export default function Header() {
                 <Link href="/about" className="hover:text-blue-700 transition-colors whitespace-nowrap">
                   <span>About Us</span>
                 </Link>
+
+                {/* 9. Tech Guides & Editorial Blog */}
+                <Link
+                  href="/blogs"
+                  className="hover:text-blue-700 font-semibold text-slate-800 flex items-center gap-1 transition-colors whitespace-nowrap"
+                >
+                  <BookOpen className="w-3.5 h-3.5 text-blue-600" />
+                  <span>Blogs &amp; Guides</span>
+                </Link>
               </div>
 
               {/* Right Side Header CTA */}
@@ -939,6 +949,18 @@ export default function Header() {
                 >
                   <span>About Us</span>
                   <ArrowRight className="w-3 h-3 text-slate-400" />
+                </Link>
+
+                <Link
+                  href="/blogs"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-2.5 bg-blue-50/80 hover:bg-blue-100 hover:text-blue-800 text-blue-900 rounded-xl border border-blue-200/80 flex items-center justify-between transition-colors font-bold"
+                >
+                  <span className="flex items-center gap-1.5">
+                    <BookOpen className="w-3.5 h-3.5 text-blue-600" />
+                    <span>Blogs &amp; Guides</span>
+                  </span>
+                  <ArrowRight className="w-3 h-3 text-blue-600" />
                 </Link>
 
                 <Link

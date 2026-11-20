@@ -155,8 +155,8 @@ export default function ProductCard({ product }: ProductCardProps) {
       className="group relative bg-white border border-slate-200/90 hover:border-blue-600/60 rounded-3xl p-3.5 sm:p-5 flex flex-col justify-between transition-all duration-300 shadow-[0_4px_20px_rgba(0,0,0,0.05)] hover:shadow-[0_25px_50px_-15px_rgba(37,99,235,0.18)]"
     >
       <div>
-        {/* Large Stage Product Image Container - Perfect 4/3 Stage so laptops fill frame without getting cut */}
-        <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-gradient-to-b from-slate-50/80 via-slate-100/40 to-white border border-slate-200/80 mb-4 sm:mb-5 group-hover:border-blue-200 transition-colors flex items-center justify-center p-1.5">
+        {/* Large Stage Product Image Container - Showroom Stage for Laptops (Complete Full View, No Cut-Off) */}
+        <div className="relative h-60 sm:h-68 md:h-72 w-full overflow-hidden rounded-2xl bg-[#F8FAFC] border border-slate-200/80 mb-4 sm:mb-5 group-hover:border-blue-300 transition-colors flex items-center justify-center p-2.5 sm:p-3.5">
           
           {/* Top Header Floating Row: Grade Badge & Floating Actions (Unified flex to prevent overlapping) */}
           <div className="absolute top-2.5 inset-x-2.5 sm:top-3 sm:inset-x-3 z-10 flex items-center justify-between gap-1.5 pointer-events-none">
@@ -215,21 +215,21 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
 
 
-          {/* Big Laptop Showcase Image with Hover Zoom */}
-          <Link href={`/product/${product.slug}`} className="block relative w-full h-full">
+          {/* Big Laptop Showcase Image - Fully Visible without Top, Bottom, or Corner Cropping */}
+          <Link href={`/product/${product.slug}`} className="block relative w-full h-full py-4 px-2 sm:py-5 sm:px-3">
             <Image
               src={imgSrc}
               alt={product.title}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-contain w-full h-full p-0.5 transition-transform duration-500 group-hover:scale-105"
+              className="object-contain object-center transition-transform duration-300 group-hover:scale-105"
               loading="lazy"
               onError={() => setImgSrc(fallbackUrl)}
             />
           </Link>
 
           {/* Bottom Floating Badges */}
-          <div className="absolute bottom-3 inset-x-3 sm:bottom-3.5 sm:inset-x-3.5 flex items-center justify-between pointer-events-none">
+          <div className="absolute bottom-2.5 inset-x-2.5 sm:bottom-3 sm:inset-x-3 flex items-center justify-between pointer-events-none z-10">
             {discountPercentage > 0 ? (
               <span className="bg-rose-600 text-white font-black text-[10px] sm:text-xs px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-lg shadow-sm">
                 SAVE {discountPercentage}%
