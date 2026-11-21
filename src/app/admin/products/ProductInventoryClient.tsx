@@ -21,6 +21,7 @@ import {
 import ProductTableActions from './ProductTableActions';
 import FirestoreSyncButton from './FirestoreSyncButton';
 import ExcelBulkImportModal from './ExcelBulkImportModal';
+import BatchWhiteBgModal from './BatchWhiteBgModal';
 
 interface ProductItem {
   id: string;
@@ -106,8 +107,9 @@ export default function ProductInventoryClient({
         </div>
 
         <div className="grid grid-cols-2 sm:flex sm:items-center gap-2">
-          <div className="col-span-2 sm:col-auto">
+          <div className="col-span-2 sm:col-auto flex items-center gap-2">
             <FirestoreSyncButton />
+            <BatchWhiteBgModal onSuccess={() => router.refresh()} />
           </div>
           <ExcelBulkImportModal onSuccess={() => router.refresh()} />
           <Link

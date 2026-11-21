@@ -76,3 +76,24 @@ export async function uploadImageToCloudinary(
     }
   });
 }
+
+/**
+ * Helpers for Cloudinary AI Studio White Background
+ */
+export function applyWhiteBackgroundToUrl(url: string): string {
+  if (!url || typeof url !== 'string') return url;
+  if (!url.includes('cloudinary.com') || !url.includes('/image/upload/')) return url;
+  if (url.includes('e_background_removal')) return url;
+  return url.replace('/image/upload/', '/image/upload/e_background_removal,b_white/');
+}
+
+export function removeWhiteBackgroundFromUrl(url: string): string {
+  if (!url || typeof url !== 'string') return url;
+  return url
+    .replace('e_background_removal,b_white/', '')
+    .replace('e_background_removal/', '');
+}
+
+export function hasWhiteBackground(url: string): boolean {
+  return typeof url === 'string' && url.includes('e_background_removal');
+}

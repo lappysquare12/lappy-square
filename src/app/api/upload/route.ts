@@ -11,6 +11,7 @@ export async function POST(req: Request) {
       const file = formData.get('file') as File | null;
       const folder = (formData.get('folder') as string) || 'lappy-square/uploads';
       const resourceType = (formData.get('resource_type') as 'auto' | 'image' | 'video') || 'auto';
+      const whiteBackground = formData.get('whiteBackground') === 'true';
 
       if (!file) {
         return NextResponse.json({ error: 'No media file provided' }, { status: 400 });
@@ -19,7 +20,7 @@ export async function POST(req: Request) {
       const bytes = await file.arrayBuffer();
       const buffer = Buffer.from(bytes);
 
-      const result = await uploadImageToCloudinary(buffer, folder, resourceType);
+      const result = await uploadImageToCloudinary(buffer, folder, resourceType, { whiteBackground });
 
       return NextResponse.json({
         success: true,
@@ -34,7 +35,8 @@ export async function POST(req: Request) {
     if (body.image || body.file) {
       const folder = body.folder || 'lappy-square/uploads';
       const resourceType = body.resource_type || 'auto';
-      const result = await uploadImageToCloudinary(body.image || body.file, folder, resourceType);
+      const whiteBackground = body.whiteBackground === true || body.whiteBackground === 'true';
+      const result = await uploadImageToCloudinary(body.image || body.file, folder, resourceType, { whiteBackground });
       return NextResponse.json({
         success: true,
         url: result.url,
