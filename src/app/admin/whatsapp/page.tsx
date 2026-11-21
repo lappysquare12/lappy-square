@@ -385,45 +385,45 @@ export default function AdminWhatsAppPage() {
         {logs.length === 0 ? (
           <p className="text-xs text-slate-500 py-6 text-center">No notifications recorded yet.</p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
+          <div className="overflow-x-auto pb-2 scrollbar-none">
+            <table className="w-full min-w-[700px] text-left text-xs whitespace-nowrap">
               <thead>
                 <tr className="border-b border-slate-100 text-slate-400 uppercase text-[10px] tracking-wider">
-                  <th className="py-2.5">Date & Time</th>
-                  <th className="py-2.5">Order / Event</th>
-                  <th className="py-2.5">Recipient</th>
-                  <th className="py-2.5">Type</th>
-                  <th className="py-2.5">Status</th>
-                  <th className="py-2.5">Message ID</th>
-                  <th className="py-2.5 text-right">Action</th>
+                  <th className="py-2.5 pr-4">Date &amp; Time</th>
+                  <th className="py-2.5 px-4">Order / Event</th>
+                  <th className="py-2.5 px-4">Recipient</th>
+                  <th className="py-2.5 px-4">Type</th>
+                  <th className="py-2.5 px-4">Status</th>
+                  <th className="py-2.5 px-4">Message ID</th>
+                  <th className="py-2.5 pl-4 text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-slate-700">
                 {logs.map((log) => (
-                  <tr key={log.id} className="hover:bg-slate-50/70">
-                    <td className="py-3 text-slate-500">
+                  <tr key={log.id} className="hover:bg-slate-50/70 transition-colors">
+                    <td className="py-3 pr-4 text-slate-500 font-medium">
                       {new Date(log.createdAt).toLocaleString('en-IN', { dateStyle: 'short', timeStyle: 'short' })}
                     </td>
-                    <td className="py-3 font-semibold text-slate-900">
+                    <td className="py-3 px-4 font-semibold text-slate-900">
                       {log.order ? (
-                        <Link href={`/admin/orders/${log.orderId}`} className="hover:underline">
+                        <Link href={`/admin/orders/${log.orderId}`} className="text-blue-700 hover:underline">
                           #{log.order.orderNumber} (₹{log.order.totalAmount.toLocaleString('en-IN')})
                         </Link>
                       ) : (
                         log.messageType
                       )}
                     </td>
-                    <td className="py-3 font-mono text-[11px] text-slate-600">
+                    <td className="py-3 px-4 font-mono text-[11px] text-slate-600">
                       {log.recipient}
                     </td>
-                    <td className="py-3">
-                      <span className="bg-slate-100 text-slate-800 text-[10px] font-bold px-1.5 py-0.5 rounded">
+                    <td className="py-3 px-4">
+                      <span className="bg-slate-100 text-slate-800 text-[10px] font-bold px-2 py-0.5 rounded-md">
                         {log.messageType}
                       </span>
                     </td>
-                    <td className="py-3">
+                    <td className="py-3 px-4">
                       <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                        className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${
                           log.status === 'SENT'
                             ? 'bg-emerald-100 text-emerald-800'
                             : 'bg-rose-100 text-rose-800'
@@ -432,10 +432,10 @@ export default function AdminWhatsAppPage() {
                         {log.status}
                       </span>
                     </td>
-                    <td className="py-3 font-mono text-[10px] text-slate-400 truncate max-w-[140px]">
+                    <td className="py-3 px-4 font-mono text-[10px] text-slate-400 truncate max-w-[140px]">
                       {log.providerMessageId || 'N/A'}
                     </td>
-                    <td className="py-3 text-right">
+                    <td className="py-3 pl-4 text-right">
                       {log.orderId && (
                         <button
                           onClick={() => handleRetry(log.id)}
