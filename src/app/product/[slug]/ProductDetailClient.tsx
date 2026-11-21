@@ -313,7 +313,7 @@ export default function ProductDetailClient({ product }: ProductDetailProps) {
               {/* Main Preview Box - 100% Full Complete Laptop Display (Zero Cut-Off) */}
               <div
                 onClick={() => setIsLightboxOpen(true)}
-                className="group relative aspect-[4/3] w-full rounded-2xl bg-[#F8FAFC] border border-slate-200/90 overflow-hidden flex items-center justify-center cursor-zoom-in shadow-xs hover:border-blue-400 hover:shadow-md transition-all duration-300 p-3 sm:p-5"
+                className="group relative aspect-[4/3] w-full rounded-2xl bg-white border border-slate-200/90 overflow-hidden flex items-center justify-center cursor-zoom-in shadow-xs hover:border-blue-400 hover:shadow-md transition-all duration-300"
                 title="Click to view full photo in high resolution"
               >
                 <div className="relative w-full h-full flex items-center justify-center">

@@ -156,7 +156,7 @@ export default function ProductCard({ product }: ProductCardProps) {
     >
       <div>
         {/* Large Stage Product Image Container - Showroom Stage for Laptops (Complete Full View, No Cut-Off) */}
-        <div className="relative h-60 sm:h-68 md:h-72 w-full overflow-hidden rounded-2xl bg-[#F8FAFC] border border-slate-200/80 mb-4 sm:mb-5 group-hover:border-blue-300 transition-colors flex items-center justify-center p-2.5 sm:p-3.5">
+        <div className="relative h-60 sm:h-68 md:h-72 w-full overflow-hidden rounded-2xl bg-white border border-slate-200/80 mb-4 sm:mb-5 group-hover:border-blue-300 transition-colors flex items-center justify-center p-2.5 sm:p-3.5">
           
           {/* Top Header Floating Row: Grade Badge & Floating Actions (Unified flex to prevent overlapping) */}
           <div className="absolute top-2.5 inset-x-2.5 sm:top-3 sm:inset-x-3 z-10 flex items-center justify-between gap-1.5 pointer-events-none">

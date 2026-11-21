@@ -39,111 +39,6 @@ export default function CloudinaryMultiImageUploader({
   const [autoWhiteBg, setAutoWhiteBg] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  /**
-   * Client-side studio background optimizer:
-   * 1. Creates a clean white canvas.
-   * 2. Detects background lighting & border tint.
-   * 3. Blends perimeter highlights to pure #FFFFFF so the laptop stands out cleanly on a pure white background.
-   */
-  const processImageToWhiteBg = async (file: File): Promise<Blob | File> => {
-    return new Promise((resolve) => {
-      const img = new window.Image();
-      const objectUrl = URL.createObjectURL(file);
-
-      img.onload = () => {
-        URL.revokeObjectURL(objectUrl);
-        try {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          if (!ctx) return resolve(file);
-
-          const maxDim = 1600;
-          let w = img.width;
-          let h = img.height;
-          if (w > maxDim || h > maxDim) {
-            if (w > h) {
-              h = Math.round((h * maxDim) / w);
-              w = maxDim;
-            } else {
-              w = Math.round((w * maxDim) / h);
-              h = maxDim;
-            }
-          }
-
-          canvas.width = w;
-          canvas.height = h;
-
-          // Fill canvas with pure studio white
-          ctx.fillStyle = '#FFFFFF';
-          ctx.fillRect(0, 0, w, h);
-
-          // Draw image
-          ctx.drawImage(img, 0, 0, w, h);
-
-          const imgData = ctx.getImageData(0, 0, w, h);
-          const data = imgData.data;
-
-          // Sample border pixels to detect background color
-          let bgR = 0, bgG = 0, bgB = 0, count = 0;
-          const step = Math.max(1, Math.floor(w / 40));
-          for (let x = 0; x < w; x += step) {
-            let idx = (0 * w + x) * 4;
-            bgR += data[idx]; bgG += data[idx + 1]; bgB += data[idx + 2]; count++;
-            idx = ((h - 1) * w + x) * 4;
-            bgR += data[idx]; bgG += data[idx + 1]; bgB += data[idx + 2]; count++;
-          }
-          for (let y = 0; y < h; y += step) {
-            let idx = (y * w + 0) * 4;
-            bgR += data[idx]; bgG += data[idx + 1]; bgB += data[idx + 2]; count++;
-            idx = (y * w + (w - 1)) * 4;
-            bgR += data[idx]; bgG += data[idx + 1]; bgB += data[idx + 2]; count++;
-          }
-
-          bgR /= count; bgG /= count; bgB /= count;
-
-          // Replace surrounding near-white, light gray, or transparent pixels with pure white (#FFFFFF)
-          for (let i = 0; i < data.length; i += 4) {
-            const r = data[i];
-            const g = data[i + 1];
-            const b = data[i + 2];
-            const a = data[i + 3];
-
-            if (a < 25) {
-              data[i] = 255; data[i + 1] = 255; data[i + 2] = 255; data[i + 3] = 255;
-              continue;
-            }
-
-            const dist = Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
-            const luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-
-            // If close to sampled border background or high brightness tint, turn into pure crisp white
-            if (dist < 55 || luminance > 235) {
-              data[i] = 255;
-              data[i + 1] = 255;
-              data[i + 2] = 255;
-            }
-          }
-
-          ctx.putImageData(imgData, 0, 0);
-
-          canvas.toBlob(
-            (blob) => {
-              if (blob) resolve(blob);
-              else resolve(file);
-            },
-            'image/jpeg',
-            0.92
-          );
-        } catch {
-          resolve(file);
-        }
-      };
-
-      img.onerror = () => resolve(file);
-      img.src = objectUrl;
-    });
-  };
-
   const handleToggleWhiteBg = (index: number) => {
     const currentUrl = images[index];
     if (!currentUrl.includes('cloudinary.com')) return;
@@ -167,17 +62,12 @@ export default function CloudinaryMultiImageUploader({
         const file = files[i];
         setUploadProgress(
           autoWhiteBg
-            ? `Optimizing white studio BG & uploading (${i + 1}/${files.length})...`
+            ? `Uploading with AI Studio White-BG (${i + 1}/${files.length})...`
             : `Uploading image (${i + 1}/${files.length})...`
         );
 
-        // Process to white background if enabled
-        const processedPayload = autoWhiteBg
-          ? await processImageToWhiteBg(file)
-          : file;
-
         const formData = new FormData();
-        formData.append('file', processedPayload, file.name.replace(/\.[^.]+$/, '.jpg'));
+        formData.append('file', file);
         formData.append('folder', folder);
         formData.append('resource_type', 'image');
         if (autoWhiteBg) {
