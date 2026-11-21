@@ -132,10 +132,10 @@ export default function ExcelBulkImportModal({ onSuccess }: ExcelBulkImportModal
       <button
         type="button"
         onClick={handleOpen}
-        className="px-3 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md shadow-emerald-600/20 flex items-center justify-center gap-1.5 transition-all text-center cursor-pointer"
+        className="h-10 px-3 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold shadow-md shadow-emerald-600/20 flex items-center justify-center gap-1.5 transition-all text-center cursor-pointer whitespace-nowrap shrink-0"
         title="Upload 50+ laptops at once using Excel"
       >
-        <FileSpreadsheet className="w-4 h-4" />
+        <FileSpreadsheet className="w-4 h-4 shrink-0" />
         <span>Excel Bulk Upload</span>
       </button>
 

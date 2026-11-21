@@ -62,72 +62,78 @@ export default function FirestoreSyncButton() {
   };
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex flex-wrap items-center gap-2">
-        {/* Firestore Sync Button */}
-        <button
-          onClick={handleSyncFirestore}
-          disabled={syncing}
-          title="Push all products to Firebase Firestore collection"
-          className="px-3.5 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all disabled:opacity-50"
-        >
-          {syncing ? (
-            <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-600" />
-          ) : (
-            <Database className="w-3.5 h-3.5 text-emerald-600" />
-          )}
-          <span>{syncing ? 'Syncing to Firestore...' : 'Sync Firestore DB'}</span>
-        </button>
+    <div className="relative flex items-center gap-2 shrink-0">
+      {/* Firestore Sync Button */}
+      <button
+        onClick={handleSyncFirestore}
+        disabled={syncing}
+        title="Push all products to Firebase Firestore collection"
+        className="h-10 px-3 bg-emerald-50 hover:bg-emerald-100 text-emerald-800 border border-emerald-200 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all disabled:opacity-50 whitespace-nowrap shrink-0 cursor-pointer"
+      >
+        {syncing ? (
+          <Loader2 className="w-3.5 h-3.5 animate-spin text-emerald-600" />
+        ) : (
+          <Database className="w-3.5 h-3.5 text-emerald-600" />
+        )}
+        <span>{syncing ? 'Syncing...' : 'Sync Firestore DB'}</span>
+      </button>
 
-        {/* Resend Test Email Button */}
-        <button
-          onClick={handleTestEmail}
-          disabled={testingEmail}
-          title="Send test email notification to lappysquare@gmail.com"
-          className="px-3.5 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all disabled:opacity-50"
-        >
-          {testingEmail ? (
-            <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-600" />
-          ) : (
-            <Mail className="w-3.5 h-3.5 text-indigo-600" />
-          )}
-          <span>{testingEmail ? 'Sending Test...' : 'Test Resend Mail'}</span>
-        </button>
-      </div>
+      {/* Resend Test Email Button */}
+      <button
+        onClick={handleTestEmail}
+        disabled={testingEmail}
+        title="Send test email notification to lappysquare@gmail.com"
+        className="h-10 px-3 bg-indigo-50 hover:bg-indigo-100 text-indigo-800 border border-indigo-200 rounded-xl text-xs font-bold flex items-center gap-1.5 transition-all disabled:opacity-50 whitespace-nowrap shrink-0 cursor-pointer"
+      >
+        {testingEmail ? (
+          <Loader2 className="w-3.5 h-3.5 animate-spin text-indigo-600" />
+        ) : (
+          <Mail className="w-3.5 h-3.5 text-indigo-600" />
+        )}
+        <span>{testingEmail ? 'Sending Test...' : 'Test Resend Mail'}</span>
+      </button>
 
-      {/* Sync Status Banner */}
-      {syncMessage && (
-        <div
-          className={`text-[11px] font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 border animate-in fade-in duration-200 ${
-            syncStatus === 'success'
-              ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
-              : 'bg-rose-50 text-rose-800 border-rose-200'
-          }`}
-        >
-          {syncStatus === 'success' ? (
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
-          ) : (
-            <AlertCircle className="w-3.5 h-3.5 text-rose-600 flex-shrink-0" />
+      {/* Floating Status Toast for Sync / Email (Never breaks button line) */}
+      {(syncMessage || emailMessage) && (
+        <div className="absolute top-full mt-2 left-0 z-50 whitespace-nowrap bg-white border border-slate-200 shadow-xl rounded-xl p-2.5 flex items-center gap-2 text-xs font-semibold animate-in fade-in zoom-in-95 duration-200">
+          {syncMessage && (
+            <span
+              className={`flex items-center gap-1.5 ${
+                syncStatus === 'success' ? 'text-emerald-700' : 'text-rose-700'
+              }`}
+            >
+              {syncStatus === 'success' ? (
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+              ) : (
+                <AlertCircle className="w-3.5 h-3.5 text-rose-600" />
+              )}
+              {syncMessage}
+            </span>
           )}
-          <span>{syncMessage}</span>
-        </div>
-      )}
-
-      {/* Email Status Banner */}
-      {emailMessage && (
-        <div
-          className={`text-[11px] font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 border animate-in fade-in duration-200 ${
-            emailStatus === 'success'
-              ? 'bg-indigo-50 text-indigo-800 border-indigo-200'
-              : 'bg-amber-50 text-amber-800 border-amber-200'
-          }`}
-        >
-          {emailStatus === 'success' ? (
-            <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600 flex-shrink-0" />
-          ) : (
-            <AlertCircle className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
+          {emailMessage && (
+            <span
+              className={`flex items-center gap-1.5 ${
+                emailStatus === 'success' ? 'text-indigo-700' : 'text-amber-700'
+              }`}
+            >
+              {emailStatus === 'success' ? (
+                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-600" />
+              ) : (
+                <AlertCircle className="w-3.5 h-3.5 text-amber-600" />
+              )}
+              {emailMessage}
+            </span>
           )}
-          <span>{emailMessage}</span>
+          <button
+            type="button"
+            onClick={() => {
+              setSyncMessage(null);
+              setEmailMessage(null);
+            }}
+            className="text-slate-400 hover:text-black ml-2 font-bold cursor-pointer"
+          >
+            ✕
+          </button>
         </div>
       )}
     </div>

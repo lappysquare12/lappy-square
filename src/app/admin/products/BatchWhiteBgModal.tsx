@@ -84,12 +84,12 @@ export default function BatchWhiteBgModal({ onSuccess }: BatchWhiteBgModalProps)
       <button
         type="button"
         onClick={() => setIsOpen(true)}
-        className="px-3 py-2.5 bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-blue-800 border border-blue-200/90 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-2xs hover:shadow-sm cursor-pointer"
+        className="h-10 px-3 bg-gradient-to-r from-blue-50 to-indigo-50 hover:from-blue-100 hover:to-indigo-100 text-blue-800 border border-blue-200/90 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-2xs hover:shadow-sm cursor-pointer whitespace-nowrap shrink-0"
         title="Automatically remove background and apply pure white studio background across all existing laptop photos"
       >
-        <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+        <Sparkles className="w-3.5 h-3.5 text-blue-600 shrink-0" />
         <span>Auto White-BG</span>
-        <span className="text-[9px] bg-blue-600 text-white font-black px-1.5 py-0.2 rounded-full uppercase">
+        <span className="text-[9px] bg-blue-600 text-white font-black px-1.5 py-0.2 rounded-full uppercase shrink-0">
           AI
         </span>
       </button>

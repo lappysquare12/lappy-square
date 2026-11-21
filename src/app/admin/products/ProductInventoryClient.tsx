@@ -106,25 +106,24 @@ export default function ProductInventoryClient({
           </p>
         </div>
 
-        <div className="grid grid-cols-2 sm:flex sm:items-center gap-2">
-          <div className="col-span-2 sm:col-auto flex items-center gap-2">
-            <FirestoreSyncButton />
-            <BatchWhiteBgModal onSuccess={() => router.refresh()} />
-          </div>
+        {/* Responsive Single Line Toolbar */}
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 max-w-full scrollbar-none flex-nowrap shrink-0">
+          <FirestoreSyncButton />
+          <BatchWhiteBgModal onSuccess={() => router.refresh()} />
           <ExcelBulkImportModal onSuccess={() => router.refresh()} />
           <Link
             href="/admin/brands"
-            className="px-3 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all text-center"
+            className="h-10 px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all text-center whitespace-nowrap shrink-0"
             title="Manage Brand Series (MacBook Air/Pro, Latitude, etc.)"
           >
-            <Tag className="w-3.5 h-3.5" />
+            <Tag className="w-3.5 h-3.5 shrink-0" />
             <span>Brand Series</span>
           </Link>
           <Link
             href="/admin/products/new"
-            className="px-3 py-2.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-700/20 flex items-center justify-center gap-1.5 transition-all text-center"
+            className="h-10 px-3.5 bg-blue-700 hover:bg-blue-800 text-white rounded-xl text-xs font-bold shadow-md shadow-blue-700/20 flex items-center justify-center gap-1.5 transition-all text-center whitespace-nowrap shrink-0"
           >
-            <Plus className="w-4 h-4" />
+            <Plus className="w-4 h-4 shrink-0" />
             <span>+ Add Laptop</span>
           </Link>
         </div>
